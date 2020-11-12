@@ -9,3 +9,5 @@ This repository contains the unity client of the EdgeMultiplay Solution.
 * The Solution is compatible with (IL2CPP & .NET 2.0) , (IL2CPP & .NET 4.x) , (Mono & .NET 2.0) **but not compatible with (Mono  & .NET 4.x)**
 * [MobiledgeX Unity SDK](https://github.com/mobiledgex/edge-cloud-sdk-unity).
 
+## Documentation
+To get started, Check [EdgeMultiplay Github Page ](https://mobiledgex.github.io/EdgeMultiplay-UnityClient/)
