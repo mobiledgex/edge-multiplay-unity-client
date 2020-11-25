@@ -47,8 +47,16 @@ namespace EdgeMultiplay
 
         IEnumerator ConnectToEdgeCoroutine(bool testingMode = false, bool useFallBackLocation = false)
         {
-            yield return StartCoroutine(MobiledgeX.LocationService.EnsureLocation());
-            FindObjectOfType<EdgeManager>().ConnectToServer(testingMode, useFallBackLocation);
+            EdgeManager edgeManager = FindObjectOfType<EdgeManager>();
+            if (edgeManager.useLocalHostServer == false && (Application.platform == RuntimePlatform.IPhonePlayer || Application.platform == RuntimePlatform.Android))
+            {
+                yield return StartCoroutine(MobiledgeX.LocationService.EnsureLocation());
+            }
+            else
+            {
+                yield return null;
+            }
+            edgeManager.ConnectToServer(testingMode, useFallBackLocation);
         }
 
         /// <summary>
