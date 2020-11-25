@@ -177,7 +177,6 @@ namespace EdgeMultiplay
                     wsClient = new MobiledgeXWebSocketClient();
                     await integration.RegisterAndFindCloudlet();
                     integration.GetAppPort(LProto.L_PROTO_TCP);
-
                     string url = integration.GetUrl("ws");
                     Uri uri = new Uri(url);
                     if (wsClient.isOpen())

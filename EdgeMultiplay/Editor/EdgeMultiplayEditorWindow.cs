@@ -15,52 +15,62 @@
  * limitations under the License.
  */
 
-
+using System;
 using System.IO;
 using UnityEditor;
 using UnityEngine;
 using EnhancementManager;
+
 
 namespace EdgeMultiplay
 {
     [ExecuteInEditMode]
     public class EdgeMultiplayEditorWindow : EditorWindow
     {
-        #region  Mobiledgex ToolBar Menu items
+
+        #region  EdgeMultiplay ToolBar Menu items
 
         [MenuItem("EdgeMultiplay/Examples/PingPong", false, 0)]
-        public static void ImportPingPongExamples()
+        public static void ImportPingPongExample()
         {
             string assetsFolder = Path.GetFullPath(Application.dataPath);
-            AssetDatabase.ImportPackage(Path.Combine(assetsFolder, "EdgeMultiplay/Examples/PingPong.unitypackage"), true);
-            Enhancement.EdgeMultiplayPingPongImported();
+            AssetDatabase.ImportPackage(Path.Combine(assetsFolder, "EdgeMultiplay/Examples/PingPongExample.unitypackage"), true);
+            
+            Enhancement.EdgeMultiplayPingPongImported(getId());
         }
 
         [MenuItem("EdgeMultiplay/Docs/Getting Started", false, 20)]
         public static void OpenGettingStartedURL()
         {
-            Application.OpenURL("https://mobiledgex.github.io/EdgeMultiplay-UnityClient/getting_started.html");
-            Enhancement.EdgeMultiplayDocsOpened();
+            Application.OpenURL("https://mobiledgex.github.io/edge-multiplay-unity-client/getting_started.html");
+            Enhancement.EdgeMultiplayDocsOpened(getId());
         }
 
         [MenuItem("EdgeMultiplay/Docs/How It Works?", false, 20)]
         public static void OpenHowItWorksURL()
         {
-            Application.OpenURL("https://mobiledgex.github.io/EdgeMultiplay-UnityClient/how_it_works.html");
-            Enhancement.EdgeMultiplayDocsOpened();
+            Application.OpenURL("https://mobiledgex.github.io/edge-multiplay-unity-client/how_it_works.html");
+            Enhancement.EdgeMultiplayDocsOpened(getId());
         }
 
         [MenuItem("EdgeMultiplay/Docs/Documentation", false, 20)]
         public static void OpenDocumentationURL()
         {
-            Application.OpenURL("https://mobiledgex.github.io/EdgeMultiplay-UnityClient");
-            Enhancement.EdgeMultiplayDocsOpened();
+            Application.OpenURL("https://mobiledgex.github.io/edge-multiplay-unity-client/");
+            Enhancement.EdgeMultiplayDocsOpened(getId());
         }
 
         [MenuItem("EdgeMultiplay/Report a bug", false, 60)]
         public static void ReportBug()
         {
-            Application.OpenURL("https://github.com/mobiledgex/EdgeMultiplay-UnityClient/issues/new/choose");
+            Application.OpenURL("https://github.com/mobiledgex/edge-multiplay-unity-client/issues/new/choose");
+        }
+
+        static string getId()
+        {
+            string id = EditorPrefs.GetString("mobiledegx-user", Guid.NewGuid().ToString());
+            EditorPrefs.SetString("mobiledegx-user", id);
+            return id;
         }
     }
 }
