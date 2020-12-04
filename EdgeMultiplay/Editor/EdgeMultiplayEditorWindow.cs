@@ -60,6 +60,12 @@ namespace EdgeMultiplay
             Enhancement.EdgeMultiplayDocsOpened(getId());
         }
 
+        [MenuItem("EdgeMultiplay/Join the Community", false, 20)]
+        public static void JoinTheCommunity()
+        {
+            Application.OpenURL("https://discord.com/invite/w25dC4g8");
+        }
+
         [MenuItem("EdgeMultiplay/Report a bug", false, 60)]
         public static void ReportBug()
         {
