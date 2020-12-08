@@ -63,7 +63,7 @@ namespace EdgeMultiplay
         [MenuItem("EdgeMultiplay/Join the Community", false, 20)]
         public static void JoinTheCommunity()
         {
-            Application.OpenURL("https://discord.com/invite/w25dC4g8");
+            Application.OpenURL("https://discord.gg/k22WcfMFZ3");
         }
 
         [MenuItem("EdgeMultiplay/Report a bug", false, 60)]
@@ -74,8 +74,8 @@ namespace EdgeMultiplay
 
         static string getId()
         {
-            string id = EditorPrefs.GetString("mobiledegx-user", Guid.NewGuid().ToString());
-            EditorPrefs.SetString("mobiledegx-user", id);
+            string id = EditorPrefs.GetString("mobiledgex-user", Guid.NewGuid().ToString());
+            EditorPrefs.SetString("mobiledgex-user", id);
             return id;
         }
     }
