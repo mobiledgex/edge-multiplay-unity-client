@@ -47,6 +47,13 @@ namespace EdgeMultiplay
         public const int defaultEdgeMultiplayServerTCPPort = 3000;
         #endregion
 
+        #region private variables
+
+        byte[] udpMsg;
+        string wsMsg;
+        
+        #endregion
+
         #region EdgeManager Editor Exposed Variables
 
         /// <summary>
@@ -96,24 +103,22 @@ namespace EdgeMultiplay
             }
             //websocket receive queue
             var ws_queue = wsClient.receiveQueue;
-            string msg;
-            while (ws_queue.TryPeek(out msg))
+            while (ws_queue.TryPeek(out wsMsg))
             {
-                ws_queue.TryDequeue(out msg);
-                HandleWebSocketMessage(msg);
+                ws_queue.TryDequeue(out wsMsg);
+                HandleWebSocketMessage(wsMsg);
+                wsMsg = null;
             }
             if (udpClient == null)
             {
                 return;
             }
             //udp receive queue
-            byte[] udpMsg;
-            var udp_queue = udpClient.receiveQueue;
-            while (udp_queue.TryPeek(out udpMsg))
+            while (udpClient.receiveQueue.TryPeek(out udpMsg))
             {
-                udp_queue.TryDequeue(out udpMsg);
-                string udpMsgString = Encoding.UTF8.GetString(udpMsg);
-                HandleUDPMessage(udpMsgString);
+                udpClient.receiveQueue.TryDequeue(out udpMsg);
+                HandleUDPMessage(Encoding.UTF8.GetString(udpMsg));
+                udpMsg = null;
             }
         }
 
@@ -323,7 +328,7 @@ namespace EdgeMultiplay
             gameplayEvent.senderId = gameSession.playerId;
             if (udpClient.run)
             {
-                udpClient.Send(Messaging<GamePlayEvent>.Serialize(gameplayEvent));
+                udpClient.Send(gameplayEvent.ToString());
             }
         }
 
@@ -442,7 +447,11 @@ namespace EdgeMultiplay
                     }
                     SendUDPMessage(new GamePlayEvent
                     {
-                        stringData = new string[] { "Start" }
+                        stringData = new string[] { "Start" },
+                        floatData = new float[] { 0, 0, 0 },
+                        integerData = new int[] { 0 },
+                        booleanData = new bool[] { false },
+                        eventName = "test"
                     });
                     break;
 
@@ -464,24 +473,40 @@ namespace EdgeMultiplay
 
         void HandleUDPMessage(string message)
         {
-            var msg = MessageWrapper.UnWrapMessage(message);
-            switch (msg.type)
+            // GamePlayEvent string array structure
+            // 0 GamePlayEvent Type
+            // 1 GamePlayEvent room id
+            // 2 GamePlayEvent sender id
+            // 3 GamePlayEvent event name
+            // 4 GamePlayEvent stringData
+            // 5 GamePlayEvent integerData
+            // 6 GamePlayEvent floatData
+            // 7 GamePlayEvent booleanData
+
+            string[] gamePlayEventStringArr = message.Split('$');
+            string[] stringData = gamePlayEventStringArr[4].Split(new[] { ',', });
+            int[] intData = Array.ConvertAll(gamePlayEventStringArr[5].Split(new[] { ',', }), int.Parse);
+            float[] floatData = Array.ConvertAll(gamePlayEventStringArr[6].Split(new[] { ',', }), float.Parse);
+            bool[] booleanData = Array.ConvertAll(gamePlayEventStringArr[7].Split(new[] { ',', }), bool.Parse);
+
+            GamePlayEvent gamePlayEvent = new GamePlayEvent(gamePlayEventStringArr[1], gamePlayEventStringArr[2],
+                gamePlayEventStringArr[3], stringData, intData, floatData, booleanData);
+            switch (gamePlayEvent.type)
             {
                 case "GamePlayEvent":
-                    GamePlayEvent mobiledgexEvent = Messaging<GamePlayEvent>.Deserialize(message);
-                    if (mobiledgexEvent.eventName == "EdgeMultiplayObserver")
+                    if (gamePlayEvent.eventName == "EdgeMultiplayObserver")
                     {
-                        SyncObject(mobiledgexEvent);
+                        SyncObject(gamePlayEvent);
                     }
                     else
                     {
                         // if used for other than that Syncing GameObjects Position & Rotation
                         // it wil trigger OnUDPMessagesReceived()
-                        EdgeMultiplayCallbacks.udpEventReceived(mobiledgexEvent);
+                        EdgeMultiplayCallbacks.udpEventReceived(message);
                     }
                     break;
                 default:
-                    Debug.LogError("Unknown UDP message arrived: " + msg.type + ", message: " + message);
+                    Debug.LogError("Unknown UDP message arrived: " + message);
                     break;
             }
         }
@@ -533,20 +558,21 @@ namespace EdgeMultiplay
                     GameObject playerObj = SpawnPrefabs[player.playerAvatar];
                     playerObj.GetComponent<NetworkedPlayer>().SetUpPlayer(player, gameSession.roomId, player.playerId == gameSession.playerId);
                     GameObject playerCreated = Instantiate(playerObj, SpawnInfo[player.playerIndex].position, Quaternion.Euler(SpawnInfo[player.playerIndex].rotation));
+                    NetworkedPlayer networkedPlayer = playerCreated.GetComponent<NetworkedPlayer>();
                     if (player.playerName == "")
                     {
-                        playerCreated.name = playerCreated.GetComponent<NetworkedPlayer>().playerName = "Player " + (player.playerIndex + 1);
+                        playerCreated.name = networkedPlayer.playerName = "Player " + (player.playerIndex + 1);
                     }
                     else
                     {
                         playerCreated.name = player.playerName;
                     }
-                    currentRoomPlayers.Add(playerCreated.GetComponent<NetworkedPlayer>());
-                    EdgeMultiplayCallbacks.eventReceived += playerCreated.GetComponent<NetworkedPlayer>().OnWebSocketEventReceived;
-                    EdgeMultiplayCallbacks.udpEventReceived += playerCreated.GetComponent<NetworkedPlayer>().OnUDPEventReceived;
+                    currentRoomPlayers.Add(networkedPlayer);
+                    EdgeMultiplayCallbacks.eventReceived += networkedPlayer.OnWebSocketEventReceived;
+                    EdgeMultiplayCallbacks.udpEventReceived += networkedPlayer.OnUDPEventReceived;
                     if (player.playerId == gameSession.playerId)
                     {
-                        localPlayer = MessageSender = playerCreated.GetComponent<NetworkedPlayer>();
+                        localPlayer = MessageSender = networkedPlayer;
                         localPlayerIsMaster = player.playerIndex == 0;
                     }
                 }

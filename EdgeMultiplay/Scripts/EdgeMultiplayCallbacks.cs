@@ -13,7 +13,7 @@ namespace EdgeMultiplay
         public static Action registerEvent;
         public static Action<Notification> notificationEvent;
         public static Action<GamePlayEvent> eventReceived;
-        public static Action<GamePlayEvent> udpEventReceived;
+        public static Action<string> udpEventReceived;
         public static Action<RoomMemberLeft> playerLeft;
         public static Action<List<Room>> roomsList;
         public static Action<Room> roomCreated;
@@ -92,7 +92,7 @@ namespace EdgeMultiplay
         /// <param name="notification"> the notification received from the server</param>
         public virtual void OnNotificationEvent(Notification notification)
         {
-            Debug.Log("Notification Event From Server :"+ notification);
+            Debug.Log("Notification Event From Server :"+ notification.notificationText);
         }
 
         /// <summary>
@@ -190,9 +190,9 @@ namespace EdgeMultiplay
         /// During GamePlay once a event received from another player (UDP)
         /// </summary>
         /// <param name="gamePlayEvent">received GamePlayEvent</param>
-        public virtual void OnUDPEventReceived(GamePlayEvent gamePlayEvent)
+        public virtual void OnUDPEventReceived(string gamePlayEvent)
         {
-            Debug.Log("UDP Msg Received Event From Server : " + gamePlayEvent.eventName);
+            //Debug.Log("UDP Msg Received Event From Server : " + gamePlayEvent.eventName);
         }
 
         private void OnDestroy()

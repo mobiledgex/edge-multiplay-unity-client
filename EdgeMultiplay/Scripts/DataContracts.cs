@@ -143,8 +143,8 @@ namespace EdgeMultiplay
     [DataContract]
     public class GamePlayEvent
     {
-        [DataMember (IsRequired = true)]
-        public string type = "GamePlayEvent";
+        [DataMember(IsRequired = true)]
+        public string type;
         [DataMember (IsRequired = true)]
         public string roomId;
         [DataMember (IsRequired = true)]
@@ -267,6 +267,11 @@ namespace EdgeMultiplay
             this.integerData = integerData;
             this.floatData = floatData;
             this.booleanData = booleanData;
+        }
+
+        public override string ToString()
+        { 
+            return type+"$" + roomId + "$" + senderId + "$" + eventName + "$" + string.Join(",", stringData) + "$" +string.Join(",", integerData) + "$" + string.Join(",", floatData) + "$" + string.Join(",", booleanData);
         }
     }
     #endregion
@@ -554,8 +559,10 @@ namespace EdgeMultiplay
 
         public static T Deserialize(string jsonString)
         {
-            MemoryStream ms = new MemoryStream(Encoding.UTF8.GetBytes(jsonString ?? ""));
-            return Deserialize(ms);
+            using (MemoryStream memStream = new MemoryStream(Encoding.UTF8.GetBytes(jsonString ?? "")))
+            {
+                return Deserialize(memStream);
+            }
         }
 
         public static T Deserialize(Stream stream)
