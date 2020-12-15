@@ -135,8 +135,6 @@ namespace EdgeMultiplay
         public Room room;
     }
 
-
-
     /// <summary>
     /// GamePlayEvent is the main event for GamePlayEvents
     /// </summary>
@@ -269,9 +267,9 @@ namespace EdgeMultiplay
             this.booleanData = booleanData;
         }
 
-        public override string ToString()
-        { 
-            return type+"$" + roomId + "$" + senderId + "$" + eventName + "$" + string.Join(",", stringData) + "$" +string.Join(",", integerData) + "$" + string.Join(",", floatData) + "$" + string.Join(",", booleanData);
+        public  string ToJson()
+        {
+            return JsonUtility.ToJson(this); ;
         }
     }
     #endregion

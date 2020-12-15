@@ -51,7 +51,7 @@ namespace EdgeMultiplay
 
         byte[] udpMsg;
         string wsMsg;
-        
+
         #endregion
 
         #region EdgeManager Editor Exposed Variables
@@ -328,7 +328,7 @@ namespace EdgeMultiplay
             gameplayEvent.senderId = gameSession.playerId;
             if (udpClient.run)
             {
-                udpClient.Send(gameplayEvent.ToString());
+                udpClient.Send(gameplayEvent.ToJson());
             }
         }
 
@@ -473,24 +473,7 @@ namespace EdgeMultiplay
 
         void HandleUDPMessage(string message)
         {
-            // GamePlayEvent string array structure
-            // 0 GamePlayEvent Type
-            // 1 GamePlayEvent room id
-            // 2 GamePlayEvent sender id
-            // 3 GamePlayEvent event name
-            // 4 GamePlayEvent stringData
-            // 5 GamePlayEvent integerData
-            // 6 GamePlayEvent floatData
-            // 7 GamePlayEvent booleanData
-
-            string[] gamePlayEventStringArr = message.Split('$');
-            string[] stringData = gamePlayEventStringArr[4].Split(new[] { ',', });
-            int[] intData = Array.ConvertAll(gamePlayEventStringArr[5].Split(new[] { ',', }), int.Parse);
-            float[] floatData = Array.ConvertAll(gamePlayEventStringArr[6].Split(new[] { ',', }), float.Parse);
-            bool[] booleanData = Array.ConvertAll(gamePlayEventStringArr[7].Split(new[] { ',', }), bool.Parse);
-
-            GamePlayEvent gamePlayEvent = new GamePlayEvent(gamePlayEventStringArr[1], gamePlayEventStringArr[2],
-                gamePlayEventStringArr[3], stringData, intData, floatData, booleanData);
+            GamePlayEvent gamePlayEvent = JsonUtility.FromJson<GamePlayEvent>(message);
             switch (gamePlayEvent.type)
             {
                 case "GamePlayEvent":
@@ -553,37 +536,37 @@ namespace EdgeMultiplay
             {
                 try
                 {
-                foreach (Player player in gamePlayers)
-                {
-                    GameObject playerObj = SpawnPrefabs[player.playerAvatar];
-                    playerObj.GetComponent<NetworkedPlayer>().SetUpPlayer(player, gameSession.roomId, player.playerId == gameSession.playerId);
-                    GameObject playerCreated = Instantiate(playerObj, SpawnInfo[player.playerIndex].position, Quaternion.Euler(SpawnInfo[player.playerIndex].rotation));
-                    NetworkedPlayer networkedPlayer = playerCreated.GetComponent<NetworkedPlayer>();
-                    if (player.playerName == "")
+                    foreach (Player player in gamePlayers)
                     {
-                        playerCreated.name = networkedPlayer.playerName = "Player " + (player.playerIndex + 1);
+                        GameObject playerObj = SpawnPrefabs[player.playerAvatar];
+                        playerObj.GetComponent<NetworkedPlayer>().SetUpPlayer(player, gameSession.roomId, player.playerId == gameSession.playerId);
+                        GameObject playerCreated = Instantiate(playerObj, SpawnInfo[player.playerIndex].position, Quaternion.Euler(SpawnInfo[player.playerIndex].rotation));
+                        NetworkedPlayer networkedPlayer = playerCreated.GetComponent<NetworkedPlayer>();
+                        if (player.playerName == "")
+                        {
+                            playerCreated.name = networkedPlayer.playerName = "Player " + (player.playerIndex + 1);
+                        }
+                        else
+                        {
+                            playerCreated.name = player.playerName;
+                        }
+                        currentRoomPlayers.Add(networkedPlayer);
+                        EdgeMultiplayCallbacks.eventReceived += networkedPlayer.OnWebSocketEventReceived;
+                        EdgeMultiplayCallbacks.udpEventReceived += networkedPlayer.OnUDPEventReceived;
+                        if (player.playerId == gameSession.playerId)
+                        {
+                            localPlayer = MessageSender = networkedPlayer;
+                            localPlayerIsMaster = player.playerIndex == 0;
+                        }
                     }
-                    else
-                    {
-                        playerCreated.name = player.playerName;
-                    }
-                    currentRoomPlayers.Add(networkedPlayer);
-                    EdgeMultiplayCallbacks.eventReceived += networkedPlayer.OnWebSocketEventReceived;
-                    EdgeMultiplayCallbacks.udpEventReceived += networkedPlayer.OnUDPEventReceived;
-                    if (player.playerId == gameSession.playerId)
-                    {
-                        localPlayer = MessageSender = networkedPlayer;
-                        localPlayerIsMaster = player.playerIndex == 0;
-                    }
-                }
                 }
                 catch (NullReferenceException)
                 {
-                   throw new Exception ("EdgeMultiplay: Error in creating players, Make sure all your EdgeManager Spawn prefabs have a script that inherits from NetworkedPlayer ");
+                    throw new Exception("EdgeMultiplay: Error in creating players, Make sure all your EdgeManager Spawn prefabs have a script that inherits from NetworkedPlayer ");
                 }
                 catch (ArgumentOutOfRangeException)
                 {
-                    throw new Exception ("EdgeMultiplay: Error in creating players, Make sure Size of EdgeManager Spawn Info equal or greater than number of players in the room ");
+                    throw new Exception("EdgeMultiplay: Error in creating players, Make sure Size of EdgeManager Spawn Info equal or greater than number of players in the room ");
                 }
                 catch (Exception)
                 {
