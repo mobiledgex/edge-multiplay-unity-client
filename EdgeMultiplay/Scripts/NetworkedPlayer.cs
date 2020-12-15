@@ -83,7 +83,7 @@ namespace EdgeMultiplay
             }
         }
 
-        public override void OnUDPEventReceived(string udpEvent)
+        public override void OnUDPEventReceived(GamePlayEvent udpEvent)
         { 
             if (!isLocalPlayer)
             {

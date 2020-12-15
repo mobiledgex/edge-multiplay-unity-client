@@ -267,7 +267,7 @@ namespace EdgeMultiplay
             this.booleanData = booleanData;
         }
 
-        public  string ToJson()
+        public string ToJson()
         {
             return JsonUtility.ToJson(this); ;
         }
