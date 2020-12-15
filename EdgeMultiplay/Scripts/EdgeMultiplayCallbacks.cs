@@ -92,7 +92,7 @@ namespace EdgeMultiplay
         /// <param name="notification"> the notification received from the server</param>
         public virtual void OnNotificationEvent(Notification notification)
         {
-            Debug.Log("Notification Event From Server :"+ notification);
+            Debug.Log("Notification Event From Server :"+ notification.notificationText);
         }
 
         /// <summary>
@@ -192,7 +192,7 @@ namespace EdgeMultiplay
         /// <param name="gamePlayEvent">received GamePlayEvent</param>
         public virtual void OnUDPEventReceived(GamePlayEvent gamePlayEvent)
         {
-            Debug.Log("UDP Msg Received Event From Server : " + gamePlayEvent.eventName);
+            //Debug.Log("UDP Msg Received Event From Server : " + gamePlayEvent.eventName);
         }
 
         private void OnDestroy()

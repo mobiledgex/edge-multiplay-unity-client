@@ -29,6 +29,8 @@ namespace EdgeMultiplay
             SyncRotation,
             SyncPositionAndRotation
         }
+        NetworkedPlayer networkedPlayer;
+
         #endregion
 
         #region EdgeMultiplayObserver Editor exposed variables
@@ -57,7 +59,6 @@ namespace EdgeMultiplay
         [Range(0.1f, 1f)]
         public float InterpolationFactor;
 
-        
         #endregion
 
         #region MonoBehaviour Callbacks
@@ -81,16 +82,17 @@ namespace EdgeMultiplay
             else
             {
                 isLocalPlayerMaster = false;
-                 
             }
             EdgeManager.observers.Add(this);
             positionFromServer = transform.position;
             rotationFromServer = transform.rotation.eulerAngles;
+            networkedPlayer = GetComponent<NetworkedPlayer>();
         }
 
         private void Update()
         {
-            if (EdgeManager.gameStarted) {
+            if (EdgeManager.gameStarted)
+            {
                 if ((lastPosition != transform.position && syncOption == SyncOptions.SyncPosition)
                     || (lastRotation != transform.rotation.eulerAngles && syncOption == SyncOptions.SyncRotation)
                     || ((lastRotation != transform.rotation.eulerAngles || lastPosition != transform.position)
@@ -98,9 +100,9 @@ namespace EdgeMultiplay
                 {
                     if (attachedToPlayer)
                     {
-                        if (GetComponent<NetworkedPlayer>() && GetComponent<NetworkedPlayer>().isLocalPlayer)
+                        if (networkedPlayer && networkedPlayer.isLocalPlayer)
                         {
-                                SendDataToServer(syncOption, true, GetComponent<NetworkedPlayer>().playerId);
+                            SendDataToServer(syncOption, true, networkedPlayer.playerId);
                         }
                     }
                     else if (!attachedToPlayer && isLocalPlayerMaster)
@@ -115,7 +117,7 @@ namespace EdgeMultiplay
         {
             if (attachedToPlayer)
             {
-                if (GetComponent<NetworkedPlayer>() && !GetComponent<NetworkedPlayer>().isLocalPlayer)
+                if (networkedPlayer && !networkedPlayer.isLocalPlayer)
                 {
                     ReflectServerData(syncOption);
                 }
