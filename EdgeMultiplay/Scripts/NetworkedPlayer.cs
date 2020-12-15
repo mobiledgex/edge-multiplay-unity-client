@@ -13,6 +13,7 @@ namespace EdgeMultiplay
     public class NetworkedPlayer : EdgeMultiplayCallbacks
     {
         #region NetworkedPlayer Variables
+
         /// <summary>
         /// the id of the room that the player is a member of
         /// </summary>
@@ -33,9 +34,16 @@ namespace EdgeMultiplay
         /// Can be used to set the player to be active or inactive although the player is still an active connection in the room
         /// </summary>
         public bool ActivePlayer = true;
+        EdgeManager edgeManager;
+
         #endregion
 
         #region NetworkedPlayer Functions
+
+        private void Awake()
+        {
+           edgeManager = FindObjectOfType<EdgeManager>();
+        }
 
         /// <summary>
         /// Call ListenToMessages() to start listening to messages from the server
@@ -81,7 +89,7 @@ namespace EdgeMultiplay
             {
                 if (udpEvent.senderId == playerId)
                 {
-                    playerEvent(udpEvent);
+                   playerEvent(udpEvent);
                 }
             }
         }
@@ -117,7 +125,7 @@ namespace EdgeMultiplay
                 integerData = gamePlayEvent.integerData,
                 floatData = gamePlayEvent.floatData,
             };
-            FindObjectOfType<EdgeManager>().SendGamePlayEvent(gameplayEvent);
+            edgeManager.SendGamePlayEvent(gameplayEvent);
         }
 
         /// <summary>
@@ -126,7 +134,7 @@ namespace EdgeMultiplay
         public void BroadcastMessage(string eventName, Vector3 position)
         {
             GamePlayEvent gameplayEvent = new GamePlayEvent(eventName, position);
-            FindObjectOfType<EdgeManager>().SendGamePlayEvent(gameplayEvent);
+            edgeManager.SendGamePlayEvent(gameplayEvent);
         }
 
         /// <summary>
@@ -135,7 +143,7 @@ namespace EdgeMultiplay
         public void BroadcastMessage(string eventName, Quaternion rotation)
         {
             GamePlayEvent gameplayEvent = new GamePlayEvent(eventName, rotation);
-            FindObjectOfType<EdgeManager>().SendGamePlayEvent(gameplayEvent);
+            edgeManager.SendGamePlayEvent(gameplayEvent) ;
         }
 
         /// <summary>
@@ -144,7 +152,7 @@ namespace EdgeMultiplay
         public void BroadcastMessage(string eventName, Vector3 position, Quaternion rotation)
         {
             GamePlayEvent gameplayEvent = new GamePlayEvent(eventName, position, rotation);
-            FindObjectOfType<EdgeManager>().SendGamePlayEvent(gameplayEvent);
+            edgeManager.SendGamePlayEvent(gameplayEvent);
         }
 
         /// <summary>
@@ -153,7 +161,7 @@ namespace EdgeMultiplay
         public void BroadcastMessage(string eventName, List<int> integerArray)
         {
             GamePlayEvent gameplayEvent = new GamePlayEvent(eventName, integerArray);
-            FindObjectOfType<EdgeManager>().SendGamePlayEvent(gameplayEvent);
+            edgeManager.SendGamePlayEvent(gameplayEvent);
         }
 
         /// <summary>
@@ -162,7 +170,7 @@ namespace EdgeMultiplay
         public void BroadcastMessage(string eventName, List<float> floatArray)
         {
             GamePlayEvent gameplayEvent = new GamePlayEvent(eventName, floatArray);
-            FindObjectOfType<EdgeManager>().SendGamePlayEvent(gameplayEvent);
+            edgeManager.SendGamePlayEvent(gameplayEvent);
         }
 
         /// <summary>
@@ -173,7 +181,7 @@ namespace EdgeMultiplay
             bool[] booleanData = null)
         {
             GamePlayEvent gamePlayEvent = new GamePlayEvent(this.roomId, playerId, eventName, stringData, commandInts, floatData, booleanData);
-            FindObjectOfType<EdgeManager>().SendGamePlayEvent(gamePlayEvent);
+            edgeManager.SendGamePlayEvent(gamePlayEvent);
         }
 
         #endregion

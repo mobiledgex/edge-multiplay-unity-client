@@ -135,16 +135,14 @@ namespace EdgeMultiplay
         public Room room;
     }
 
-
-
     /// <summary>
     /// GamePlayEvent is the main event for GamePlayEvents
     /// </summary>
     [DataContract]
     public class GamePlayEvent
     {
-        [DataMember (IsRequired = true)]
-        public string type = "GamePlayEvent";
+        [DataMember(IsRequired = true)]
+        public string type;
         [DataMember (IsRequired = true)]
         public string roomId;
         [DataMember (IsRequired = true)]
@@ -267,6 +265,11 @@ namespace EdgeMultiplay
             this.integerData = integerData;
             this.floatData = floatData;
             this.booleanData = booleanData;
+        }
+
+        public string ToJson()
+        {
+            return JsonUtility.ToJson(this); ;
         }
     }
     #endregion
@@ -554,8 +557,10 @@ namespace EdgeMultiplay
 
         public static T Deserialize(string jsonString)
         {
-            MemoryStream ms = new MemoryStream(Encoding.UTF8.GetBytes(jsonString ?? ""));
-            return Deserialize(ms);
+            using (MemoryStream memStream = new MemoryStream(Encoding.UTF8.GetBytes(jsonString ?? "")))
+            {
+                return Deserialize(memStream);
+            }
         }
 
         public static T Deserialize(Stream stream)
