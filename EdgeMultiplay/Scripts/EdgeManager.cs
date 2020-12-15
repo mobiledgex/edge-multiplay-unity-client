@@ -445,14 +445,7 @@ namespace EdgeMultiplay
                     {
                         udpClient = new MobiledgeXUDPClient(integration.GetHost(), integration.GetAppPort(LProto.L_PROTO_UDP).public_port, gameSession.udpReceivePort);
                     }
-                    SendUDPMessage(new GamePlayEvent
-                    {
-                        stringData = new string[] { "Start" },
-                        floatData = new float[] { 0, 0, 0 },
-                        integerData = new int[] { 0 },
-                        booleanData = new bool[] { false },
-                        eventName = "test"
-                    });
+                    SendUDPMessage(new GamePlayEvent(){eventName = "Start"});
                     break;
 
                 case "GamePlayEvent":
@@ -485,7 +478,7 @@ namespace EdgeMultiplay
                     {
                         // if used for other than that Syncing GameObjects Position & Rotation
                         // it wil trigger OnUDPMessagesReceived()
-                        EdgeMultiplayCallbacks.udpEventReceived(message);
+                        EdgeMultiplayCallbacks.udpEventReceived(gamePlayEvent);
                     }
                     break;
                 default:
