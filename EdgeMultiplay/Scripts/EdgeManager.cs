@@ -431,7 +431,6 @@ namespace EdgeMultiplay
                         if (player.playerId == gameSession.playerId)
                         {
                             gameSession.playerIndex = player.playerIndex;
-                            gameSession.udpReceivePort = player.udpPort;
                         }
                     }
                     CreatePlayers(gameSession.currentPlayers);
@@ -439,11 +438,11 @@ namespace EdgeMultiplay
                     EdgeMultiplayCallbacks.gameStart();
                     if (useLocalHostServer)
                     {
-                        udpClient = new MobiledgeXUDPClient(hostIPAddress, defaultEdgeMultiplayServerUDPPort, gameSession.udpReceivePort);
+                        udpClient = new MobiledgeXUDPClient(hostIPAddress, defaultEdgeMultiplayServerUDPPort);
                     }
                     else
                     {
-                        udpClient = new MobiledgeXUDPClient(integration.GetHost(), integration.GetAppPort(LProto.L_PROTO_UDP).public_port, gameSession.udpReceivePort);
+                        udpClient = new MobiledgeXUDPClient(integration.GetHost(), integration.GetAppPort(LProto.L_PROTO_UDP).public_port);
                     }
                     SendUDPMessage(new GamePlayEvent(){eventName = "Start"});
                     break;
