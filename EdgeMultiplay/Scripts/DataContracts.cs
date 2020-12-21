@@ -420,7 +420,6 @@ namespace EdgeMultiplay
         public string playerAvatar;
         public int playerIndex;
         public Player[] currentPlayers;
-        public int udpReceivePort;
     }
     /// <summary>
     /// Wrapper class for room info received the server
@@ -475,13 +474,6 @@ namespace EdgeMultiplay
         /// </summary>
         [DataMember]
         public int playerAvatar = 0;
-
-        /// <summary>
-        /// UDP receive port for the player to communicate with the server, assigned by the server on GameStartEvent
-        /// </summary>
-        [HideInInspector]
-        [DataMember]
-        public int udpPort;
     }
 
     /// <summary>
