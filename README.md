@@ -10,4 +10,4 @@ This repository contains the unity client of the EdgeMultiplay Solution.
 * [MobiledgeX Unity SDK](https://github.com/mobiledgex/edge-cloud-sdk-unity).
 
 ## Documentation
-To get started, Check [EdgeMultiplay Github Page ](https://mobiledgex.github.io/EdgeMultiplay-UnityClient/)
+To get started, Check [EdgeMultiplay Github Page ](https://mobiledgex.github.io/edge-multiplay-unity-client/)
