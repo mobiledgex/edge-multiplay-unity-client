@@ -70,9 +70,9 @@ namespace EdgeMultiplay
             {
                 playerEvent += OnMessageReceived;
                 if (GetComponent<Rigidbody>())
-                    Destroy(GetComponent<Rigidbody>());
+                    GetComponent<Rigidbody>().isKinematic = true;
                 if (GetComponent<Rigidbody2D>())
-                    Destroy(GetComponent<Rigidbody2D>());
+                    GetComponent<Rigidbody2D>().isKinematic = true;
 
             }
         }
