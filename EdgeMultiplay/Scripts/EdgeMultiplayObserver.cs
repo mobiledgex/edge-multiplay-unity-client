@@ -105,14 +105,33 @@ namespace EdgeMultiplay
             networkedPlayer = GetComponent<NetworkedPlayer>();
         }
 
+        private bool RequiresUpdate()
+        {
+            switch (syncOption)
+            {
+                case SyncOptions.SyncPosition:
+                    if (lastPosition != transform.position)
+                        return true;
+                    else
+                        return false;
+                case SyncOptions.SyncRotation:
+                    if (lastRotation != transform.rotation.eulerAngles)
+                        return true;
+                    else
+                        return false;
+                default:
+                case SyncOptions.SyncPositionAndRotation:
+                    if (lastPosition != transform.position || lastRotation != transform.rotation.eulerAngles)
+                        return true;
+                    else
+                        return false;
+            }
+        }
         private void Update()
         {
             if (EdgeManager.gameStarted)
             {
-                if ((lastPosition != transform.position && syncOption == SyncOptions.SyncPosition)
-                    || (lastRotation != transform.rotation.eulerAngles && syncOption == SyncOptions.SyncRotation)
-                    || ((lastRotation != transform.rotation.eulerAngles || lastPosition != transform.position)
-                         && syncOption == SyncOptions.SyncPositionAndRotation))
+                if (RequiresUpdate())
                 {
                     if (attachedToPlayer)
                     {

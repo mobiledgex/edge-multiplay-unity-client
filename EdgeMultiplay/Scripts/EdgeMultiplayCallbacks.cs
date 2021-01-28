@@ -41,7 +41,12 @@ namespace EdgeMultiplay
         public static Action gameStart;
         public static Action gameEnd;
 
-        public void ConnectToEdge(bool testingMode = false,bool useFallBackLocation = false)
+        /// <summary>
+        /// Starts the connection to your Edge server, server discovery is based on GPS location and the telecommunication carrier
+        /// </summary>
+        /// <param name="useAnyCarrierNetwork">True by default, set to false to connect to a specific carrier, set carrier name using EdgeManager.integration.carrierName </param>
+        /// <param name="useFallBackLocation">False by default, location is acquired from user GPS location, if you are using location blind device like Oculus, use EdgeManager.integration.SetFallbackLocation()</param>
+        public void ConnectToEdge(bool useAnyCarrierNetwork = true, bool useFallBackLocation = false)
         {
             connectedToEdge += OnConnectionToEdge;
             failureToConnect += OnFaliureToConnect;
@@ -58,10 +63,10 @@ namespace EdgeMultiplay
             leftRoom += OnLeftRoom;
             eventReceived += OnWebSocketEventReceived;
             udpEventReceived += OnUDPEventReceived;
-            StartCoroutine(ConnectToEdgeCoroutine( testingMode, useFallBackLocation));
+            StartCoroutine(ConnectToEdgeCoroutine(useAnyCarrierNetwork, useFallBackLocation));
         }
 
-        IEnumerator ConnectToEdgeCoroutine(bool testingMode = false, bool useFallBackLocation = false)
+        IEnumerator ConnectToEdgeCoroutine(bool useAnyCarrierNetwork = true, bool useFallBackLocation = false)
         {
             EdgeManager edgeManager = FindObjectOfType<EdgeManager>();
             if (edgeManager.useLocalHostServer == false && (Application.platform == RuntimePlatform.IPhonePlayer || Application.platform == RuntimePlatform.Android))
@@ -72,7 +77,12 @@ namespace EdgeMultiplay
             {
                 yield return null;
             }
-            edgeManager.ConnectToServer(testingMode, useFallBackLocation);
+            // Non Phone devices
+            if(Application.platform != RuntimePlatform.Android || Application.platform != RuntimePlatform.IPhonePlayer)
+            {
+                useFallBackLocation = true;
+            }
+            edgeManager.ConnectToServer(useAnyCarrierNetwork, useFallBackLocation);
         }
 
         /// <summary>

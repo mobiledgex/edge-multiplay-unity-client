@@ -19,7 +19,6 @@ using System;
 using System.IO;
 using UnityEditor;
 using UnityEngine;
-using EnhancementManager;
 
 
 namespace EdgeMultiplay
@@ -35,29 +34,24 @@ namespace EdgeMultiplay
         {
             string assetsFolder = Path.GetFullPath(Application.dataPath);
             AssetDatabase.ImportPackage(Path.Combine(assetsFolder, "EdgeMultiplay/Examples/PingPongExample.unitypackage"), true);
-            
-            Enhancement.EdgeMultiplayPingPongImported(getId());
         }
 
         [MenuItem("EdgeMultiplay/Docs/Getting Started", false, 20)]
         public static void OpenGettingStartedURL()
         {
             Application.OpenURL("https://mobiledgex.github.io/edge-multiplay-unity-client/getting_started.html");
-            Enhancement.EdgeMultiplayDocsOpened(getId());
         }
 
         [MenuItem("EdgeMultiplay/Docs/How It Works?", false, 20)]
         public static void OpenHowItWorksURL()
         {
             Application.OpenURL("https://mobiledgex.github.io/edge-multiplay-unity-client/how_it_works.html");
-            Enhancement.EdgeMultiplayDocsOpened(getId());
         }
 
         [MenuItem("EdgeMultiplay/Docs/Documentation", false, 20)]
         public static void OpenDocumentationURL()
         {
             Application.OpenURL("https://mobiledgex.github.io/edge-multiplay-unity-client/");
-            Enhancement.EdgeMultiplayDocsOpened(getId());
         }
 
         [MenuItem("EdgeMultiplay/Join the Community", false, 20)]
@@ -70,13 +64,6 @@ namespace EdgeMultiplay
         public static void ReportBug()
         {
             Application.OpenURL("https://github.com/mobiledgex/edge-multiplay-unity-client/issues/new/choose");
-        }
-
-        static string getId()
-        {
-            string id = EditorPrefs.GetString("mobiledgex-user", Guid.NewGuid().ToString());
-            EditorPrefs.SetString("mobiledgex-user", id);
-            return id;
         }
     }
 }
