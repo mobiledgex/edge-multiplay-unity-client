@@ -41,7 +41,7 @@ namespace EdgeMultiplay
                     outfile.WriteLine(" ");
                     outfile.WriteLine("    // Use this for initialization");
                     outfile.WriteLine("    void Start () {");
-                    outfile.WriteLine("        ConnectToEdge(true,true);");
+                    outfile.WriteLine("        ConnectToEdge();");
                     outfile.WriteLine("    }");
                     outfile.WriteLine(" ");
                     outfile.WriteLine("    // Called once connected to your server deployed on Edge");

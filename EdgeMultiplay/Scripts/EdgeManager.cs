@@ -36,7 +36,7 @@ namespace EdgeMultiplay
     {
         #region  EdgeManager static variables and constants
 
-        static MobiledgeXIntegration integration;
+        public static MobiledgeXIntegration integration;
         static MobiledgeXWebSocketClient wsClient;
         static MobiledgeXUDPClient udpClient;
         /// <summary>
@@ -61,6 +61,11 @@ namespace EdgeMultiplay
 
         public const int defaultEdgeMultiplayServerUDPPort = 5000;
         public const int defaultEdgeMultiplayServerTCPPort = 3000;
+
+        /// <summary>
+        /// If you want to have a different World Origin, Players will be spawned relative to the Transform specified
+        /// </summary>
+        public Transform WorldOriginTransform;
         #endregion
 
         #region private variables
@@ -161,10 +166,10 @@ namespace EdgeMultiplay
         /// use <b>public override void OnConnectionToEdge()</b>  to get the server response
         /// </para>
         /// </summary>
-        /// <param name="testingMode"> set to true for connection based on location info only </param>
+        /// <param name="useAnyCarrierNetwork"> set to true for connection based on location info only </param>
         /// <param name="useFallBackLocation"> set to true to use overloaded location sat in setFallbackLocation()</param>
         /// <returns></returns>
-        public async Task ConnectToServer(bool testingMode = false, bool useFallBackLocation = false)
+        public async Task ConnectToServer(bool useAnyCarrierNetwork = true, bool useFallBackLocation = false)
         {
             if (useLocalHostServer)
             {
@@ -193,7 +198,7 @@ namespace EdgeMultiplay
                 {
                     gameSession = new Session();
                     integration = new MobiledgeXIntegration();
-                    integration.UseWifiOnly(testingMode);
+                    integration.UseWifiOnly(useAnyCarrierNetwork);
                     integration.useFallbackLocation = useFallBackLocation;
                     wsClient = new MobiledgeXWebSocketClient();
                     await integration.RegisterAndFindCloudlet();
@@ -548,7 +553,24 @@ namespace EdgeMultiplay
                     {
                         GameObject playerObj = SpawnPrefabs[player.playerAvatar];
                         playerObj.GetComponent<NetworkedPlayer>().SetUpPlayer(player, gameSession.roomId, player.playerId == gameSession.playerId);
-                        GameObject playerCreated = Instantiate(playerObj, SpawnInfo[player.playerIndex].position, Quaternion.Euler(SpawnInfo[player.playerIndex].rotation));
+
+                        GameObject playerCreated;
+                        if (WorldOriginTransform != null)
+                        {
+                            playerCreated = Instantiate(playerObj, WorldOriginTransform);
+                            var position = playerCreated.transform.localPosition;
+                            position.Set(SpawnInfo[player.playerIndex].position.x, SpawnInfo[player.playerIndex].position.y, SpawnInfo[player.playerIndex].position.z);
+                            playerCreated.transform.localPosition = position;
+
+                            var rotation = playerCreated.transform.localRotation;
+                            Quaternion tempRotation = Quaternion.Euler(SpawnInfo[player.playerIndex].rotation);
+                            rotation.Set(tempRotation.x, tempRotation.y, tempRotation.z, tempRotation.w);
+                            playerCreated.transform.localRotation = rotation;
+                        }
+                        else
+                        {
+                            playerCreated = Instantiate(playerObj, SpawnInfo[player.playerIndex].position, Quaternion.Euler(SpawnInfo[player.playerIndex].rotation));
+                        }
                         NetworkedPlayer networkedPlayer = playerCreated.GetComponent<NetworkedPlayer>();
                         if (player.playerName == "")
                         {
