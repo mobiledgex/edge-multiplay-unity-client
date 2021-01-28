@@ -166,7 +166,7 @@ namespace EdgeMultiplay
         /// use <b>public override void OnConnectionToEdge()</b>  to get the server response
         /// </para>
         /// </summary>
-        /// <param name="testingMode"> set to true for connection based on location info only </param>
+        /// <param name="useAnyCarrierNetwork"> set to true for connection based on location info only </param>
         /// <param name="useFallBackLocation"> set to true to use overloaded location sat in setFallbackLocation()</param>
         /// <returns></returns>
         public async Task ConnectToServer(bool useAnyCarrierNetwork = true, bool useFallBackLocation = false)

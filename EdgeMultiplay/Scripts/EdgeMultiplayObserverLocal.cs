@@ -29,7 +29,7 @@ namespace EdgeMultiplay
 
         private Vector3 latestPosition;
         private Vector3 latestRotation;
-        private bool LocalPlayeIsMaster;
+        private bool LocalPlayerIsMaster;
         private NetworkedPlayer networkPlayer;
         private Vector3 targetPosInterpolated;
         private Vector3 targetRotInterpolated;
@@ -52,7 +52,7 @@ namespace EdgeMultiplay
         {
             if (!attachedToPlayer)
             {
-                LocalPlayeIsMaster = EdgeManager.localPlayerIsMaster;
+                LocalPlayerIsMaster = EdgeManager.localPlayerIsMaster;
             }
             EdgeManager.observers.Add(this);
             networkPlayer = GetComponent<NetworkedPlayer>();
@@ -60,13 +60,34 @@ namespace EdgeMultiplay
             rotationFromServer = transform.localRotation.eulerAngles;
         }
 
+        private bool RequiresUpdate()
+        {
+            switch (syncOption)
+            {
+                case SyncOptions.SyncPosition:
+                    if (latestPosition != transform.localPosition)
+                        return true;
+                    else
+                        return false;
+                case SyncOptions.SyncRotation:
+                    if (latestRotation != transform.localRotation.eulerAngles)
+                        return true;
+                    else
+                        return false;
+                default:
+                case SyncOptions.SyncPositionAndRotation:
+                    if (latestPosition != transform.localPosition || latestRotation != transform.localRotation.eulerAngles)
+                        return true;
+                    else
+                        return false;
+            }
+        }
+
         private void Update() 
         {
             if (EdgeManager.gameStarted)
             {
-                if ((latestPosition != transform.localPosition && syncOption == SyncOptions.SyncPosition)
-                || (latestRotation != transform.localRotation.eulerAngles && syncOption == SyncOptions.SyncRotation)
-                || ((latestRotation != transform.localRotation.eulerAngles || latestPosition != transform.localPosition) && syncOption == SyncOptions.SyncPositionAndRotation))
+                if (RequiresUpdate())
                 {
                     if (attachedToPlayer)
                     {
@@ -75,7 +96,7 @@ namespace EdgeMultiplay
                             SendDataToServer(syncOption, true, networkPlayer.playerId);
                         }
                     }
-                    else if (!attachedToPlayer && LocalPlayeIsMaster)
+                    else if (!attachedToPlayer && LocalPlayerIsMaster)
                     {
                         SendDataToServer(syncOption, false, eventId);
                     }
@@ -92,7 +113,7 @@ namespace EdgeMultiplay
                     ReflectServerData(syncOption);
                 }
             }
-            else if (!attachedToPlayer && !LocalPlayeIsMaster)
+            else if (!attachedToPlayer && !LocalPlayerIsMaster)
             {
                 ReflectServerData(syncOption);
             }
