@@ -15,11 +15,9 @@
  * limitations under the License.
  */
 
-using System;
 using System.IO;
 using UnityEditor;
 using UnityEngine;
-
 
 namespace EdgeMultiplay
 {
@@ -29,17 +27,31 @@ namespace EdgeMultiplay
 
         #region  EdgeMultiplay ToolBar Menu items
 
-        [MenuItem("EdgeMultiplay/Examples/PingPong", false, 0)]
+        [MenuItem("EdgeMultiplay/Getting Started", false, 0)]
+        public static void OpenGettingStartedURL()
+        {
+            Application.OpenURL("https://www.youtube.com/playlist?list=PLwUZZfaECSv18E5d0ooDR7S8416pImW8W");
+        }
+
+        [MenuItem("EdgeMultiplay/Examples/PingPong", false, 40)]
         public static void ImportPingPongExample()
         {
             string assetsFolder = Path.GetFullPath(Application.dataPath);
             AssetDatabase.ImportPackage(Path.Combine(assetsFolder, "EdgeMultiplay/Examples/PingPongExample.unitypackage"), true);
         }
 
-        [MenuItem("EdgeMultiplay/Docs/Getting Started", false, 20)]
-        public static void OpenGettingStartedURL()
+        [MenuItem("EdgeMultiplay/Examples/AR PingPong", false, 40)]
+        public static void ImportARPingPongExample()
         {
-            Application.OpenURL("https://mobiledgex.github.io/edge-multiplay-unity-client/getting_started.html");
+            string assetsFolder = Path.GetFullPath(Application.dataPath);
+            AssetDatabase.ImportPackage(Path.Combine(assetsFolder, "EdgeMultiplay/Examples/AR_PingPongExample.unitypackage"), true);
+        }
+
+        [MenuItem("EdgeMultiplay/Examples/Chat", false, 40)]
+        public static void ImportChatExample()
+        {
+            string assetsFolder = Path.GetFullPath(Application.dataPath);
+            AssetDatabase.ImportPackage(Path.Combine(assetsFolder, "EdgeMultiplay/Examples/ChatExample.unitypackage"), true);
         }
 
         [MenuItem("EdgeMultiplay/Docs/How It Works?", false, 20)]
@@ -57,7 +69,7 @@ namespace EdgeMultiplay
         [MenuItem("EdgeMultiplay/Join the Community", false, 20)]
         public static void JoinTheCommunity()
         {
-            Application.OpenURL("https://discord.gg/k22WcfMFZ3");
+            Application.OpenURL("https://discord.gg/CHCWfgrxh6");
         }
 
         [MenuItem("EdgeMultiplay/Report a bug", false, 60)]
