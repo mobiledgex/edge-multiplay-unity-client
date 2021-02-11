@@ -178,6 +178,7 @@ namespace EdgeMultiplay
         /// </summary>
         /// <param name="useAnyCarrierNetwork"> set to true for connection based on location info only </param>
         /// <param name="useFallBackLocation"> set to true to use overloaded location sat in setFallbackLocation()</param>
+        /// <returns> Connection Task, use OnConnectionToEdge() to listen to the async task result </returns>
         public async Task ConnectToServer(bool useAnyCarrierNetwork = true, bool useFallBackLocation = false)
         {
             if (useLocalHostServer)
@@ -243,7 +244,7 @@ namespace EdgeMultiplay
         /// Get Player based on playerId
         /// </summary>
         /// <param name="playerId"> playerId is a unique Id assigned to player during OnRegister() and saved into EdgeManager.gameSession.playerId</param>
-        /// <returns></returns>
+        /// <returns> The NetworkedPlayer of the supplied playerId </returns>
         public static NetworkedPlayer GetPlayer(string playerId)
         {
             return currentRoomPlayers.Find(player => player.playerId == playerId);
