@@ -211,16 +211,7 @@ namespace EdgeMultiplay
                     integration.UseWifiOnly(useAnyCarrierNetwork);
                     integration.useFallbackLocation = useFallBackLocation;
                     wsClient = new MobiledgeXWebSocketClient();
-                    try
-                    {
-                        await integration.RegisterAndFindCloudlet();
-                    }
-                    catch (LocationException)
-                    {
-                        MobiledgeXIntegration.LocationFromIPAddress location = await MobiledgeXIntegration.GetLocationFromIP();
-                        integration.SetFallbackLocation(location.longitude, location.latitude);
-                        await integration.RegisterAndFindCloudlet();
-                    }
+                    await integration.RegisterAndFindCloudlet();
                     integration.GetAppPort(LProto.L_PROTO_TCP);
                     string url = integration.GetUrl("ws");
                     Uri uri = new Uri(url);
