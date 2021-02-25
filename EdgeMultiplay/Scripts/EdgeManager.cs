@@ -523,27 +523,28 @@ namespace EdgeMultiplay
             {
                 return;
             }
-            EdgeMultiplayObserver observedObject;
+            EdgeMultiplayObserver edgeMultiplayObserver;
             if (receivedEvent.booleanData[0]) // player object
             {
-                observedObject = observers.Find(observer => observer.GetComponent<NetworkedPlayer>()
+                edgeMultiplayObserver = observers.Find(observer => observer.GetComponent<NetworkedPlayer>()
                 && observer.GetComponent<NetworkedPlayer>().playerId == receivedEvent.stringData[0]);
             }
             else
             {
-                observedObject = observers.Find(observer => observer.eventId == receivedEvent.stringData[0]);
+                edgeMultiplayObserver = observers.Find(observer => observer.eventId == receivedEvent.stringData[0]);
             }
+            int observerId = receivedEvent.integerData[1];
             switch (receivedEvent.integerData[0])
             {
                 case (int)EdgeMultiplayObserver.SyncOptions.SyncPosition:
-                    observedObject.positionFromServer = new Vector3(receivedEvent.floatData[0], receivedEvent.floatData[1], receivedEvent.floatData[2]);
+                    edgeMultiplayObserver.observers[observerId].positionFromServer = new Vector3(receivedEvent.floatData[0], receivedEvent.floatData[1], receivedEvent.floatData[2]);
                     break;
                 case (int)EdgeMultiplayObserver.SyncOptions.SyncRotation:
-                    observedObject.rotationFromServer = new Vector3(receivedEvent.floatData[0], receivedEvent.floatData[1], receivedEvent.floatData[2]);
+                    edgeMultiplayObserver.observers[observerId].rotationFromServer = new Vector3(receivedEvent.floatData[0], receivedEvent.floatData[1], receivedEvent.floatData[2]);
                     break;
                 case (int)EdgeMultiplayObserver.SyncOptions.SyncPositionAndRotation:
-                    observedObject.positionFromServer = new Vector3(receivedEvent.floatData[0], receivedEvent.floatData[1], receivedEvent.floatData[2]);
-                    observedObject.rotationFromServer = new Vector3(receivedEvent.floatData[3], receivedEvent.floatData[4], receivedEvent.floatData[5]);
+                    edgeMultiplayObserver.observers[observerId].positionFromServer = new Vector3(receivedEvent.floatData[0], receivedEvent.floatData[1], receivedEvent.floatData[2]);
+                    edgeMultiplayObserver.observers[observerId].rotationFromServer = new Vector3(receivedEvent.floatData[3], receivedEvent.floatData[4], receivedEvent.floatData[5]);
                     break;
             }
         }

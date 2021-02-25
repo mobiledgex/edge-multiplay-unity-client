@@ -16,7 +16,9 @@
  */
 
 using System;
+using System.Collections.Generic;
 using UnityEngine;
+using static EdgeMultiplay.EdgeMultiplayObserver;
 
 namespace EdgeMultiplay
 {
@@ -24,28 +26,15 @@ namespace EdgeMultiplay
     /// EdgeMultiplayObserver can be added to on an object to sync its position and/or rotation between all players
     /// You can sync a PlayerObject or Non PlayerObject
     /// </summary>
-
     [AddComponentMenu("EdgeMultiplay/EdgeMultiplayObserver")]
     public class EdgeMultiplayObserver : MonoBehaviour
     {
         #region EdgeMultiplayObserver Variables
 
         [HideInInspector]
-        public Vector3 positionFromServer;
-        [HideInInspector]
-        public Vector3 rotationFromServer;
-        [HideInInspector]
         public string eventId;
-        private Vector3 lastPosition;
-        private Vector3 lastRotation;
         private bool isLocalPlayerMaster;
-        public enum SyncOptions
-        {
-            SyncPosition,
-            SyncRotation,
-            SyncPositionAndRotation
-        }
-        NetworkedPlayer networkedPlayer;
+        private NetworkedPlayer networkedPlayer;
 
         #endregion
 
@@ -56,24 +45,19 @@ namespace EdgeMultiplay
         /// </summary>
         [Tooltip("Check if the Observer is attached to a player object, otherwise leave unchecked.")]
         public bool attachedToPlayer;
-        [Header("Sync Options", order = 1)]
-        public SyncOptions syncOption;
+
         /// <summary>
-        /// Set to true if you want to smoothen the tracked position if you have network lag
+        /// List of GameObjects that you want to sync its position and/or rotation
         /// </summary>
-        [Tooltip("Check if you want to smoothen the tracked position if you have network lag")]
-        public bool InterpolatePosition;
-        /// <summary>
-        /// Set to true if you want to smoothen the tracked rotation if you have network lag
-        /// </summary>
-        [Tooltip("Check if you want to smoothen the tracked rotation if you have network lag")]
-        public bool InterpolateRotation;
-        /// <summary>
-        /// Set Interpolation factor between 0.1 and 1
-        /// </summary>
-        [Tooltip("Set Interpolation factor between 0.1 and 1")]
-        [Range(0.1f, 1f)]
-        public float InterpolationFactor;
+        [Tooltip("GameObjects you want to sync its position and/or rotation")]
+        public List<Observer> observers;
+
+        public enum SyncOptions
+        {
+            SyncPosition,
+            SyncRotation,
+            SyncPositionAndRotation
+        }
 
         #endregion
 
@@ -100,49 +84,41 @@ namespace EdgeMultiplay
                 isLocalPlayerMaster = false;
             }
             EdgeManager.observers.Add(this);
-            positionFromServer = transform.position;
-            rotationFromServer = transform.rotation.eulerAngles;
+            foreach(Observer observer in observers)
+            {
+                observer.positionFromServer = observer.gameObject.transform.position;
+                observer.rotationFromServer = observer.gameObject.transform.rotation.eulerAngles;
+            }
             networkedPlayer = GetComponent<NetworkedPlayer>();
         }
 
-        private bool RequiresUpdate()
+        private void OnValidate()
         {
-            switch (syncOption)
+            for(int i =0; i< observers.Count; i++)
             {
-                case SyncOptions.SyncPosition:
-                    if (lastPosition != transform.position)
-                        return true;
-                    else
-                        return false;
-                case SyncOptions.SyncRotation:
-                    if (lastRotation != transform.rotation.eulerAngles)
-                        return true;
-                    else
-                        return false;
-                default:
-                case SyncOptions.SyncPositionAndRotation:
-                    if (lastPosition != transform.position || lastRotation != transform.rotation.eulerAngles)
-                        return true;
-                    else
-                        return false;
+                observers[i].observerId = i;
             }
         }
+
         private void Update()
         {
             if (EdgeManager.gameStarted)
             {
-                if (RequiresUpdate())
+                foreach (Observer observer in observers)
                 {
-                    if (attachedToPlayer)
+                    if (RequiresUpdate(observer))
                     {
-                        if (networkedPlayer && networkedPlayer.isLocalPlayer)
+                        if (attachedToPlayer)
                         {
-                            SendDataToServer(syncOption, true, networkedPlayer.playerId);
+                            if (networkedPlayer && networkedPlayer.isLocalPlayer)
+                            {
+                                SendDataToServer(observer, true, networkedPlayer.playerId);
+                            }
                         }
-                    }
-                    else if (!attachedToPlayer && isLocalPlayerMaster)
-                    {
-                        SendDataToServer(syncOption, false, eventId);
+                        else if (!attachedToPlayer && isLocalPlayerMaster)
+                        {
+                            SendDataToServer(observer, false, eventId);
+                        }
                     }
                 }
             }
@@ -150,16 +126,19 @@ namespace EdgeMultiplay
 
         private void LateUpdate()
         {
-            if (attachedToPlayer)
+            foreach (Observer observer in observers)
             {
-                if (networkedPlayer && !networkedPlayer.isLocalPlayer)
+                if (attachedToPlayer)
                 {
-                    ReflectServerData(syncOption);
+                    if (networkedPlayer && !networkedPlayer.isLocalPlayer)
+                    {
+                        ReflectServerData(observer);
+                    }
                 }
-            }
-            else if (!attachedToPlayer && !isLocalPlayerMaster)
-            {
-                ReflectServerData(syncOption);
+                else if (!attachedToPlayer && !isLocalPlayerMaster)
+                {
+                    ReflectServerData(observer);
+                }
             }
         }
 
@@ -172,65 +151,125 @@ namespace EdgeMultiplay
 
         #region EdgeMultiplayObserver Private Functions
 
-        void ReflectServerData(SyncOptions syncOption)
+        private bool RequiresUpdate(Observer observer)
         {
-            switch (syncOption)
+            switch (observer.syncOption)
             {
                 case SyncOptions.SyncPosition:
-                    if (InterpolatePosition)
-                        transform.position = Vector3.Lerp(transform.position, positionFromServer, Time.deltaTime * InterpolationFactor);
+                    if (observer.lastPosition != observer.gameObject.transform.position)
+                        return true;
                     else
-                        transform.position = positionFromServer;
+                        return false;
+                case SyncOptions.SyncRotation:
+                    if (observer.lastRotation != observer.gameObject.transform.rotation.eulerAngles)
+                        return true;
+                    else
+                        return false;
+                default:
+                case SyncOptions.SyncPositionAndRotation:
+                    if (observer.lastPosition != observer.gameObject.transform.position || observer.lastRotation != observer.gameObject.transform.rotation.eulerAngles)
+                        return true;
+                    else
+                        return false;
+            }
+        }
+
+        void ReflectServerData(Observer obs)
+        {
+            switch (obs.syncOption)
+            {
+                case SyncOptions.SyncPosition:
+                    if (obs.InterpolatePosition)
+                        obs.gameObject.transform.position = Vector3.Lerp(obs.gameObject.transform.position, obs.positionFromServer, Time.deltaTime * obs.InterpolationFactor);
+                    else
+                        obs.gameObject.transform.position = obs.positionFromServer;
                     break;
 
                 case SyncOptions.SyncRotation:
-                    if (InterpolateRotation)
-                        transform.rotation = Quaternion.Lerp(transform.rotation, Quaternion.Euler(rotationFromServer), Time.deltaTime * InterpolationFactor);
+                    if (obs.InterpolateRotation)
+                        obs.gameObject.transform.rotation = Quaternion.Lerp(obs.gameObject.transform.rotation, Quaternion.Euler(obs.rotationFromServer), Time.deltaTime * obs.InterpolationFactor);
                     else
-                        transform.rotation = Quaternion.Euler(rotationFromServer);
+                        obs.gameObject.transform.rotation = Quaternion.Euler(obs.rotationFromServer);
                     break;
 
                 case SyncOptions.SyncPositionAndRotation:
-                    if (InterpolatePosition)
-                        transform.position = Vector3.Lerp(transform.position, positionFromServer, Time.deltaTime * InterpolationFactor);
+                    if (obs.InterpolatePosition)
+                        obs.gameObject.transform.position = Vector3.Lerp(obs.gameObject.transform.position, obs.positionFromServer, Time.deltaTime * obs.InterpolationFactor);
                     else
-                        transform.position = positionFromServer;
+                        obs.gameObject.transform.position = obs.positionFromServer;
 
-                    if (InterpolateRotation)
-                        transform.rotation = Quaternion.Lerp(transform.rotation, Quaternion.Euler(rotationFromServer), Time.deltaTime * InterpolationFactor);
+                    if (obs.InterpolateRotation)
+                        obs.gameObject.transform.rotation = Quaternion.Lerp(obs.gameObject.transform.rotation, Quaternion.Euler(obs.rotationFromServer), Time.deltaTime * obs.InterpolationFactor);
                     else
-                        transform.rotation = Quaternion.Euler(rotationFromServer);
+                        obs.gameObject.transform.rotation = Quaternion.Euler(obs.rotationFromServer);
                     break;
             }
         }
 
-        void SendDataToServer(SyncOptions syncOption, bool attachedToPlayer, string observerId)
+        void SendDataToServer(Observer observer, bool attachedToPlayer, string playerId)
         {
             GamePlayEvent observerEvent = new GamePlayEvent();
             observerEvent.eventName = "EdgeMultiplayObserver";
             observerEvent.booleanData = new bool[1] { attachedToPlayer };
-            observerEvent.stringData = new string[1] { observerId };
-            observerEvent.integerData = new int[1] { (int)syncOption };
-            switch (syncOption)
+            observerEvent.stringData = new string[1] { playerId };
+            observerEvent.integerData = new int[2] { (int)observer.syncOption, observer.observerId };
+            switch (observer.syncOption)
             {
                 case SyncOptions.SyncPosition:
-                    observerEvent.floatData = new float[3] { transform.position.x, transform.position.y, transform.position.z };
-                    lastPosition = transform.position;
+                    observerEvent.floatData = new float[3] { observer.gameObject.transform.position.x, observer.gameObject.transform.position.y, observer.gameObject.transform.position.z };
+                    observer.lastPosition = observer.gameObject.transform.position;
                     break;
                 case SyncOptions.SyncRotation:
-                    observerEvent.floatData = new float[3] { transform.rotation.eulerAngles.x, transform.rotation.eulerAngles.y, transform.rotation.eulerAngles.z };
-                    lastRotation = transform.rotation.eulerAngles;
+                    observerEvent.floatData = new float[3] { observer.gameObject.transform.rotation.eulerAngles.x, observer.gameObject.transform.rotation.eulerAngles.y, observer.gameObject.transform.rotation.eulerAngles.z };
+                    observer.lastRotation = observer.gameObject.transform.rotation.eulerAngles;
                     break;
                 case SyncOptions.SyncPositionAndRotation:
-                    observerEvent.floatData = new float[6] { transform.position.x, transform.position.y, transform.position.z
-                        , transform.rotation.eulerAngles.x, transform.rotation.eulerAngles.y, transform.rotation.eulerAngles.z };
-                    lastRotation = transform.rotation.eulerAngles;
-                    lastPosition = transform.position;
+                    observerEvent.floatData = new float[6] { observer.gameObject.transform.position.x, observer.gameObject.transform.position.y, observer.gameObject.transform.position.z
+                        , observer.gameObject.transform.rotation.eulerAngles.x, observer.gameObject.transform.rotation.eulerAngles.y, observer.gameObject.transform.rotation.eulerAngles.z };
+                    observer.lastRotation = observer.gameObject.transform.rotation.eulerAngles;
+                    observer.lastPosition = observer.gameObject.transform.position;
                     break;
             }
             EdgeManager.SendUDPMessage(observerEvent);
         }
 
         #endregion
+    }
+
+    [Serializable]
+    public class Observer
+    {
+        /// <summary>
+        /// The GameObject you want to Sync its position and/or rotation
+        /// </summary>
+        public GameObject gameObject;
+        public SyncOptions syncOption;
+        /// <summary>
+        /// Set to true if you want to smoothen the tracked position if you have network lag
+        /// </summary>
+        [Tooltip("Check if you want to smoothen the tracked position if you have network lag")]
+        public bool InterpolatePosition;
+        /// <summary>
+        /// Set to true if you want to smoothen the tracked rotation if you have network lag
+        /// </summary>
+        [Tooltip("Check if you want to smoothen the tracked rotation if you have network lag")]
+        public bool InterpolateRotation;
+        /// <summary>
+        /// Set Interpolation factor between 0.1 and 1
+        /// </summary>
+        [Tooltip("Set Interpolation factor between 0.1 and 1")]
+        [Range(0.1f, 1f)]
+        public float InterpolationFactor;
+        [HideInInspector]
+        public int observerId;
+        [HideInInspector]
+        public Vector3 lastPosition;
+        [HideInInspector]
+        public Vector3 lastRotation;
+        [HideInInspector]
+        public Vector3 positionFromServer;
+        [HideInInspector]
+        public Vector3 rotationFromServer;
+
     }
 }
