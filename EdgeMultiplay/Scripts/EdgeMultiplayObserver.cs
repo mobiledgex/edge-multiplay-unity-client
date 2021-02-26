@@ -17,8 +17,22 @@
 
 using System;
 using System.Collections.Generic;
+using System.Collections;
 using UnityEngine;
 using static EdgeMultiplay.EdgeMultiplayObserver;
+
+
+// fixme two problems
+// Syncing non player objects like PingPongBall
+// Creating synced object at run time (non player and player)
+
+
+// Requirement for synced object across players:
+// 1. Unique id consistent across all players.
+// 2. who owns the GOs? (One with the best connection) - (One geographically closer to the server)
+
+// Creating synced object at run time (non player and player)
+// OnObservers list update add item to list
 
 namespace EdgeMultiplay
 {
@@ -31,72 +45,59 @@ namespace EdgeMultiplay
     {
         #region EdgeMultiplayObserver Variables
 
-        [HideInInspector]
-        public string eventId;
-        private bool isLocalPlayerMaster;
         private NetworkedPlayer networkedPlayer;
 
         #endregion
 
         #region EdgeMultiplayObserver Editor exposed variables
-
-        /// <summary>
-        /// Set to true if the Component is attached a player that have a scripts that inherits from NetwokedPlayer
-        /// </summary>
-        [Tooltip("Check if the Observer is attached to a player object, otherwise leave unchecked.")]
-        public bool attachedToPlayer;
-
-        /// <summary>
-        /// List of GameObjects that you want to sync its position and/or rotation
-        /// </summary>
-        [Tooltip("GameObjects you want to sync its position and/or rotation")]
+        
         public List<Observer> observers;
-
-        public enum SyncOptions
-        {
-            SyncPosition,
-            SyncRotation,
-            SyncPositionAndRotation
-        }
 
         #endregion
 
         #region MonoBehaviour Callbacks
 
-#if UNITY_EDITOR
-
-        //Reset is a Monobehaviour callback and is called once a Component is added to a GameObject
-        [ExecuteAlways]
-        void Reset()
-        {
-            eventId = Guid.NewGuid().ToString("N") + gameObject.GetInstanceID().ToString();
-        }
-
-#endif
         private void Awake()
         {
-            if (!attachedToPlayer)
-            {
-                isLocalPlayerMaster = EdgeManager.localPlayerIsMaster;
-            }
-            else
-            {
-                isLocalPlayerMaster = false;
-            }
+
             EdgeManager.observers.Add(this);
-            foreach(Observer observer in observers)
-            {
-                observer.positionFromServer = observer.gameObject.transform.position;
-                observer.rotationFromServer = observer.gameObject.transform.rotation.eulerAngles;
-            }
+            
             networkedPlayer = GetComponent<NetworkedPlayer>();
+            UpdateObservers();
+
         }
 
+
+        public void UpdateObservers()
+        {
+            for (int i = 0; i < observers.Count; i++)
+            {
+                observers[i].SetObserverId(i);
+                if (observers[i].gameObject)
+                {
+                    observers[i].SetupObserver();
+                }
+                if (!networkedPlayer.isLocalPlayer)
+                {
+                    if (observers[i].gameObject.GetComponent<Rigidbody>())
+                        GetComponent<Rigidbody>().isKinematic = true;
+                    if (observers[i].gameObject.GetComponent<Rigidbody2D>())
+                        GetComponent<Rigidbody2D>().isKinematic = true;
+                }
+            }
+        }
         private void OnValidate()
         {
-            for(int i =0; i< observers.Count; i++)
+            if (observers.Count > 0)
             {
-                observers[i].observerId = i;
+                for (int i = 0; i < observers.Count; i++)
+                {
+                    observers[i].SetObserverId(i);
+                    if (observers[i].gameObject)
+                    {
+                        observers[i].SetupObserver();
+                    }
+                }
             }
         }
 
@@ -108,17 +109,10 @@ namespace EdgeMultiplay
                 {
                     if (RequiresUpdate(observer))
                     {
-                        if (attachedToPlayer)
-                        {
-                            if (networkedPlayer && networkedPlayer.isLocalPlayer)
-                            {
-                                SendDataToServer(observer, true, networkedPlayer.playerId);
-                            }
-                        }
-                        else if (!attachedToPlayer && isLocalPlayerMaster)
-                        {
-                            SendDataToServer(observer, false, eventId);
-                        }
+                       if (networkedPlayer && networkedPlayer.isLocalPlayer)
+                       {
+                           observer.SendDataToServer(true,networkedPlayer.playerId);
+                       }
                     }
                 }
             }
@@ -128,23 +122,11 @@ namespace EdgeMultiplay
         {
             foreach (Observer observer in observers)
             {
-                if (attachedToPlayer)
-                {
-                    if (networkedPlayer && !networkedPlayer.isLocalPlayer)
-                    {
-                        ReflectServerData(observer);
-                    }
-                }
-                else if (!attachedToPlayer && !isLocalPlayerMaster)
-                {
-                    ReflectServerData(observer);
-                }
+               if (networkedPlayer && !networkedPlayer.isLocalPlayer)
+               {
+                   observer.ReflectDataFromServer();
+               }
             }
-        }
-
-        private void OnDestroy()
-        {
-            eventId = null;
         }
 
         #endregion
@@ -174,68 +156,25 @@ namespace EdgeMultiplay
             }
         }
 
-        void ReflectServerData(Observer obs)
-        {
-            switch (obs.syncOption)
-            {
-                case SyncOptions.SyncPosition:
-                    if (obs.InterpolatePosition)
-                        obs.gameObject.transform.position = Vector3.Lerp(obs.gameObject.transform.position, obs.positionFromServer, Time.deltaTime * obs.InterpolationFactor);
-                    else
-                        obs.gameObject.transform.position = obs.positionFromServer;
-                    break;
-
-                case SyncOptions.SyncRotation:
-                    if (obs.InterpolateRotation)
-                        obs.gameObject.transform.rotation = Quaternion.Lerp(obs.gameObject.transform.rotation, Quaternion.Euler(obs.rotationFromServer), Time.deltaTime * obs.InterpolationFactor);
-                    else
-                        obs.gameObject.transform.rotation = Quaternion.Euler(obs.rotationFromServer);
-                    break;
-
-                case SyncOptions.SyncPositionAndRotation:
-                    if (obs.InterpolatePosition)
-                        obs.gameObject.transform.position = Vector3.Lerp(obs.gameObject.transform.position, obs.positionFromServer, Time.deltaTime * obs.InterpolationFactor);
-                    else
-                        obs.gameObject.transform.position = obs.positionFromServer;
-
-                    if (obs.InterpolateRotation)
-                        obs.gameObject.transform.rotation = Quaternion.Lerp(obs.gameObject.transform.rotation, Quaternion.Euler(obs.rotationFromServer), Time.deltaTime * obs.InterpolationFactor);
-                    else
-                        obs.gameObject.transform.rotation = Quaternion.Euler(obs.rotationFromServer);
-                    break;
-            }
-        }
-
-        void SendDataToServer(Observer observer, bool attachedToPlayer, string playerId)
-        {
-            GamePlayEvent observerEvent = new GamePlayEvent();
-            observerEvent.eventName = "EdgeMultiplayObserver";
-            observerEvent.booleanData = new bool[1] { attachedToPlayer };
-            observerEvent.stringData = new string[1] { playerId };
-            observerEvent.integerData = new int[2] { (int)observer.syncOption, observer.observerId };
-            switch (observer.syncOption)
-            {
-                case SyncOptions.SyncPosition:
-                    observerEvent.floatData = new float[3] { observer.gameObject.transform.position.x, observer.gameObject.transform.position.y, observer.gameObject.transform.position.z };
-                    observer.lastPosition = observer.gameObject.transform.position;
-                    break;
-                case SyncOptions.SyncRotation:
-                    observerEvent.floatData = new float[3] { observer.gameObject.transform.rotation.eulerAngles.x, observer.gameObject.transform.rotation.eulerAngles.y, observer.gameObject.transform.rotation.eulerAngles.z };
-                    observer.lastRotation = observer.gameObject.transform.rotation.eulerAngles;
-                    break;
-                case SyncOptions.SyncPositionAndRotation:
-                    observerEvent.floatData = new float[6] { observer.gameObject.transform.position.x, observer.gameObject.transform.position.y, observer.gameObject.transform.position.z
-                        , observer.gameObject.transform.rotation.eulerAngles.x, observer.gameObject.transform.rotation.eulerAngles.y, observer.gameObject.transform.rotation.eulerAngles.z };
-                    observer.lastRotation = observer.gameObject.transform.rotation.eulerAngles;
-                    observer.lastPosition = observer.gameObject.transform.position;
-                    break;
-            }
-            EdgeManager.SendUDPMessage(observerEvent);
-        }
-
         #endregion
     }
 
+    [Serializable]
+    public class ObserverList<Observer>:List<Observer>
+    {
+        //public List<Observer> observers;
+
+         event EventHandler OnAdd;
+
+        public new void Add(Observer item)
+        {
+            if (null != OnAdd)
+            {
+                OnAdd(this, null);
+            }
+            base.Add(item);
+        }
+    }
     [Serializable]
     public class Observer
     {
@@ -270,6 +209,232 @@ namespace EdgeMultiplay
         public Vector3 positionFromServer;
         [HideInInspector]
         public Vector3 rotationFromServer;
+
+        public Observer(GameObject gameObject, SyncOptions syncOption, bool interpolatePosition, bool interpolateRotation, float interpolationFactor, int observerId)
+        {
+            this.gameObject = gameObject;
+            this.syncOption = syncOption;
+            InterpolatePosition = interpolatePosition;
+            InterpolateRotation = interpolateRotation;
+            InterpolationFactor = interpolationFactor;
+            this.observerId = observerId;
+        }
+
+        public void SetLocalPostion(Vector3 targetPosition)
+        {
+            var tempPosition = gameObject.transform.localPosition;
+            tempPosition.Set(targetPosition.x, targetPosition.y, targetPosition.z);
+            gameObject.transform.localPosition = tempPosition;
+        }
+
+        public void SetLocalRotation(Vector3 targetRotationEulers)
+        {
+            Quaternion tempRotation = gameObject.transform.localRotation;
+            Quaternion rot = Quaternion.Euler(targetRotationEulers);
+            tempRotation.Set(rot.x, rot.y, rot.z, rot.w);
+            gameObject.transform.localRotation = tempRotation;
+        }
+
+        public void SetObserverId(int index)
+        {
+            observerId = index;
+        }
+
+        public void SetupObserver()
+        {
+            switch (syncOption)
+            {
+                case SyncOptions.SyncPosition:
+                    lastPosition = gameObject.transform.position;
+                    positionFromServer = gameObject.transform.position;
+                    break;
+                case SyncOptions.SyncRotation:
+                    lastRotation = gameObject.transform.rotation.eulerAngles;
+                    rotationFromServer = gameObject.transform.rotation.eulerAngles;
+                    break;
+                case SyncOptions.SyncPositionAndRotation:
+                    lastPosition = gameObject.transform.position;
+                    positionFromServer = gameObject.transform.position;
+                    lastRotation = gameObject.transform.rotation.eulerAngles;
+                    rotationFromServer = gameObject.transform.rotation.eulerAngles;
+                    break;
+                case SyncOptions.SyncLocalPosition:
+                    lastPosition = gameObject.transform.localPosition;
+                    positionFromServer = gameObject.transform.localPosition;
+                    break;
+                case SyncOptions.SyncLocalRotation:
+                    lastRotation = gameObject.transform.localRotation.eulerAngles;
+                    rotationFromServer = gameObject.transform.localRotation.eulerAngles;
+                    break;
+                case SyncOptions.SyncLocalPositionAndRotation:
+                    lastPosition = gameObject.transform.localPosition;
+                    positionFromServer = gameObject.transform.localPosition;
+                    lastRotation = gameObject.transform.localRotation.eulerAngles;
+                    rotationFromServer = gameObject.transform.localRotation.eulerAngles;
+                    break;
+            }
+        }
+
+        public void ReflectDataFromServer()
+        {
+            switch (syncOption)
+            {
+                case SyncOptions.SyncPosition:
+                    if (InterpolatePosition)
+                       gameObject.transform.position = Vector3.Lerp(gameObject.transform.position, positionFromServer, Time.deltaTime * InterpolationFactor);
+                    else
+                        gameObject.transform.position = positionFromServer;
+                    break;
+
+                case SyncOptions.SyncRotation:
+                    if (InterpolateRotation)
+                        gameObject.transform.rotation = Quaternion.Lerp(gameObject.transform.rotation, Quaternion.Euler(rotationFromServer), Time.deltaTime * InterpolationFactor);
+                    else
+                        gameObject.transform.rotation = Quaternion.Euler(rotationFromServer);
+                    break;
+
+                case SyncOptions.SyncPositionAndRotation:
+                    if (InterpolatePosition)
+                        gameObject.transform.position = Vector3.Lerp(gameObject.transform.position, positionFromServer, Time.deltaTime * InterpolationFactor);
+                    else
+                        gameObject.transform.position = positionFromServer;
+
+                    if (InterpolateRotation)
+                        gameObject.transform.rotation = Quaternion.Lerp(gameObject.transform.rotation, Quaternion.Euler(rotationFromServer), Time.deltaTime * InterpolationFactor);
+                    else
+                        gameObject.transform.rotation = Quaternion.Euler(rotationFromServer);
+                    break;
+                case SyncOptions.SyncLocalPosition:
+                    if (InterpolatePosition)
+                        SetLocalPostion(Vector3.Lerp(gameObject.transform.position, positionFromServer, Time.deltaTime * InterpolationFactor));
+                    else
+                        SetLocalPostion(positionFromServer);
+                    break;
+
+                case SyncOptions.SyncLocalRotation:
+                    if (InterpolateRotation)
+                        SetLocalRotation(Vector3.Lerp(gameObject.transform.localRotation.eulerAngles, rotationFromServer, Time.deltaTime * InterpolationFactor));
+                    else
+                        SetLocalRotation(rotationFromServer);
+                    break;
+
+                case SyncOptions.SyncLocalPositionAndRotation:
+                    if (InterpolatePosition)
+                        SetLocalPostion(Vector3.Lerp(gameObject.transform.position, positionFromServer, Time.deltaTime * InterpolationFactor));
+                    else
+                        SetLocalPostion(positionFromServer);
+
+                    if (InterpolateRotation)
+                        SetLocalRotation(Vector3.Lerp(gameObject.transform.localRotation.eulerAngles, rotationFromServer, Time.deltaTime * InterpolationFactor));
+                    else
+                        SetLocalRotation(rotationFromServer);
+                    break;
+            }
+        }
+
+        public void SendDataToServer(bool attachedToPlayer, string playerId)
+        {
+            GamePlayEvent observerEvent = new GamePlayEvent();
+            observerEvent.eventName = "EdgeMultiplayObserver";
+            observerEvent.booleanData = new bool[1] { attachedToPlayer };
+            observerEvent.stringData = new string[1] { playerId };
+            observerEvent.integerData = new int[2] { (int)syncOption, observerId };
+            switch (syncOption)
+            {
+                case SyncOptions.SyncPosition:
+                    observerEvent.floatData = GetPositionData(gameObject.transform);
+                    lastPosition = gameObject.transform.position;
+                    break;
+                case SyncOptions.SyncRotation:
+                    observerEvent.floatData = GetRotationData(gameObject.transform);
+                    lastRotation = gameObject.transform.rotation.eulerAngles;
+                    break;
+                case SyncOptions.SyncPositionAndRotation:
+                    observerEvent.floatData = GetPositionAndRotationData(gameObject.transform);
+                    lastRotation = gameObject.transform.rotation.eulerAngles;
+                    lastPosition = gameObject.transform.position;
+                    break;
+                case SyncOptions.SyncLocalPosition:
+                    observerEvent.floatData = GetLocalPositionData(gameObject.transform);
+                    lastPosition = gameObject.transform.localPosition;
+                    break;
+                case SyncOptions.SyncLocalRotation:
+                    observerEvent.floatData = GetLocalRotationData(gameObject.transform);
+                    lastRotation = gameObject.transform.rotation.eulerAngles;
+                    break;
+                case SyncOptions.SyncLocalPositionAndRotation:
+                    observerEvent.floatData = GetLocalPositionAndRotationData(gameObject.transform);
+                    lastPosition = gameObject.transform.localRotation.eulerAngles;
+                    lastRotation = gameObject.transform.localPosition;
+                    break;
+            }
+            EdgeManager.SendUDPMessage(observerEvent);
+        }
+
+        public float[] GetPositionData(Transform transformComponent)
+        {
+            return new float[3] { transformComponent.position.x, transformComponent.position.y, transformComponent.position.z };
+        }
+
+        public float[] GetRotationData(Transform transformComponent)
+        {
+            return new float[3] { transformComponent.rotation.eulerAngles.x, transformComponent.rotation.eulerAngles.x, transformComponent.rotation.eulerAngles.x };
+        }
+        public float[] GetPositionAndRotationData(Transform transformComponent)
+        {
+            return new float[6] {transformComponent.position.x, transformComponent.position.y, transformComponent.position.z,
+                transformComponent.rotation.eulerAngles.x, transformComponent.rotation.eulerAngles.x, transformComponent.rotation.eulerAngles.x };
+        }
+
+        public float[] GetLocalPositionData(Transform transformComponent)
+        {
+            return new float[3] { transformComponent.localPosition.x, transformComponent.localPosition.y, transformComponent.localPosition.z };
+        }
+
+        public float[] GetLocalRotationData(Transform transformComponent)
+        {
+            return new float[3] { transformComponent.localRotation.eulerAngles.x, transformComponent.localRotation.eulerAngles.y, transformComponent.localRotation.eulerAngles.z };
+        }
+
+        public float[] GetLocalPositionAndRotationData(Transform transformComponent)
+        {
+            return new float[6] {transformComponent.localPosition.x, transformComponent.localPosition.y, transformComponent.localPosition.z,
+                transformComponent.localRotation.eulerAngles.x, transformComponent.localRotation.eulerAngles.y, transformComponent.localRotation.eulerAngles.z };
+        }
+
+        public float[] GetLocalScaleData(Transform transformComponent)
+        {
+            return new float[3] { transformComponent.localScale.x, transformComponent.localScale.y, transformComponent.localScale.z };
+        }
+
+
+    }
+
+    public class NonPlayerObserver : MonoBehaviour
+    {
+        public enum Owner
+        {
+            FirstPlayerInRoom,
+            ClosestPlayerToServer
+        }
+        public Owner owner;
+        public SyncOptions syncOption;
+        public Observer observer;
+
+        private void Awake()
+        {
+          if(owner == Owner.FirstPlayerInRoom)
+          {
+             NetworkedPlayer observerOwner = EdgeManager.GetPlayer(0);
+             EdgeMultiplayObserver edgeMultiplayObserver = observerOwner.GetComponent<EdgeMultiplayObserver>();
+             if (!edgeMultiplayObserver)
+             {
+                    edgeMultiplayObserver = observerOwner.gameObject.AddComponent<EdgeMultiplayObserver>();
+             }
+             edgeMultiplayObserver.observers.Add(observer);
+             edgeMultiplayObserver.UpdateObservers();
+          }
+        }
 
     }
 }

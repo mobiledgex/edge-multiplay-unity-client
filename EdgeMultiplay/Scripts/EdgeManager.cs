@@ -178,7 +178,6 @@ namespace EdgeMultiplay
         /// </summary>
         /// <param name="useAnyCarrierNetwork"> set to true for connection based on location info only </param>
         /// <param name="useFallBackLocation"> set to true to use overloaded location sat in setFallbackLocation()</param>
-        /// <returns> Connection Task, use OnConnectionToEdge() to listen to the async task result </returns>
         public async Task ConnectToServer(bool useAnyCarrierNetwork = true, bool useFallBackLocation = false)
         {
             if (useLocalHostServer)
@@ -211,7 +210,16 @@ namespace EdgeMultiplay
                     integration.UseWifiOnly(useAnyCarrierNetwork);
                     integration.useFallbackLocation = useFallBackLocation;
                     wsClient = new MobiledgeXWebSocketClient();
-                    await integration.RegisterAndFindCloudlet();
+                    try
+                    {
+                        await integration.RegisterAndFindCloudlet();
+                    }
+                    catch (LocationException)
+                    {
+                        MobiledgeXIntegration.LocationFromIPAddress location = await MobiledgeXIntegration.GetLocationFromIP();
+                        integration.SetFallbackLocation(location.longitude, location.latitude);
+                        await integration.RegisterAndFindCloudlet();
+                    }
                     integration.GetAppPort(LProto.L_PROTO_TCP);
                     string url = integration.GetUrl("ws");
                     Uri uri = new Uri(url);
@@ -235,10 +243,20 @@ namespace EdgeMultiplay
         /// Get Player based on playerId
         /// </summary>
         /// <param name="playerId"> playerId is a unique Id assigned to player during OnRegister() and saved into EdgeManager.gameSession.playerId</param>
-        /// <returns> The NetworkedPlayer of the supplied playerId </returns>
+        /// <returns></returns>
         public static NetworkedPlayer GetPlayer(string playerId)
         {
             return currentRoomPlayers.Find(player => player.playerId == playerId);
+        }
+
+        /// <summary>
+        /// Get Player based on playerId
+        /// </summary>
+        /// <param name="playerIndex"> playerIndex is an id assigned to player based on the precedence of joining the room </param>
+        /// <returns></returns>
+        public static NetworkedPlayer GetPlayer(int playerIndex)
+        {
+            return currentRoomPlayers.Find(player => player.playerIndex == playerIndex);
         }
 
         /// <summary>
@@ -391,6 +409,7 @@ namespace EdgeMultiplay
             wsClient.Send(Messaging<ExitRoomRequest>.Serialize(exitRoomRequest));
         }
 
+
         #endregion
 
         #region EdgeManager Functions
@@ -405,6 +424,7 @@ namespace EdgeMultiplay
         void HandleWebSocketMessage(string message)
         {
             var msg = MessageWrapper.UnWrapMessage(message);
+            print("WS Msg " + msg);
             switch (msg.type)
             {
                 case "register":
@@ -479,8 +499,13 @@ namespace EdgeMultiplay
                     break;
 
                 case "GamePlayEvent":
-                    GamePlayEvent mobiledgexEvent = Messaging<GamePlayEvent>.Deserialize(message);
-                    ReflectEvent(mobiledgexEvent);
+                    GamePlayEvent gamePlayEvent = Messaging<GamePlayEvent>.Deserialize(message);
+                    if (gamePlayEvent.eventName == "NewObserverCreated")
+                    {
+                        CreateObserver(gamePlayEvent);
+                        break;
+                    }
+                    ReflectEvent(gamePlayEvent);
                     break;
 
                 case "memberLeft":
@@ -517,6 +542,23 @@ namespace EdgeMultiplay
             }
         }
 
+        void CreateObserver(GamePlayEvent newObserverEvent)
+        {
+            if(localPlayer.playerId == newObserverEvent.stringData[0])
+            {
+                return;
+            }
+            NetworkedPlayer playerCreatedObserver = GetPlayer(newObserverEvent.stringData[0]);
+            playerCreatedObserver.CreateObserverObject(
+                prefabName: newObserverEvent.stringData[1],
+                startPosition: new Vector3 ( newObserverEvent.floatData[0], newObserverEvent.floatData[1] , newObserverEvent.floatData[2] ),
+                startRotation: Quaternion.Euler(new Vector3(newObserverEvent.floatData[3], newObserverEvent.floatData[4], newObserverEvent.floatData[5])),
+                syncOption: (SyncOptions)Enum.ToObject(typeof(SyncOptions), newObserverEvent.integerData[0]),
+                interpolatePosition: newObserverEvent.booleanData[0],
+                interpolateRotation: newObserverEvent.booleanData[1],
+                interpolationFactor: newObserverEvent.floatData[6]);
+        }
+
         void SyncObject(GamePlayEvent receivedEvent)
         {
             if (receivedEvent.senderId == gameSession.playerId)
@@ -524,25 +566,25 @@ namespace EdgeMultiplay
                 return;
             }
             EdgeMultiplayObserver edgeMultiplayObserver;
-            if (receivedEvent.booleanData[0]) // player object
-            {
+            //if (receivedEvent.booleanData[0]) // player object
+            //{
                 edgeMultiplayObserver = observers.Find(observer => observer.GetComponent<NetworkedPlayer>()
                 && observer.GetComponent<NetworkedPlayer>().playerId == receivedEvent.stringData[0]);
-            }
-            else
-            {
-                edgeMultiplayObserver = observers.Find(observer => observer.eventId == receivedEvent.stringData[0]);
-            }
+            //}
+            //else
+            //{
+                //edgeMultiplayObserver = observers.Find(observer => observer.eventId == receivedEvent.stringData[0]);
+            //}
             int observerId = receivedEvent.integerData[1];
             switch (receivedEvent.integerData[0])
             {
-                case (int)EdgeMultiplayObserver.SyncOptions.SyncPosition:
+                case (int)SyncOptions.SyncPosition:
                     edgeMultiplayObserver.observers[observerId].positionFromServer = new Vector3(receivedEvent.floatData[0], receivedEvent.floatData[1], receivedEvent.floatData[2]);
                     break;
-                case (int)EdgeMultiplayObserver.SyncOptions.SyncRotation:
+                case (int)SyncOptions.SyncRotation:
                     edgeMultiplayObserver.observers[observerId].rotationFromServer = new Vector3(receivedEvent.floatData[0], receivedEvent.floatData[1], receivedEvent.floatData[2]);
                     break;
-                case (int)EdgeMultiplayObserver.SyncOptions.SyncPositionAndRotation:
+                case (int)SyncOptions.SyncPositionAndRotation:
                     edgeMultiplayObserver.observers[observerId].positionFromServer = new Vector3(receivedEvent.floatData[0], receivedEvent.floatData[1], receivedEvent.floatData[2]);
                     edgeMultiplayObserver.observers[observerId].rotationFromServer = new Vector3(receivedEvent.floatData[3], receivedEvent.floatData[4], receivedEvent.floatData[5]);
                     break;

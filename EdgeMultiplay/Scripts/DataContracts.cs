@@ -25,6 +25,17 @@ using UnityEngine;
 
 namespace EdgeMultiplay
 {
+
+    public enum SyncOptions
+    {
+        SyncPosition,
+        SyncRotation,
+        SyncPositionAndRotation,
+        SyncLocalPosition,
+        SyncLocalRotation,
+        SyncLocalPositionAndRotation
+    }
+
     #region GameFlowEvents
     /// <summary>
     /// Called once a notification is received from the server

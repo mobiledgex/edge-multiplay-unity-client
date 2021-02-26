@@ -200,6 +200,39 @@ namespace EdgeMultiplay
             edgeManager.SendGamePlayEvent(gamePlayEvent);
         }
 
+        public void CreateObserverObject(string prefabName, Vector3 startPosition, Quaternion startRotation, SyncOptions syncOption, bool interpolatePosition = false, bool interpolateRotation = false, float interpolationFactor = 0)
+        {
+            GameObject prefab = Resources.Load<GameObject>(prefabName);
+            GameObject syncedObject;
+
+            syncedObject = Instantiate(prefab, startPosition, startRotation);
+
+            EdgeMultiplayObserver edgeMultiplayObserver = gameObject.GetComponent<EdgeMultiplayObserver>();
+            if (!edgeMultiplayObserver)
+            {
+                edgeMultiplayObserver =  gameObject.AddComponent<EdgeMultiplayObserver>();
+            }
+            Observer newObserver = new Observer(syncedObject, syncOption, interpolatePosition, interpolateRotation, Mathf.Clamp(interpolationFactor, 0.1f, 1f), edgeMultiplayObserver.observers.Count);
+            edgeMultiplayObserver.observers.Add(newObserver);
+            print("This number should be 2 == " + edgeMultiplayObserver.observers.Count);
+            edgeMultiplayObserver.UpdateObservers();
+
+            if (isLocalPlayer)
+            {
+                // create object on all devices
+                // send an event to all devices but the owner find player with x player id and add it to its edgemultiplay observer the created gameoject
+                GamePlayEvent newObserverEvent = new GamePlayEvent
+                {
+                    eventName = "NewObserverCreated",
+                    booleanData = new bool[2] { interpolatePosition, interpolateRotation },
+                    stringData = new string[2] { playerId, prefabName },
+                    integerData = new int[1] { (int)syncOption },
+                    floatData = new float[7] { startPosition.x, startPosition.y, startPosition.z, startRotation.eulerAngles.x, startRotation.eulerAngles.y, startRotation.eulerAngles.z, interpolationFactor },
+                };
+                edgeManager.SendGamePlayEvent(newObserverEvent);
+            }
+        }
+
         #endregion
     }
 }
