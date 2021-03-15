@@ -323,10 +323,10 @@ namespace EdgeMultiplay
         }
     }
 
-        /// <summary>
-        /// JoinOrCreateRoomRequest is sent to the server to join a room or create a new room if it there is no available rooms
-        /// </summary>
-        [DataContract]
+    /// <summary>
+    /// JoinOrCreateRoomRequest is sent to the server to join a room or create a new room if it there is no available rooms
+    /// </summary>
+    [DataContract]
     public class JoinOrCreateRoomRequest
     {
         [DataMember]
