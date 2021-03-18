@@ -22,6 +22,8 @@ using System.Text;
 using System.Runtime.Serialization;
 using System.Collections.Generic;
 using UnityEngine;
+using System.Collections;
+using DistributedMatchEngine;
 
 namespace EdgeMultiplay
 {
@@ -307,21 +309,24 @@ namespace EdgeMultiplay
         public int playerAvatar;
         [DataMember]
         public int maxPlayersPerRoom;
+        [DataMember (EmitDefaultValue = false)]
+        public Hashtable playerTags;
 
-        public CreateRoomRequest(string PlayerName, int PlayerAvatar, int MaxPlayersPerRoom)
+        public CreateRoomRequest(string PlayerName, int PlayerAvatar, int MaxPlayersPerRoom , Hashtable playerTags = null)
         {
             type = "CreateRoom";
             playerId = EdgeManager.gameSession.playerId;
             playerName = PlayerName;
             playerAvatar = PlayerAvatar;
             maxPlayersPerRoom = MaxPlayersPerRoom;
+            this.playerTags = playerTags;
         }
     }
 
-        /// <summary>
-        /// JoinOrCreateRoomRequest is sent to the server to join a room or create a new room if it there is no available rooms
-        /// </summary>
-        [DataContract]
+    /// <summary>
+    /// JoinOrCreateRoomRequest is sent to the server to join a room or create a new room if there are no available rooms
+    /// </summary>
+    [DataContract]
     public class JoinOrCreateRoomRequest
     {
         [DataMember]
@@ -334,14 +339,17 @@ namespace EdgeMultiplay
         public int playerAvatar;
         [DataMember]
         public int maxPlayersPerRoom;
+        [DataMember (EmitDefaultValue = false)]
+        public Hashtable playerTags;
 
-        public JoinOrCreateRoomRequest(string PlayerName, int PlayerAvatar, int MaxPlayersPerRoom)
+        public JoinOrCreateRoomRequest(string PlayerName, int PlayerAvatar, int MaxPlayersPerRoom, Hashtable playerTags = null)
         {
             type = "JoinOrCreateRoom";
             playerId = EdgeManager.gameSession.playerId;
             playerName = PlayerName;
             playerAvatar = PlayerAvatar;
             maxPlayersPerRoom = MaxPlayersPerRoom;
+            this.playerTags = playerTags;
         }
     }
 
@@ -362,14 +370,17 @@ namespace EdgeMultiplay
         public int playerAvatar;
         [DataMember]
         public string roomId;
+        [DataMember (EmitDefaultValue = false)]
+        public Hashtable playerTags;
 
-        public JoinRoomRequest(string RoomId, string PlayerName, int PlayerAvatar)
+        public JoinRoomRequest(string RoomId, string PlayerName, int PlayerAvatar, Hashtable playerTags = null)
         {
             type = "JoinRoom";
             roomId = RoomId;
             playerId = EdgeManager.gameSession.playerId;
             playerName = PlayerName;
             playerAvatar = PlayerAvatar;
+            this.playerTags = playerTags;
         }
     }
 
@@ -490,6 +501,29 @@ namespace EdgeMultiplay
         /// </summary>
         [DataMember]
         public int playerAvatar = 0;
+
+        /// <summary>
+        /// helper instance variable for serializing and deserializing playerTags
+        /// </summary>
+   		[DataMember (EmitDefaultValue = false)]
+        internal Hashtable playerTags;
+
+        /// <summary>
+        /// Dictionary<string,string> custom data associated with the player
+        /// </summary>
+        public Dictionary<string, string> playerTagsDict {
+            get 
+            {
+                if(playerTags != null)
+                {
+                    return Tag.HashtableToDictionary(playerTags);
+                }
+                else
+                {
+                    return null;
+                }
+            }
+        }
     }
 
     /// <summary>
@@ -522,6 +556,7 @@ namespace EdgeMultiplay
 
     #endregion
     #region Serialization Helpers
+
     [DataContract]
     class MessageWrapper
     {
