@@ -179,6 +179,7 @@ namespace EdgeMultiplay
         /// </summary>
         /// <param name="useAnyCarrierNetwork"> set to true for connection based on location info only </param>
         /// <param name="useFallBackLocation"> set to true to use overloaded location sat in setFallbackLocation()</param>
+        /// <param name="path"> You can specify a path for your connection to be verified on the server side </param>
         /// <returns> Connection Task, use OnConnectionToEdge() to listen to the async task result </returns>
         public async Task ConnectToServer(bool useAnyCarrierNetwork = true, bool useFallBackLocation = false, string path = "")
         {
@@ -259,7 +260,7 @@ namespace EdgeMultiplay
             if(maxPlayersPerRoom < 2)
             {
                 Debug.LogError("EdgeMultiplay : maxPlayersPerRoom must be greater than 1");
-                return ;
+                return;
             }
             Hashtable playertagsHashtable;
             if (playerTags != null)
