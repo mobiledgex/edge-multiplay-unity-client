@@ -512,7 +512,8 @@ namespace EdgeMultiplay
         /// Dictionary<string,string> custom data associated with the player
         /// </summary>
         public Dictionary<string, string> playerTagsDict {
-            get {
+            get 
+            {
                 if(playerTags != null)
                 {
                     return Tag.HashtableToDictionary(playerTags);
