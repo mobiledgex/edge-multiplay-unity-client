@@ -479,8 +479,7 @@ namespace EdgeMultiplay
         public int maxPlayersPerRoom;
         [DataMember (EmitDefaultValue = false)]
         public Hashtable playerTags;
-
-        public CreateRoomRequest(string PlayerName, int PlayerAvatar, int MaxPlayersPerRoom, Hashtable playerTags = null)
+        public CreateRoomRequest(string PlayerName, int PlayerAvatar, int MaxPlayersPerRoom , Hashtable playerTags = null)
         {
             type = "CreateRoom";
             playerId = EdgeManager.gameSession.playerId;

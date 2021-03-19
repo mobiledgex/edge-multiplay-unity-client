@@ -186,6 +186,7 @@ namespace EdgeMultiplay
             {
                 try
                 {
+                    integration = new MobiledgeXIntegration();
                     gameSession = new Session();
                     MobiledgeX.Logger.SetLogType(MobiledgeX.Logger.LogType.ErrorsOnly);
                     wsClient = new MobiledgeXWebSocketClient();
@@ -318,7 +319,7 @@ namespace EdgeMultiplay
         /// <param name="playerAvatar">(integer value) Avatar Index from EdgeManager Spawn Prefabs</param>
         /// <param name="maxPlayersPerRoom">The maximum players allowed in the room</param>
         /// <param name="playerTags">Dictionary<string,string> custom data associated with the player</param>
-        public static void CreateRoom(string playerName, int playerAvatar, int maxPlayersPerRoom, Dictionary<string,string> playerTags = null)
+        public static void CreateRoom(string playerName, int playerAvatar, int maxPlayersPerRoom, Dictionary<string, string> playerTags = null)
         {
             if (maxPlayersPerRoom < 2)
             {
@@ -355,7 +356,7 @@ namespace EdgeMultiplay
         /// <param name="roomId">Id of the room intended to join</param>
         /// <param name="playerAvatar">(integer value) Avatar Index from EdgeManager Spawn Prefabs</param>
         /// <param name="playerTags">Dictionary<string,string> custom data associated with the player</param>
-        public static void JoinRoom(string roomId, string playerName, int playerAvatar, Dictionary<string,string> playerTags = null)
+        public static void JoinRoom(string roomId, string playerName, int playerAvatar, Dictionary<string, string> playerTags = null)
         {
             if (gameSession.roomId == "")
             {
