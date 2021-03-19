@@ -39,7 +39,7 @@ namespace EdgeMultiplay
         /// <returns> float array of size 3  containing transform.rotation.eulerAngles data </returns>
         public static float[] GetRotationEulerData(Transform transformComponent)
         {
-            return new float[3] { transformComponent.rotation.eulerAngles.x, transformComponent.rotation.eulerAngles.x, transformComponent.rotation.eulerAngles.x };
+            return new float[3] { transformComponent.rotation.eulerAngles.x, transformComponent.rotation.eulerAngles.y, transformComponent.rotation.eulerAngles.z };
         }
 
         /// <summary>
@@ -50,7 +50,7 @@ namespace EdgeMultiplay
         public static float[] GetPositionAndRotationData(Transform transformComponent)
         {
             return new float[6] {transformComponent.position.x, transformComponent.position.y, transformComponent.position.z,
-                transformComponent.rotation.eulerAngles.x, transformComponent.rotation.eulerAngles.x, transformComponent.rotation.eulerAngles.x };
+                transformComponent.rotation.eulerAngles.x, transformComponent.rotation.eulerAngles.y, transformComponent.rotation.eulerAngles.z };
         }
 
         /// <summary>
