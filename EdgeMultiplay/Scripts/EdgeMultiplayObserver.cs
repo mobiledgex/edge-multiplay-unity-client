@@ -16,7 +16,9 @@
  */
 
 using System;
+using System.Collections.Generic;
 using UnityEngine;
+
 
 namespace EdgeMultiplay
 {
@@ -24,211 +26,163 @@ namespace EdgeMultiplay
     /// EdgeMultiplayObserver can be added to on an object to sync its position and/or rotation between all players
     /// You can sync a PlayerObject or Non PlayerObject
     /// </summary>
-
     [AddComponentMenu("EdgeMultiplay/EdgeMultiplayObserver")]
     public class EdgeMultiplayObserver : MonoBehaviour
     {
         #region EdgeMultiplayObserver Variables
-
+        ///
         [HideInInspector]
-        public Vector3 positionFromServer;
-        [HideInInspector]
-        public Vector3 rotationFromServer;
-        [HideInInspector]
-        public string eventId;
-        private Vector3 lastPosition;
-        private Vector3 lastRotation;
-        private bool isLocalPlayerMaster;
-        public enum SyncOptions
-        {
-            SyncPosition,
-            SyncRotation,
-            SyncPositionAndRotation
-        }
-        NetworkedPlayer networkedPlayer;
-
-        #endregion
-
-        #region EdgeMultiplayObserver Editor exposed variables
+        public NetworkedPlayer networkedPlayer;
 
         /// <summary>
-        /// Set to true if the Component is attached a player that have a scripts that inherits from NetwokedPlayer
+        /// List of observed objects
         /// </summary>
-        [Tooltip("Check if the Observer is attached to a player object, otherwise leave unchecked.")]
-        public bool attachedToPlayer;
-        [Header("Sync Options", order = 1)]
-        public SyncOptions syncOption;
-        /// <summary>
-        /// Set to true if you want to smoothen the tracked position if you have network lag
-        /// </summary>
-        [Tooltip("Check if you want to smoothen the tracked position if you have network lag")]
-        public bool InterpolatePosition;
-        /// <summary>
-        /// Set to true if you want to smoothen the tracked rotation if you have network lag
-        /// </summary>
-        [Tooltip("Check if you want to smoothen the tracked rotation if you have network lag")]
-        public bool InterpolateRotation;
-        /// <summary>
-        /// Set Interpolation factor between 0.1 and 1
-        /// </summary>
-        [Tooltip("Set Interpolation factor between 0.1 and 1")]
-        [Range(0.1f, 1f)]
-        public float InterpolationFactor;
+        [Tooltip("Add all sync Transforms including the player transform")]
+        public List<Observerable> observerables;
 
         #endregion
 
         #region MonoBehaviour Callbacks
 
-#if UNITY_EDITOR
-
-        //Reset is a Monobehaviour callback and is called once a Component is added to a GameObject
-        [ExecuteAlways]
-        void Reset()
-        {
-            eventId = Guid.NewGuid().ToString("N") + gameObject.GetInstanceID().ToString();
-        }
-
-#endif
         private void Awake()
         {
-            if (!attachedToPlayer)
-            {
-                isLocalPlayerMaster = EdgeManager.localPlayerIsMaster;
-            }
-            else
-            {
-                isLocalPlayerMaster = false;
-            }
             EdgeManager.observers.Add(this);
-            positionFromServer = transform.position;
-            rotationFromServer = transform.rotation.eulerAngles;
             networkedPlayer = GetComponent<NetworkedPlayer>();
+            UpdateObserverables();
         }
 
-        private bool RequiresUpdate()
+        private void OnValidate()
         {
-            switch (syncOption)
+            if (!GetComponent<NetworkedPlayer>())
+            {
+                Debug.LogError("EdgeMultiplayObserver requires PlayerManager or a class that inherits from NetworkedPlayer," +
+                    "\nRemove EdgeMultiplayObserver Component from "+gameObject.name);
+            }
+            if (observerables.Count > 0)
+            {
+                for (int i = 0; i < observerables.Count; i++)
+                {
+                    observerables[i].SetObserverableIndex(i);
+                    if (observerables[i].observeredTransform)
+                    {
+                        observerables[i].SetupObserverable(networkedPlayer);
+                    }
+                }
+            }
+        }
+
+        private void Update()
+        {
+            if (EdgeManager.gameStarted)
+            {
+                foreach (Observerable observerable in observerables)
+                {
+                    if (RequiresUpdate(observerable))
+                    {
+                       if (networkedPlayer && networkedPlayer.isLocalPlayer)
+                       {
+                           observerable.SendDataToServer();
+                       }
+                    }
+                }
+            }
+        }
+
+        #endregion
+
+        #region EdgeMultiplayObserver Functions
+        /// <summary>
+        ///UpdateObservers does the following:
+        /// <para>1.Update the observerables list indices.</para>
+        /// <para>2.Updates/Assigns an Obserview View to the observed game objects.</para>
+        /// <para>3.Disables the rigid body 2d or 3d on the observed game objects, so the physics can be simulated from the owner only.</para>
+        /// <para>You should call UpdateObserverables() at these situations:</para>
+        /// <para>1.New observerable added.</para>
+        /// <para>2.Observerable ownership change.</para>
+        /// </summary>
+        public void UpdateObserverables()
+        {
+            for (int i = 0; i < observerables.Count; i++)
+            {
+                ObserverableView observerView;
+                observerables[i].SetObserverableIndex(i);
+                if (observerables[i].observeredTransform.gameObject.GetComponent<ObserverableView>())
+                {
+                    observerView = observerables[i].observeredTransform.gameObject.GetComponent<ObserverableView>();
+                }
+                else
+                {
+                    observerView = observerables[i].observeredTransform.gameObject.AddComponent<ObserverableView>();
+                }
+                observerView.SetupObserverView(networkedPlayer.playerId, i);
+              
+                if (observerables[i].observeredTransform != null)
+                {
+                    observerables[i].SetupObserverable(networkedPlayer);
+                }
+                if (networkedPlayer && !networkedPlayer.isLocalPlayer && observerables[i].owner == null)
+                {
+                    if (observerables[i].observeredTransform && observerables[i].observeredTransform.GetComponent<Rigidbody>())
+                    {
+                        observerables[i].observeredTransform.GetComponent<Rigidbody>().isKinematic = true;
+                    }
+                    if (observerables[i].observeredTransform && observerables[i].observeredTransform.GetComponent<Rigidbody2D>())
+                    {
+                        observerables[i].observeredTransform.GetComponent<Rigidbody2D>().isKinematic = true;
+                    }
+                }
+                else
+                {
+                    if (observerables[i].owner != null && !observerables[i].owner.isLocalPlayer && observerables[i].attachedToPlayer)
+                    {
+                        if (observerables[i].observeredTransform.GetComponent<Rigidbody>())
+                        {
+                            observerables[i].observeredTransform.GetComponent<Rigidbody>().isKinematic = true;
+                        }
+                        if (observerables[i].observeredTransform.GetComponent<Rigidbody2D>())
+                        {
+                            observerables[i].observeredTransform.GetComponent<Rigidbody2D>().isKinematic = true;
+                        }
+                    }
+                    else
+                    {
+                        if (observerables[i].owner != null && observerables[i].owner.isLocalPlayer && observerables[i].attachedToPlayer)
+                        {
+                            if (observerables[i].observeredTransform.GetComponent<Rigidbody>())
+                            {
+                                observerables[i].observeredTransform.GetComponent<Rigidbody>().isKinematic = false;
+                            }
+                            if (observerables[i].observeredTransform.GetComponent<Rigidbody2D>())
+                            {
+                                observerables[i].observeredTransform.GetComponent<Rigidbody2D>().isKinematic = false;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        private bool RequiresUpdate(Observerable observerable)
+        {
+            switch (observerable.syncOption)
             {
                 case SyncOptions.SyncPosition:
-                    if (lastPosition != transform.position)
+                    if (observerable.lastPosition != observerable.observeredTransform.position)
                         return true;
                     else
                         return false;
                 case SyncOptions.SyncRotation:
-                    if (lastRotation != transform.rotation.eulerAngles)
+                    if (observerable.lastRotation != observerable.observeredTransform.rotation.eulerAngles)
                         return true;
                     else
                         return false;
                 default:
                 case SyncOptions.SyncPositionAndRotation:
-                    if (lastPosition != transform.position || lastRotation != transform.rotation.eulerAngles)
+                    if (observerable.lastPosition != observerable.observeredTransform.position || observerable.lastRotation != observerable.observeredTransform.rotation.eulerAngles)
                         return true;
                     else
                         return false;
             }
-        }
-        private void Update()
-        {
-            if (EdgeManager.gameStarted)
-            {
-                if (RequiresUpdate())
-                {
-                    if (attachedToPlayer)
-                    {
-                        if (networkedPlayer && networkedPlayer.isLocalPlayer)
-                        {
-                            SendDataToServer(syncOption, true, networkedPlayer.playerId);
-                        }
-                    }
-                    else if (!attachedToPlayer && isLocalPlayerMaster)
-                    {
-                        SendDataToServer(syncOption, false, eventId);
-                    }
-                }
-            }
-        }
-
-        private void LateUpdate()
-        {
-            if (attachedToPlayer)
-            {
-                if (networkedPlayer && !networkedPlayer.isLocalPlayer)
-                {
-                    ReflectServerData(syncOption);
-                }
-            }
-            else if (!attachedToPlayer && !isLocalPlayerMaster)
-            {
-                ReflectServerData(syncOption);
-            }
-        }
-
-        private void OnDestroy()
-        {
-            eventId = null;
-        }
-
-        #endregion
-
-        #region EdgeMultiplayObserver Private Functions
-
-        void ReflectServerData(SyncOptions syncOption)
-        {
-            switch (syncOption)
-            {
-                case SyncOptions.SyncPosition:
-                    if (InterpolatePosition)
-                        transform.position = Vector3.Lerp(transform.position, positionFromServer, Time.deltaTime * InterpolationFactor);
-                    else
-                        transform.position = positionFromServer;
-                    break;
-
-                case SyncOptions.SyncRotation:
-                    if (InterpolateRotation)
-                        transform.rotation = Quaternion.Lerp(transform.rotation, Quaternion.Euler(rotationFromServer), Time.deltaTime * InterpolationFactor);
-                    else
-                        transform.rotation = Quaternion.Euler(rotationFromServer);
-                    break;
-
-                case SyncOptions.SyncPositionAndRotation:
-                    if (InterpolatePosition)
-                        transform.position = Vector3.Lerp(transform.position, positionFromServer, Time.deltaTime * InterpolationFactor);
-                    else
-                        transform.position = positionFromServer;
-
-                    if (InterpolateRotation)
-                        transform.rotation = Quaternion.Lerp(transform.rotation, Quaternion.Euler(rotationFromServer), Time.deltaTime * InterpolationFactor);
-                    else
-                        transform.rotation = Quaternion.Euler(rotationFromServer);
-                    break;
-            }
-        }
-
-        void SendDataToServer(SyncOptions syncOption, bool attachedToPlayer, string observerId)
-        {
-            GamePlayEvent observerEvent = new GamePlayEvent();
-            observerEvent.eventName = "EdgeMultiplayObserver";
-            observerEvent.booleanData = new bool[1] { attachedToPlayer };
-            observerEvent.stringData = new string[1] { observerId };
-            observerEvent.integerData = new int[1] { (int)syncOption };
-            switch (syncOption)
-            {
-                case SyncOptions.SyncPosition:
-                    observerEvent.floatData = new float[3] { transform.position.x, transform.position.y, transform.position.z };
-                    lastPosition = transform.position;
-                    break;
-                case SyncOptions.SyncRotation:
-                    observerEvent.floatData = new float[3] { transform.rotation.eulerAngles.x, transform.rotation.eulerAngles.y, transform.rotation.eulerAngles.z };
-                    lastRotation = transform.rotation.eulerAngles;
-                    break;
-                case SyncOptions.SyncPositionAndRotation:
-                    observerEvent.floatData = new float[6] { transform.position.x, transform.position.y, transform.position.z
-                        , transform.rotation.eulerAngles.x, transform.rotation.eulerAngles.y, transform.rotation.eulerAngles.z };
-                    lastRotation = transform.rotation.eulerAngles;
-                    lastPosition = transform.position;
-                    break;
-            }
-            EdgeManager.SendUDPMessage(observerEvent);
         }
 
         #endregion

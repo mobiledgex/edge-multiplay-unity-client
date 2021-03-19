@@ -25,7 +25,21 @@ using UnityEngine;
 
 namespace EdgeMultiplay
 {
-    #region GameFlowEvents
+    #region EdgeMultiplay Data Structures
+
+    /// <summary>
+    /// Synchronization Options
+    /// </summary>
+    public enum SyncOptions
+    {
+        SyncPosition,
+        SyncRotation,
+        SyncPositionAndRotation,
+        SyncLocalPosition,
+        SyncLocalRotation,
+        SyncLocalPositionAndRotation
+    }
+
     /// <summary>
     /// Called once a notification is received from the server
     /// Example of Notifications are new room created on server 
@@ -110,7 +124,7 @@ namespace EdgeMultiplay
 
     /// <summary>
     /// Event is received once a new member joins a room that the local player is a member of
-    /// the room member have the new updated list of room members
+    /// the room member has the new updated list of room members
     /// </summary>
     [DataContract]
     public class PlayerJoinedRoom
@@ -174,60 +188,6 @@ namespace EdgeMultiplay
         [DataMember (EmitDefaultValue = false)]
         public bool[] booleanData;
 
-        /// <summary>
-        /// Returns a Vector 3 from the GamePlayEvent floatData
-        /// </summary>
-        /// <param name="startIndex"></param>
-        /// <returns>Vector3 Object</returns>
-        public Vector3 GetVector3(int startIndex = 0)
-        {
-            if (floatData.Length > (startIndex+2))
-            {
-                return new Vector3(floatData[startIndex], floatData[startIndex + 1], floatData[startIndex + 2]);
-            }
-            else
-            {
-                throw new Exception("Float Data starting from the start index doesn't qualify to create a Vector3"); 
-            }
-        }
-
-        /// <summary>
-        /// Returns a Quaternion from the GamePlayEvent floatData
-        /// </summary>
-        /// <param name="startIndex"></param>
-        /// <returns>Quaternion Object represents Rotation</returns>
-        public Quaternion GetQuaternion(int startIndex = 0)
-        {
-            if (floatData.Length > (startIndex + 2))
-            {
-                Vector3 eulers = GetVector3(startIndex);
-                return Quaternion.Euler(eulers);
-            }
-            else
-            {
-                throw new Exception("Float Data starting from the start index doesn't qualify to create a Quaternion");
-            }
-        
-        }
-
-        /// <summary>
-        /// Returns a PositionAndRotation from the GamePlayEvent floatData
-        /// </summary>
-        /// <param name="startIndex"></param>
-        /// <returns>PositionAndRotation Object</returns>
-        public PositionAndRotation GetPositionAndRotation(int startIndex = 0)
-        {
-            if (floatData.Length > (startIndex + 5))
-            {
-                Vector3 eulers = GetVector3(startIndex+3);
-                return new PositionAndRotation(GetVector3(startIndex), Quaternion.Euler(eulers));
-            }
-            else
-            {
-                throw new Exception("Float Data starting from the start index doesn't qualify to create a PositionAndRotation");
-            }
-        }
-
         public GamePlayEvent()
         {
             type = "GamePlayEvent";
@@ -237,22 +197,25 @@ namespace EdgeMultiplay
         {
             type = "GamePlayEvent";
             this.eventName = eventName;
-            floatData = new float[3] { position.x, position.y, position.z };
+            floatData = Util.ConvertVector3ToFloatArray(position);
         }
 
         public GamePlayEvent(string eventName, Quaternion rotation)
         {
             type = "GamePlayEvent";
             this.eventName = eventName;
-            floatData = new float[3] { rotation.eulerAngles.x, rotation.eulerAngles.y, rotation.eulerAngles.z };
+            floatData = Util.ConvertVector3ToFloatArray(rotation.eulerAngles);
         }
 
         public GamePlayEvent(string eventName, Vector3 position, Quaternion rotation)
         {
             type = "GamePlayEvent";
             this.eventName = eventName;
-            floatData = new float[6] { position.x, position.y, position.z ,
-                rotation.eulerAngles.x, rotation.eulerAngles.y, rotation.eulerAngles.z };
+
+            floatData = new float[6]
+            {
+                position.x, position.y, position.z,rotation.eulerAngles.x, rotation.eulerAngles.y, rotation.eulerAngles.z
+            };
         }
 
         public GamePlayEvent(string eventName, List<int> scoreArray)
@@ -288,6 +251,190 @@ namespace EdgeMultiplay
             return JsonUtility.ToJson(this); ;
         }
     }
+
+
+    [Serializable]
+    public class Observerable
+    {
+        /// <summary>
+        /// The GameObject you want to Sync its position and/or rotation
+        /// </summary>
+        public Transform observeredTransform;
+        /// <summary>
+        /// Synchronization Option
+        /// </summary>
+        public SyncOptions syncOption;
+        /// <summary>
+        /// Set to true if you want to smoothen the tracked position if you have network lag
+        /// </summary>
+        [Tooltip("Check if you want to smoothen the tracked position if you have network lag")]
+        public bool InterpolatePosition;
+        /// <summary>
+        /// Set to true if you want to smoothen the tracked rotation if you have network lag
+        /// </summary>
+        [Tooltip("Check if you want to smoothen the tracked rotation if you have network lag")]
+        public bool InterpolateRotation;
+        /// <summary>
+        /// Set Interpolation factor between 0.1 and 1
+        /// </summary>
+        [Tooltip("Set Interpolation factor between 0.1 and 1")]
+        [Range(0.1f, 1f)]
+        public float InterpolationFactor;
+        [HideInInspector]
+        public int observerIndex;
+        [HideInInspector]
+        public Vector3 lastPosition;
+        [HideInInspector]
+        public Vector3 lastRotation;
+        [HideInInspector]
+        public NetworkedPlayer owner;
+        [HideInInspector]
+        public bool attachedToPlayer;
+
+        public Observerable(Transform targetTransform, SyncOptions syncOption, bool interpolatePosition, bool interpolateRotation, float interpolationFactor, int observerIndex = 0)
+        {
+            this.observeredTransform = targetTransform;
+            this.syncOption = syncOption;
+            InterpolatePosition = interpolatePosition;
+            InterpolateRotation = interpolateRotation;
+            InterpolationFactor = interpolationFactor;
+            this.observerIndex = observerIndex;
+            
+        }
+        public Observerable(Transform targetTransform, SyncOptions syncOption, bool interpolatePosition, bool interpolateRotation, float interpolationFactor)
+        {
+            this.observeredTransform = targetTransform;
+            this.syncOption = syncOption;
+            InterpolatePosition = interpolatePosition;
+            InterpolateRotation = interpolateRotation;
+            InterpolationFactor = interpolationFactor;
+        }
+
+        public void SetObserverableIndex(int index)
+        {
+            observerIndex = index;
+        }
+
+        public void SetupObserverable(NetworkedPlayer observerOwner)
+        {
+            owner = observerOwner;
+            switch (syncOption)
+            {
+                case SyncOptions.SyncPosition:
+                    lastPosition = observeredTransform.transform.position;
+                    break;
+                case SyncOptions.SyncRotation:
+                    lastRotation = observeredTransform.transform.rotation.eulerAngles;
+                    break;
+                case SyncOptions.SyncPositionAndRotation:
+                    lastPosition = observeredTransform.transform.position;
+                    lastRotation = observeredTransform.transform.rotation.eulerAngles;
+                    break;
+                case SyncOptions.SyncLocalPosition:
+                    lastPosition = observeredTransform.transform.localPosition;
+                    break;
+                case SyncOptions.SyncLocalRotation:
+                    lastRotation = observeredTransform.transform.localRotation.eulerAngles;
+                    break;
+                case SyncOptions.SyncLocalPositionAndRotation:
+                    lastPosition = observeredTransform.transform.localPosition;
+                    lastRotation = observeredTransform.transform.localRotation.eulerAngles;
+                    break;
+            }
+        }
+
+        public void SendDataToServer()
+        {
+            GamePlayEvent observerEvent = new GamePlayEvent();
+            observerEvent.eventName = "EdgeMultiplayObserver";
+            observerEvent.integerData = new int[2] { (int)syncOption, observerIndex };
+            switch (syncOption)
+            {
+                case SyncOptions.SyncPosition:
+                    observerEvent.floatData = Util.GetPositionData(observeredTransform.transform);
+                    lastPosition = observeredTransform.transform.position;
+                    break;
+                case SyncOptions.SyncRotation:
+                    observerEvent.floatData = Util.GetRotationEulerData(observeredTransform.transform);
+                    lastRotation = observeredTransform.transform.rotation.eulerAngles;
+                    break;
+                case SyncOptions.SyncPositionAndRotation:
+                    observerEvent.floatData = Util.GetPositionAndRotationData(observeredTransform.transform);
+                    lastRotation = observeredTransform.transform.rotation.eulerAngles;
+                    lastPosition = observeredTransform.transform.position;
+                    break;
+                case SyncOptions.SyncLocalPosition:
+                    observerEvent.floatData = Util.GetLocalPositionData(observeredTransform.transform);
+                    lastPosition = observeredTransform.localPosition;
+                    break;
+                case SyncOptions.SyncLocalRotation:
+                    observerEvent.floatData = Util.GetLocalRotationData(observeredTransform.transform);
+                    lastRotation = observeredTransform.transform.rotation.eulerAngles;
+                    break;
+                case SyncOptions.SyncLocalPositionAndRotation:
+                    observerEvent.floatData = Util.GetLocalPositionAndRotationData(observeredTransform.transform);
+                    lastPosition = observeredTransform.transform.localRotation.eulerAngles;
+                    lastRotation = observeredTransform.transform.localPosition;
+                    break;
+            }
+            EdgeManager.SendUDPMessage(observerEvent);
+        }
+
+        public void SetOwnership(string ownerId)
+        {
+            owner = EdgeManager.GetPlayer(ownerId);
+            if(owner == null)
+            {
+                throw new Exception("EdgeMultiplay: Couldn't find player with id: " + ownerId);
+            }
+
+            if (owner.observer == null)
+            {
+                owner.gameObject.AddComponent<EdgeMultiplayObserver>();
+            }
+            owner.observer.observerables.Add(this);
+            owner.observer.UpdateObserverables();
+        }
+
+        public void ChangeOwnership(string newOwnerId)
+        {
+            if (owner != null)
+            {
+                if (newOwnerId == owner.playerId)
+                {
+                    return;// ownership already sat
+                }
+                if (owner.observer != null)
+                {
+                    owner.observer.observerables.Remove(this);
+                }
+                owner = EdgeManager.GetPlayer(newOwnerId);
+                if(owner == null)
+                {
+                    throw new Exception("EdgeMultiplay: Couldn't find player with id: " + newOwnerId);
+                }
+                if (owner.observer == null)
+                {
+                    owner.gameObject.AddComponent<EdgeMultiplayObserver>();
+                }
+                owner.observer.observerables.Add(this);
+                owner.observer.UpdateObserverables();
+                GamePlayEvent changeOwnershipEvent = new GamePlayEvent()
+                {
+                    eventName = "ObserverableOwnershipChange",
+                    stringData = new string[1] { newOwnerId },
+                    integerData = new int[1] { observerIndex }
+                };
+                EdgeManager.MessageSender.BroadcastMessage(changeOwnershipEvent);
+            }
+            else
+            {
+                Debug.LogError("EdgeMultiplay: Observer has no owner, Use observer.SetOwnership() first");
+                return;
+            }
+        }
+    }
+
     #endregion
     #region Requests
 
@@ -318,10 +465,10 @@ namespace EdgeMultiplay
         }
     }
 
-        /// <summary>
-        /// JoinOrCreateRoomRequest is sent to the server to join a room or create a new room if it there is no available rooms
-        /// </summary>
-        [DataContract]
+    /// <summary>
+    /// JoinOrCreateRoomRequest is sent to the server to join a room or create a new room if it there is no available rooms
+    /// </summary>
+    [DataContract]
     public class JoinOrCreateRoomRequest
     {
         [DataMember]
@@ -344,7 +491,6 @@ namespace EdgeMultiplay
             maxPlayersPerRoom = MaxPlayersPerRoom;
         }
     }
-
 
     /// <summary>
     /// JoinRoomRequest is sent to the server to join a specific room
@@ -437,6 +583,7 @@ namespace EdgeMultiplay
         public int playerIndex;
         public Player[] currentPlayers;
     }
+
     /// <summary>
     /// Wrapper class for room info received the server
     /// </summary>
@@ -460,7 +607,6 @@ namespace EdgeMultiplay
         /// </summary>
         [DataMember]
         public int maxPlayersPerRoom;
-
     }
 
     /// <summary>
@@ -578,5 +724,6 @@ namespace EdgeMultiplay
             return t;
         }
     }
+
     #endregion
 }

@@ -40,6 +40,7 @@ namespace EdgeMultiplay
         public static Action leftRoom;
         public static Action gameStart;
         public static Action gameEnd;
+        public static Action<Observerable> newObserverableCreated;
 
         /// <summary>
         /// Starts the connection to your Edge server, server discovery is based on GPS location and the telecommunication carrier
@@ -63,6 +64,7 @@ namespace EdgeMultiplay
             leftRoom += OnLeftRoom;
             eventReceived += OnWebSocketEventReceived;
             udpEventReceived += OnUDPEventReceived;
+            newObserverableCreated += OnNewObserverableCreated;
             StartCoroutine(ConnectToEdgeCoroutine(useAnyCarrierNetwork, useFallBackLocation));
         }
 
@@ -89,7 +91,6 @@ namespace EdgeMultiplay
         /// </summary>
         public virtual void OnConnectionToEdge()
         {
-
             Debug.Log("Connected to Edge");
         }
 
@@ -99,7 +100,6 @@ namespace EdgeMultiplay
         /// <param name="reason"> Reason of connection faliure </param>
         public virtual void OnFaliureToConnect(string reason)
         {
-
             Debug.Log("Edge Connection Falied because " + reason);
         }
 
@@ -187,6 +187,8 @@ namespace EdgeMultiplay
 
         /// <summary>
         /// Called once a player in the same room as the local player leaves the room
+        /// <para>If the player who left was tracking any transforms
+        /// this callback will be where you should transfer observerables ownership to another player if the game is still running.</para>
         /// </summary>
         /// <param name="RoomMemberLeft">Info about the player who left the room </param>
         public virtual void OnPlayerLeft(RoomMemberLeft playerLeft)
@@ -208,7 +210,16 @@ namespace EdgeMultiplay
         /// <param name="gamePlayEvent">received GamePlayEvent</param>
         public virtual void OnWebSocketEventReceived(GamePlayEvent gamePlayEvent)
         {
-            Debug.Log("WebSocket Event Received Event From Server : " + gamePlayEvent.eventName);
+            Debug.Log("WebSocket Event Received From Server : " + gamePlayEvent.eventName);
+        }
+
+        /// <summary>
+        /// Server Callback when a new Observerable is created by one of the players
+        /// </summary>
+        /// <param name="observerable"> The created Observerable object </param>
+        public virtual void OnNewObserverableCreated(Observerable observerable)
+        {
+            Debug.Log("New Observerable created, owner name : " + observerable.owner.playerName);
         }
 
         /// <summary>
@@ -237,6 +248,7 @@ namespace EdgeMultiplay
             playerLeft -= OnPlayerLeft;
             eventReceived -= OnWebSocketEventReceived;
             udpEventReceived -= OnUDPEventReceived;
+            newObserverableCreated -= OnNewObserverableCreated;
         }
     }
 }
