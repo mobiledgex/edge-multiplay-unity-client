@@ -47,7 +47,8 @@ namespace EdgeMultiplay
         /// </summary>
         /// <param name="useAnyCarrierNetwork">True by default, set to false to connect to a specific carrier, set carrier name using EdgeManager.integration.carrierName </param>
         /// <param name="useFallBackLocation">False by default, location is acquired from user GPS location, if you are using location blind device like Oculus, use EdgeManager.integration.SetFallbackLocation()</param>
-        public void ConnectToEdge(bool useAnyCarrierNetwork = true, bool useFallBackLocation = false)
+        /// <param name="path"> You can specify a path for your connection to be verified on the server side </param>
+        public void ConnectToEdge(bool useAnyCarrierNetwork = true, bool useFallBackLocation = false, string path = "")
         {
             connectedToEdge += OnConnectionToEdge;
             failureToConnect += OnFaliureToConnect;
@@ -65,10 +66,10 @@ namespace EdgeMultiplay
             eventReceived += OnWebSocketEventReceived;
             udpEventReceived += OnUDPEventReceived;
             newObserverableCreated += OnNewObserverableCreated;
-            StartCoroutine(ConnectToEdgeCoroutine(useAnyCarrierNetwork, useFallBackLocation));
+            StartCoroutine(ConnectToEdgeCoroutine(useAnyCarrierNetwork, useFallBackLocation, path));
         }
 
-        IEnumerator ConnectToEdgeCoroutine(bool useAnyCarrierNetwork = true, bool useFallBackLocation = false)
+        IEnumerator ConnectToEdgeCoroutine(bool useAnyCarrierNetwork = true, bool useFallBackLocation = false, string path = "")
         {
             EdgeManager edgeManager = FindObjectOfType<EdgeManager>();
             if(edgeManager.useLocalHostServer == false)
@@ -83,7 +84,7 @@ namespace EdgeMultiplay
                     yield return null;
                 }
             }
-            edgeManager.ConnectToServer(useAnyCarrierNetwork, useFallBackLocation).ConfigureAwait(false);
+            edgeManager.ConnectToServer(useAnyCarrierNetwork, useFallBackLocation, path).ConfigureAwait(false);
         }
 
         /// <summary>

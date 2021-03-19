@@ -259,7 +259,7 @@ namespace EdgeMultiplay
     public class Observerable
     {
         /// <summary>
-        /// The GameObject you want to Sync its position and/or rotation
+        /// The Transform you want to Sync its position and/or rotation
         /// </summary>
         public Transform observeredTransform;
         /// <summary>
@@ -292,7 +292,15 @@ namespace EdgeMultiplay
         public NetworkedPlayer owner;
         [HideInInspector]
         public bool attachedToPlayer;
-
+        /// <summary>
+        /// Observerable Constructor
+        /// </summary>
+        /// <param name="targetTransform">The Transform you want to Sync its position and/or rotation</param>
+        /// <param name="syncOption">Synchronization Option</param>
+        /// <param name="interpolatePosition">Set to true if you want to smoothen the tracked rotation if there is network lag</param>
+        /// <param name="interpolateRotation">Set to true if you want to smoothen the tracked rotation if there is network lag</param>
+        /// <param name="interpolationFactor">Set Interpolation factor value between 0.1 and 1</param>
+        /// <param name="observerIndex">Observerable index in observer.observerables list</param>
         public Observerable(Transform targetTransform, SyncOptions syncOption, bool interpolatePosition, bool interpolateRotation, float interpolationFactor, int observerIndex = 0)
         {
             this.observeredTransform = targetTransform;
@@ -303,6 +311,14 @@ namespace EdgeMultiplay
             this.observerIndex = observerIndex;
             
         }
+        /// <summary>
+        /// Observerable Constructor
+        /// </summary>
+        /// <param name="targetTransform">The Transform you want to Sync its position and/or rotation</param>
+        /// <param name="syncOption">Synchronization Option</param>
+        /// <param name="interpolatePosition">Set to true if you want to smoothen the tracked rotation if there is network lag</param>
+        /// <param name="interpolateRotation">Set to true if you want to smoothen the tracked rotation if there is network lag</param>
+        /// <param name="interpolationFactor">Set Interpolation factor value between 0.1 and 1</param>
         public Observerable(Transform targetTransform, SyncOptions syncOption, bool interpolatePosition, bool interpolateRotation, float interpolationFactor)
         {
             this.observeredTransform = targetTransform;
@@ -397,7 +413,12 @@ namespace EdgeMultiplay
             owner.observer.observerables.Add(this);
             owner.observer.UpdateObserverables();
         }
-
+        /// <summary>
+        /// Changes the owner of an Observerable object
+        /// <para>ChangeOwnership() will change the owner in the local player's world and </para>
+        /// <para>update all room members about Ownership change.</para>
+        /// </summary>
+        /// <param name="newOwnerId">The new owner player id</param>
         public void ChangeOwnership(string newOwnerId)
         {
             if (owner != null)
@@ -456,7 +477,7 @@ namespace EdgeMultiplay
         public int playerAvatar;
         [DataMember]
         public int maxPlayersPerRoom;
-        [DataMember(EmitDefaultValue = false)]
+        [DataMember (EmitDefaultValue = false)]
         public Hashtable playerTags;
 
         public CreateRoomRequest(string PlayerName, int PlayerAvatar, int MaxPlayersPerRoom, Hashtable playerTags = null)
@@ -486,7 +507,7 @@ namespace EdgeMultiplay
         public int playerAvatar;
         [DataMember]
         public int maxPlayersPerRoom;
-        [DataMember(EmitDefaultValue = false)]
+        [DataMember (EmitDefaultValue = false)]
         public Hashtable playerTags;
 
         public JoinOrCreateRoomRequest(string PlayerName, int PlayerAvatar, int MaxPlayersPerRoom, Hashtable playerTags = null)
@@ -516,7 +537,7 @@ namespace EdgeMultiplay
         public int playerAvatar;
         [DataMember]
         public string roomId;
-        [DataMember(EmitDefaultValue = false)]
+        [DataMember (EmitDefaultValue = false)]
         public Hashtable playerTags;
 
         public JoinRoomRequest(string RoomId, string PlayerName, int PlayerAvatar, Hashtable playerTags = null)
@@ -651,7 +672,7 @@ namespace EdgeMultiplay
         /// <summary>
         /// helper instance variable for serializing and deserializing playerTags
         /// </summary>
-        [DataMember(EmitDefaultValue = false)]
+        [DataMember (EmitDefaultValue = false)]
         internal Hashtable playerTags;
 
         /// <summary>
@@ -661,7 +682,7 @@ namespace EdgeMultiplay
         {
             get
             {
-                if (playerTags != null)
+                if(playerTags != null)
                 {
                     return Tag.HashtableToDictionary(playerTags);
                 }
