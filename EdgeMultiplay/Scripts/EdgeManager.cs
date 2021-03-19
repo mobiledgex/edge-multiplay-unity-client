@@ -22,6 +22,7 @@ using System.Text;
 using MobiledgeX;
 using DistributedMatchEngine;
 using System.Threading.Tasks;
+using System.Collections;
 
 namespace EdgeMultiplay
 {
@@ -177,7 +178,9 @@ namespace EdgeMultiplay
         /// </summary>
         /// <param name="useAnyCarrierNetwork"> set to true for connection based on location info only </param>
         /// <param name="useFallBackLocation"> set to true to use overloaded location sat in setFallbackLocation()</param>
-        public async Task ConnectToServer(bool useAnyCarrierNetwork = true, bool useFallBackLocation = false)
+        /// <param name="path"> You can specify a path for your connection to be verified on the server side </param>
+        /// <returns> Connection Task, use OnConnectionToEdge() to listen to the async task result </returns>
+        public async Task ConnectToServer(bool useAnyCarrierNetwork = true, bool useFallBackLocation = false, string path = "")
         {
             if (useLocalHostServer)
             {
@@ -186,7 +189,7 @@ namespace EdgeMultiplay
                     gameSession = new Session();
                     MobiledgeX.Logger.SetLogType(MobiledgeX.Logger.LogType.ErrorsOnly);
                     wsClient = new MobiledgeXWebSocketClient();
-                    Uri uri = new Uri("ws://" + hostIPAddress + ":" + defaultEdgeMultiplayServerTCPPort);
+                    Uri uri = new Uri("ws://" + hostIPAddress + ":" + defaultEdgeMultiplayServerTCPPort + path);
                     if (wsClient.isOpen())
                     {
                         wsClient.Dispose();
@@ -212,7 +215,7 @@ namespace EdgeMultiplay
                     wsClient = new MobiledgeXWebSocketClient();
                     await integration.RegisterAndFindCloudlet();
                     integration.GetAppPort(LProto.L_PROTO_TCP);
-                    string url = integration.GetUrl("ws");
+                    string url = integration.GetUrl("ws") + path;
                     Uri uri = new Uri(url);
                     if (wsClient.isOpen())
                     {
@@ -231,7 +234,7 @@ namespace EdgeMultiplay
         }
 
         /// <summary>
-        /// Get Player based on playerId
+        /// Get Player using the player id
         /// </summary>
         /// <param name="playerId"> playerId is a unique Id assigned to player during OnRegister() and saved into EdgeManager.gameSession.playerId</param>
         /// <returns> The NetworkedPlayer of the supplied playerId </returns>
@@ -241,7 +244,7 @@ namespace EdgeMultiplay
         }
 
         /// <summary>
-        /// Get Player based on playerId
+        /// Get Player  using the player index in the room
         /// </summary>
         /// <param name="playerIndex"> playerIndex is an id assigned to player based on the precedence of joining the room </param>
         /// <returns> The NetworkedPlayer of the supplied playerIndex </returns>
@@ -260,14 +263,24 @@ namespace EdgeMultiplay
         /// <param name="playerName"> player name to be assigned to player</param>
         /// <param name="playerAvatar">(integer value) Avatar Index from EdgeManager Spawn Prefabs</param>
         /// <param name="maxPlayersPerRoom">In case of room creation, the maximum players allowed in the room</param>
-        public static void JoinOrCreateRoom(string playerName, int playerAvatar, int maxPlayersPerRoom)
+        /// <param name="playerTags">Dictionary<string,string> custom data associated with the player</param> 
+        public static void JoinOrCreateRoom(string playerName, int playerAvatar, int maxPlayersPerRoom, Dictionary<string, string> playerTags = null)
         {
-            if(maxPlayersPerRoom < 2)
+            if (maxPlayersPerRoom < 2)
             {
                 Debug.LogError("EdgeMultiplay : maxPlayersPerRoom must be greater than 1");
                 return;
             }
-            JoinOrCreateRoomRequest createOrJoinRoomRequest = new JoinOrCreateRoomRequest(playerName, playerAvatar, maxPlayersPerRoom);
+            Hashtable playertagsHashtable;
+            if (playerTags != null)
+            {
+                playertagsHashtable = Tag.DictionaryToHashtable(playerTags);
+            }
+            else
+            {
+                playertagsHashtable = null;
+            }
+            JoinOrCreateRoomRequest createOrJoinRoomRequest = new JoinOrCreateRoomRequest(playerName, playerAvatar, maxPlayersPerRoom, playertagsHashtable);
             wsClient.Send(Messaging<JoinOrCreateRoomRequest>.Serialize(createOrJoinRoomRequest));
         }
 
@@ -304,7 +317,8 @@ namespace EdgeMultiplay
         /// <param name="playerName">player name to be assigned to player</param>
         /// <param name="playerAvatar">(integer value) Avatar Index from EdgeManager Spawn Prefabs</param>
         /// <param name="maxPlayersPerRoom">The maximum players allowed in the room</param>
-        public static void CreateRoom(string playerName, int playerAvatar, int maxPlayersPerRoom)
+        /// <param name="playerTags">Dictionary<string,string> custom data associated with the player</param>
+        public static void CreateRoom(string playerName, int playerAvatar, int maxPlayersPerRoom, Dictionary<string, string> playerTags = null)
         {
             if (maxPlayersPerRoom < 2)
             {
@@ -314,7 +328,16 @@ namespace EdgeMultiplay
             // Assure Player is not already a member of another room  
             if (gameSession.roomId == "")
             {
-                CreateRoomRequest createRoomRequest = new CreateRoomRequest(playerName, playerAvatar, maxPlayersPerRoom);
+                Hashtable playertagsHashtable;
+                if (playerTags != null)
+                {
+                    playertagsHashtable = Tag.DictionaryToHashtable(playerTags);
+                }
+                else
+                {
+                    playertagsHashtable = null;
+                }
+                CreateRoomRequest createRoomRequest = new CreateRoomRequest(playerName, playerAvatar, maxPlayersPerRoom, playertagsHashtable);
                 wsClient.Send(Messaging<CreateRoomRequest>.Serialize(createRoomRequest));
             }
             else
@@ -331,11 +354,21 @@ namespace EdgeMultiplay
         /// </summary>
         /// <param name="roomId">Id of the room intended to join</param>
         /// <param name="playerAvatar">(integer value) Avatar Index from EdgeManager Spawn Prefabs</param>
-        public static void JoinRoom(string roomId, string playerName, int playerAvatar)
+        /// <param name="playerTags">Dictionary<string,string> custom data associated with the player</param>
+        public static void JoinRoom(string roomId, string playerName, int playerAvatar, Dictionary<string, string> playerTags = null)
         {
             if (gameSession.roomId == "")
             {
-                JoinRoomRequest joinRoomRequest = new JoinRoomRequest(roomId, playerName, playerAvatar);
+                Hashtable playertagsHashtable;
+                if (playerTags != null)
+                {
+                    playertagsHashtable = Tag.DictionaryToHashtable(playerTags);
+                }
+                else
+                {
+                    playertagsHashtable = null;
+                }
+                JoinRoomRequest joinRoomRequest = new JoinRoomRequest(roomId, playerName, playerAvatar, playertagsHashtable);
                 wsClient.Send(Messaging<JoinRoomRequest>.Serialize(joinRoomRequest));
             }
             else
