@@ -297,7 +297,7 @@ namespace EdgeMultiplay
         /// </summary>
         /// <param name="targetTransform">The Transform you want to Sync its position and/or rotation</param>
         /// <param name="syncOption">Synchronization Option</param>
-        /// <param name="interpolatePosition">Set to true if you want to smoothen the tracked rotation if there is network lag</param>
+        /// <param name="interpolatePosition">Set to true if you want to smoothen the tracked position if there is network lag</param>
         /// <param name="interpolateRotation">Set to true if you want to smoothen the tracked rotation if there is network lag</param>
         /// <param name="interpolationFactor">Set Interpolation factor value between 0.1 and 1</param>
         /// <param name="observerIndex">Observable index in observer.observables list</param>
@@ -491,7 +491,7 @@ namespace EdgeMultiplay
     }
 
     /// <summary>
-    /// JoinOrCreateRoomRequest is sent to the server to join a room or create a new room if there is no available rooms
+    /// JoinOrCreateRoomRequest is sent to the server to join a room or create a new room if there are no available rooms
     /// </summary>
     [DataContract]
     public class JoinOrCreateRoomRequest
