@@ -1,4 +1,4 @@
-/**
+﻿/**
  * Copyright 2018-2021 MobiledgeX, Inc. All rights and licenses reserved.
  * MobiledgeX, Inc. 156 2nd Street #408, San Francisco, CA 94105
  *
@@ -19,18 +19,18 @@ using UnityEngine;
 
 namespace EdgeMultiplay {
     /// <summary>
-    /// ObserverableView is added by default to Observered objects,holding the reference to the observerable owner and the observerable index in in the observer.observerable list
+    /// ObservableView is added by default to Observered objects,holding the reference to the observable owner and the observable index in in the observer.observable list
     /// </summary>
-    [AddComponentMenu("EdgeMultiplay/ObserverableView")]
-    public class ObserverableView : MonoBehaviour
+    [AddComponentMenu("EdgeMultiplay/ObservableView")]
+    public class ObservableView : MonoBehaviour
     {
         public string ownerId;
-        public int observerableIndex; //the observerable index in in the observer.observerable list
+        public int observableIndex; //the observable index in in the observer.observable list
 
-        public void SetupObserverView(string ownerId, int observerableIndex)
+        public void SetupObserverView(string ownerId, int observableIndex)
         {
             this.ownerId = ownerId;
-            this.observerableIndex = observerableIndex;
+            this.observableIndex = observableIndex;
         }
 
         public bool OwnerIsLocalPlayer()

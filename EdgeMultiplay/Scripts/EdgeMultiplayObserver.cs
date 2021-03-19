@@ -1,4 +1,4 @@
-/**
+﻿/**
  * Copyright 2018-2021 MobiledgeX, Inc. All rights and licenses reserved.
  * MobiledgeX, Inc. 156 2nd Street #408, San Francisco, CA 94105
  *
@@ -38,7 +38,7 @@ namespace EdgeMultiplay
         /// List of observed objects
         /// </summary>
         [Tooltip("Add all sync Transforms including the player transform")]
-        public List<Observerable> observerables;
+        public List<Observable> observables;
 
         #endregion
 
@@ -48,7 +48,7 @@ namespace EdgeMultiplay
         {
             EdgeManager.observers.Add(this);
             networkedPlayer = GetComponent<NetworkedPlayer>();
-            UpdateObserverables();
+            UpdateObservables();
         }
 
         private void OnValidate()
@@ -58,14 +58,14 @@ namespace EdgeMultiplay
                 Debug.LogError("EdgeMultiplayObserver requires PlayerManager or a class that inherits from NetworkedPlayer," +
                     "\nRemove EdgeMultiplayObserver Component from "+gameObject.name);
             }
-            if (observerables.Count > 0)
+            if (observables.Count > 0)
             {
-                for (int i = 0; i < observerables.Count; i++)
+                for (int i = 0; i < observables.Count; i++)
                 {
-                    observerables[i].SetObserverableIndex(i);
-                    if (observerables[i].observeredTransform)
+                    observables[i].SetObservableIndex(i);
+                    if (observables[i].observeredTransform)
                     {
-                        observerables[i].SetupObserverable(networkedPlayer);
+                        observables[i].SetupObservable(networkedPlayer);
                     }
                 }
             }
@@ -75,13 +75,13 @@ namespace EdgeMultiplay
         {
             if (EdgeManager.gameStarted)
             {
-                foreach (Observerable observerable in observerables)
+                foreach (Observable observable in observables)
                 {
-                    if (RequiresUpdate(observerable))
+                    if (RequiresUpdate(observable))
                     {
                        if (networkedPlayer && networkedPlayer.isLocalPlayer)
                        {
-                           observerable.SendDataToServer();
+                           observable.SendDataToServer();
                        }
                     }
                 }
@@ -93,68 +93,68 @@ namespace EdgeMultiplay
         #region EdgeMultiplayObserver Functions
         /// <summary>
         ///UpdateObservers does the following:
-        /// <para>1.Update the observerables list indices.</para>
+        /// <para>1.Update the observables list indices.</para>
         /// <para>2.Updates/Assigns an Obserview View to the observed game objects.</para>
         /// <para>3.Disables the rigid body 2d or 3d on the observed game objects, so the physics can be simulated from the owner only.</para>
-        /// <para>You should call UpdateObserverables() at these situations:</para>
-        /// <para>1.New observerable added.</para>
-        /// <para>2.Observerable ownership change.</para>
+        /// <para>You should call UpdateObservables() at these situations:</para>
+        /// <para>1.New observable added.</para>
+        /// <para>2.Observable ownership change.</para>
         /// </summary>
-        public void UpdateObserverables()
+        public void UpdateObservables()
         {
-            for (int i = 0; i < observerables.Count; i++)
+            for (int i = 0; i < observables.Count; i++)
             {
-                ObserverableView observerView;
-                observerables[i].SetObserverableIndex(i);
-                if (observerables[i].observeredTransform.gameObject.GetComponent<ObserverableView>())
+                ObservableView observerView;
+                observables[i].SetObservableIndex(i);
+                if (observables[i].observeredTransform.gameObject.GetComponent<ObservableView>())
                 {
-                    observerView = observerables[i].observeredTransform.gameObject.GetComponent<ObserverableView>();
+                    observerView = observables[i].observeredTransform.gameObject.GetComponent<ObservableView>();
                 }
                 else
                 {
-                    observerView = observerables[i].observeredTransform.gameObject.AddComponent<ObserverableView>();
+                    observerView = observables[i].observeredTransform.gameObject.AddComponent<ObservableView>();
                 }
                 observerView.SetupObserverView(networkedPlayer.playerId, i);
               
-                if (observerables[i].observeredTransform != null)
+                if (observables[i].observeredTransform != null)
                 {
-                    observerables[i].SetupObserverable(networkedPlayer);
+                    observables[i].SetupObservable(networkedPlayer);
                 }
-                if (networkedPlayer && !networkedPlayer.isLocalPlayer && observerables[i].owner == null)
+                if (networkedPlayer && !networkedPlayer.isLocalPlayer && observables[i].owner == null)
                 {
-                    if (observerables[i].observeredTransform && observerables[i].observeredTransform.GetComponent<Rigidbody>())
+                    if (observables[i].observeredTransform && observables[i].observeredTransform.GetComponent<Rigidbody>())
                     {
-                        observerables[i].observeredTransform.GetComponent<Rigidbody>().isKinematic = true;
+                        observables[i].observeredTransform.GetComponent<Rigidbody>().isKinematic = true;
                     }
-                    if (observerables[i].observeredTransform && observerables[i].observeredTransform.GetComponent<Rigidbody2D>())
+                    if (observables[i].observeredTransform && observables[i].observeredTransform.GetComponent<Rigidbody2D>())
                     {
-                        observerables[i].observeredTransform.GetComponent<Rigidbody2D>().isKinematic = true;
+                        observables[i].observeredTransform.GetComponent<Rigidbody2D>().isKinematic = true;
                     }
                 }
                 else
                 {
-                    if (observerables[i].owner != null && !observerables[i].owner.isLocalPlayer && observerables[i].attachedToPlayer)
+                    if (observables[i].owner != null && !observables[i].owner.isLocalPlayer && observables[i].attachedToPlayer)
                     {
-                        if (observerables[i].observeredTransform.GetComponent<Rigidbody>())
+                        if (observables[i].observeredTransform.GetComponent<Rigidbody>())
                         {
-                            observerables[i].observeredTransform.GetComponent<Rigidbody>().isKinematic = true;
+                            observables[i].observeredTransform.GetComponent<Rigidbody>().isKinematic = true;
                         }
-                        if (observerables[i].observeredTransform.GetComponent<Rigidbody2D>())
+                        if (observables[i].observeredTransform.GetComponent<Rigidbody2D>())
                         {
-                            observerables[i].observeredTransform.GetComponent<Rigidbody2D>().isKinematic = true;
+                            observables[i].observeredTransform.GetComponent<Rigidbody2D>().isKinematic = true;
                         }
                     }
                     else
                     {
-                        if (observerables[i].owner != null && observerables[i].owner.isLocalPlayer && observerables[i].attachedToPlayer)
+                        if (observables[i].owner != null && observables[i].owner.isLocalPlayer && observables[i].attachedToPlayer)
                         {
-                            if (observerables[i].observeredTransform.GetComponent<Rigidbody>())
+                            if (observables[i].observeredTransform.GetComponent<Rigidbody>())
                             {
-                                observerables[i].observeredTransform.GetComponent<Rigidbody>().isKinematic = false;
+                                observables[i].observeredTransform.GetComponent<Rigidbody>().isKinematic = false;
                             }
-                            if (observerables[i].observeredTransform.GetComponent<Rigidbody2D>())
+                            if (observables[i].observeredTransform.GetComponent<Rigidbody2D>())
                             {
-                                observerables[i].observeredTransform.GetComponent<Rigidbody2D>().isKinematic = false;
+                                observables[i].observeredTransform.GetComponent<Rigidbody2D>().isKinematic = false;
                             }
                         }
                     }
@@ -162,23 +162,23 @@ namespace EdgeMultiplay
             }
         }
 
-        private bool RequiresUpdate(Observerable observerable)
+        private bool RequiresUpdate(Observable observable)
         {
-            switch (observerable.syncOption)
+            switch (observable.syncOption)
             {
                 case SyncOptions.SyncPosition:
-                    if (observerable.lastPosition != observerable.observeredTransform.position)
+                    if (observable.lastPosition != observable.observeredTransform.position)
                         return true;
                     else
                         return false;
                 case SyncOptions.SyncRotation:
-                    if (observerable.lastRotation != observerable.observeredTransform.rotation.eulerAngles)
+                    if (observable.lastRotation != observable.observeredTransform.rotation.eulerAngles)
                         return true;
                     else
                         return false;
                 default:
                 case SyncOptions.SyncPositionAndRotation:
-                    if (observerable.lastPosition != observerable.observeredTransform.position || observerable.lastRotation != observerable.observeredTransform.rotation.eulerAngles)
+                    if (observable.lastPosition != observable.observeredTransform.position || observable.lastRotation != observable.observeredTransform.rotation.eulerAngles)
                         return true;
                     else
                         return false;

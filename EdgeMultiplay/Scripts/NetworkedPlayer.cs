@@ -1,4 +1,4 @@
-/**
+﻿/**
  * Copyright 2018-2021 MobiledgeX, Inc. All rights and licenses reserved.
  * MobiledgeX, Inc. 156 2nd Street #408, San Francisco, CA 94105
  *
@@ -52,7 +52,7 @@ namespace EdgeMultiplay
         public bool ActivePlayer = true;
         EdgeManager edgeManager;
         /// <summary>
-        /// The observer responsible for tracking the observerable transforms
+        /// The observer responsible for tracking the observable transforms
         /// </summary>
         public EdgeMultiplayObserver observer
         {
@@ -215,7 +215,7 @@ namespace EdgeMultiplay
 
         /// <summary>
         /// Creates synced GameObject in runtime in the local player's world
-        /// and sends an event to all players in the room to create the observerable in their worlds
+        /// and sends an event to all players in the room to create the observable in their worlds
         /// </summary>
         /// <param name="prefabName">The name of your prefab (Game Object) stored in Resources Folder without extensions ex. 'Ball' </param>
         /// <param name="startPosition"> the inital position of the spawning </param>
@@ -225,7 +225,7 @@ namespace EdgeMultiplay
         /// <param name="interpolateRotation"> Set to true if you want to smoothen the tracked rotation if you have network lag</param>
         /// <param name="interpolationFactor"> Set Interpolation factor between 0.1 and 1 </param>
         /// <returns> The created Observer object </returns>
-        public Observerable CreateObserverableObject(string prefabName, Vector3 startPosition, Quaternion startRotation, SyncOptions syncOption, bool interpolatePosition = false, bool interpolateRotation = false, float interpolationFactor = 0)
+        public Observable CreateObservableObject(string prefabName, Vector3 startPosition, Quaternion startRotation, SyncOptions syncOption, bool interpolatePosition = false, bool interpolateRotation = false, float interpolationFactor = 0)
         {
             GameObject prefab = Resources.Load<GameObject>(prefabName);
             GameObject syncedObject;
@@ -234,15 +234,15 @@ namespace EdgeMultiplay
             {
                 observer =  gameObject.AddComponent<EdgeMultiplayObserver>();
             }
-            Observerable newObserverable = new Observerable(syncedObject.transform, syncOption, interpolatePosition, interpolateRotation, Mathf.Clamp(interpolationFactor, 0.1f, 1f), observer.observerables.Count);
-            observer.observerables.Add(newObserverable);
-            newObserverable.SetupObserverable(this);
-            observer.UpdateObserverables();
+            Observable newObservable = new Observable(syncedObject.transform, syncOption, interpolatePosition, interpolateRotation, Mathf.Clamp(interpolationFactor, 0.1f, 1f), observer.observables.Count);
+            observer.observables.Add(newObservable);
+            newObservable.SetupObservable(this);
+            observer.UpdateObservables();
             if (isLocalPlayer)
             {
                 GamePlayEvent newObserverEvent = new GamePlayEvent
                 {
-                    eventName = "NewObserverableCreated",
+                    eventName = "NewObservableCreated",
                     booleanData = new bool[2] { interpolatePosition, interpolateRotation },
                     stringData = new string[2] { playerId, prefabName },
                     integerData = new int[1] { (int)syncOption },
@@ -250,7 +250,7 @@ namespace EdgeMultiplay
                 };
                 edgeManager.SendGamePlayEvent(newObserverEvent);
             }
-            return newObserverable;
+            return newObservable;
         }
 
         #endregion

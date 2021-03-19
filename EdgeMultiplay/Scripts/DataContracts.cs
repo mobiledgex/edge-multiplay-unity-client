@@ -1,4 +1,4 @@
-/**
+﻿/**
  * Copyright 2018-2021 MobiledgeX, Inc. All rights and licenses reserved.
  * MobiledgeX, Inc. 156 2nd Street #408, San Francisco, CA 94105
  *
@@ -256,7 +256,7 @@ namespace EdgeMultiplay
 
 
     [Serializable]
-    public class Observerable
+    public class Observable
     {
         /// <summary>
         /// The Transform you want to Sync its position and/or rotation
@@ -293,15 +293,15 @@ namespace EdgeMultiplay
         [HideInInspector]
         public bool attachedToPlayer;
         /// <summary>
-        /// Observerable Constructor
+        /// Observable Constructor
         /// </summary>
         /// <param name="targetTransform">The Transform you want to Sync its position and/or rotation</param>
         /// <param name="syncOption">Synchronization Option</param>
         /// <param name="interpolatePosition">Set to true if you want to smoothen the tracked rotation if there is network lag</param>
         /// <param name="interpolateRotation">Set to true if you want to smoothen the tracked rotation if there is network lag</param>
         /// <param name="interpolationFactor">Set Interpolation factor value between 0.1 and 1</param>
-        /// <param name="observerIndex">Observerable index in observer.observerables list</param>
-        public Observerable(Transform targetTransform, SyncOptions syncOption, bool interpolatePosition, bool interpolateRotation, float interpolationFactor, int observerIndex = 0)
+        /// <param name="observerIndex">Observable index in observer.observables list</param>
+        public Observable(Transform targetTransform, SyncOptions syncOption, bool interpolatePosition, bool interpolateRotation, float interpolationFactor, int observerIndex = 0)
         {
             this.observeredTransform = targetTransform;
             this.syncOption = syncOption;
@@ -312,14 +312,14 @@ namespace EdgeMultiplay
             
         }
         /// <summary>
-        /// Observerable Constructor
+        /// Observable Constructor
         /// </summary>
         /// <param name="targetTransform">The Transform you want to Sync its position and/or rotation</param>
         /// <param name="syncOption">Synchronization Option</param>
         /// <param name="interpolatePosition">Set to true if you want to smoothen the tracked rotation if there is network lag</param>
         /// <param name="interpolateRotation">Set to true if you want to smoothen the tracked rotation if there is network lag</param>
         /// <param name="interpolationFactor">Set Interpolation factor value between 0.1 and 1</param>
-        public Observerable(Transform targetTransform, SyncOptions syncOption, bool interpolatePosition, bool interpolateRotation, float interpolationFactor)
+        public Observable(Transform targetTransform, SyncOptions syncOption, bool interpolatePosition, bool interpolateRotation, float interpolationFactor)
         {
             this.observeredTransform = targetTransform;
             this.syncOption = syncOption;
@@ -328,12 +328,12 @@ namespace EdgeMultiplay
             InterpolationFactor = interpolationFactor;
         }
 
-        public void SetObserverableIndex(int index)
+        public void SetObservableIndex(int index)
         {
             observerIndex = index;
         }
 
-        public void SetupObserverable(NetworkedPlayer observerOwner)
+        public void SetupObservable(NetworkedPlayer observerOwner)
         {
             owner = observerOwner;
             switch (syncOption)
@@ -410,11 +410,11 @@ namespace EdgeMultiplay
             {
                 owner.gameObject.AddComponent<EdgeMultiplayObserver>();
             }
-            owner.observer.observerables.Add(this);
-            owner.observer.UpdateObserverables();
+            owner.observer.observables.Add(this);
+            owner.observer.UpdateObservables();
         }
         /// <summary>
-        /// Changes the owner of an Observerable object
+        /// Changes the owner of an Observable object
         /// <para>ChangeOwnership() will change the owner in the local player's world and </para>
         /// <para>update all room members about Ownership change.</para>
         /// </summary>
@@ -429,7 +429,7 @@ namespace EdgeMultiplay
                 }
                 if (owner.observer != null)
                 {
-                    owner.observer.observerables.Remove(this);
+                    owner.observer.observables.Remove(this);
                 }
                 owner = EdgeManager.GetPlayer(newOwnerId);
                 if(owner == null)
@@ -440,11 +440,11 @@ namespace EdgeMultiplay
                 {
                     owner.gameObject.AddComponent<EdgeMultiplayObserver>();
                 }
-                owner.observer.observerables.Add(this);
-                owner.observer.UpdateObserverables();
+                owner.observer.observables.Add(this);
+                owner.observer.UpdateObservables();
                 GamePlayEvent changeOwnershipEvent = new GamePlayEvent()
                 {
-                    eventName = "ObserverableOwnershipChange",
+                    eventName = "ObservableOwnershipChange",
                     stringData = new string[1] { newOwnerId },
                     integerData = new int[1] { observerIndex }
                 };

@@ -1,4 +1,4 @@
-/**
+﻿/**
  * Copyright 2018-2021 MobiledgeX, Inc. All rights and licenses reserved.
  * MobiledgeX, Inc. 156 2nd Street #408, San Francisco, CA 94105
  *
@@ -40,7 +40,7 @@ namespace EdgeMultiplay
         public static Action leftRoom;
         public static Action gameStart;
         public static Action gameEnd;
-        public static Action<Observerable> newObserverableCreated;
+        public static Action<Observable> newObservableCreated;
 
         /// <summary>
         /// Starts the connection to your Edge server, server discovery is based on GPS location and the telecommunication carrier
@@ -65,7 +65,7 @@ namespace EdgeMultiplay
             leftRoom += OnLeftRoom;
             eventReceived += OnWebSocketEventReceived;
             udpEventReceived += OnUDPEventReceived;
-            newObserverableCreated += OnNewObserverableCreated;
+            newObservableCreated += OnNewObservableCreated;
             StartCoroutine(ConnectToEdgeCoroutine(useAnyCarrierNetwork, useFallBackLocation, path));
         }
 
@@ -189,7 +189,7 @@ namespace EdgeMultiplay
         /// <summary>
         /// Called once a player in the same room as the local player leaves the room
         /// <para>If the player who left was tracking any transforms
-        /// this callback will be where you should transfer observerables ownership to another player if the game is still running.</para>
+        /// this callback will be where you should transfer observables ownership to another player if the game is still running.</para>
         /// </summary>
         /// <param name="RoomMemberLeft">Info about the player who left the room </param>
         public virtual void OnPlayerLeft(RoomMemberLeft playerLeft)
@@ -215,12 +215,12 @@ namespace EdgeMultiplay
         }
 
         /// <summary>
-        /// Server Callback when a new Observerable is created by one of the players
+        /// Server Callback when a new Observable is created by one of the players
         /// </summary>
-        /// <param name="observerable"> The created Observerable object </param>
-        public virtual void OnNewObserverableCreated(Observerable observerable)
+        /// <param name="observable"> The created Observable object </param>
+        public virtual void OnNewObservableCreated(Observable observable)
         {
-            Debug.Log("New Observerable created, owner name : " + observerable.owner.playerName);
+            Debug.Log("New Observable created, owner name : " + observable.owner.playerName);
         }
 
         /// <summary>
@@ -249,7 +249,7 @@ namespace EdgeMultiplay
             playerLeft -= OnPlayerLeft;
             eventReceived -= OnWebSocketEventReceived;
             udpEventReceived -= OnUDPEventReceived;
-            newObserverableCreated -= OnNewObserverableCreated;
+            newObservableCreated -= OnNewObservableCreated;
         }
     }
 }
