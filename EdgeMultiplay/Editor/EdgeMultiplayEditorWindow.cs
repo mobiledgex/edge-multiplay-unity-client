@@ -77,6 +77,12 @@ namespace EdgeMultiplay
         {
             Application.OpenURL("https://github.com/mobiledgex/edge-multiplay-unity-client/issues/new/choose");
         }
+
+        [MenuItem("EdgeMultiplay/Version 1.1", false, 80)]
+        public static void Version()
+        {
+            //placeholder for version number
+        }
     }
 }
 
