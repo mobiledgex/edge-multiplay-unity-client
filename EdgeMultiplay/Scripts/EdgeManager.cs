@@ -187,8 +187,7 @@ namespace EdgeMultiplay
                 try
                 {
                     integration = new MobiledgeXIntegration();
-                    gameSession = new Session();
-                    MobiledgeX.Logger.SetLogType(MobiledgeX.Logger.LogType.ErrorsOnly);
+                    gameSession = new Session(); 
                     wsClient = new MobiledgeXWebSocketClient();
                     Uri uri = new Uri("ws://" + hostIPAddress + ":" + defaultEdgeMultiplayServerTCPPort + path);
                     if (wsClient.isOpen())
@@ -529,10 +528,10 @@ namespace EdgeMultiplay
                     GamePlayEvent gamePlayEvent = Messaging<GamePlayEvent>.Deserialize(message);
                     switch (gamePlayEvent.eventName)
                     {
-                        case "NewObserverableCreated":
+                        case "NewObservableCreated":
                             CreateObserverableObject(gamePlayEvent);
                             break;
-                        case "ObserverableOwnershipChange":
+                        case "ObservableOwnershipChange":
                             UpdateObserverOwnership(gamePlayEvent);
                             break;
                         default:
@@ -582,7 +581,7 @@ namespace EdgeMultiplay
                 return;
             }
             NetworkedPlayer playerCreatedObserver = GetPlayer(newObserverableEvent.stringData[0]);
-            Observerable observerable = playerCreatedObserver.CreateObserverableObject(
+            Observable observerable = playerCreatedObserver.CreateObservableObject(
                 prefabName: newObserverableEvent.stringData[1],
                 startPosition: Util.ConvertFloatArrayToVector3(newObserverableEvent.floatData, 0),
                 startRotation: Quaternion.Euler(Util.ConvertFloatArrayToVector3(newObserverableEvent.floatData, 3)),
@@ -590,7 +589,7 @@ namespace EdgeMultiplay
                 interpolatePosition: newObserverableEvent.booleanData[0],
                 interpolateRotation: newObserverableEvent.booleanData[1],
                 interpolationFactor: newObserverableEvent.floatData[6]);
-            EdgeMultiplayCallbacks.newObserverableCreated(observerable);
+            EdgeMultiplayCallbacks.newObservableCreated(observerable);
 
         }
 
@@ -606,9 +605,9 @@ namespace EdgeMultiplay
                 return;
             }
             NetworkedPlayer oldOwner = GetPlayer(ownershipChangeEvent.senderId);
-            Observerable observer;
+            Observable observer;
             if(oldOwner.observer != null) {
-                observer = oldOwner.observer.observerables[ownershipChangeEvent.integerData[0]];
+                observer = oldOwner.observer.observables[ownershipChangeEvent.integerData[0]];
             }
             else
             {
@@ -620,9 +619,9 @@ namespace EdgeMultiplay
             {
                 newOwner.gameObject.AddComponent<EdgeMultiplayObserver>();
             }
-            newOwner.observer.observerables.Add(observer);
-            newOwner.observer.UpdateObserverables();
-            oldOwner.observer.observerables.RemoveAt(ownershipChangeEvent.integerData[0]);
+            newOwner.observer.observables.Add(observer);
+            newOwner.observer.UpdateObservables();
+            oldOwner.observer.observables.RemoveAt(ownershipChangeEvent.integerData[0]);
         }
 
         /// <summary>
@@ -642,9 +641,9 @@ namespace EdgeMultiplay
                 return;
             }
             int observerIndex;
-            Observerable observerObject;
+            Observable observerObject;
             observerIndex = receivedEvent.integerData[1];
-            observerObject = sourcePlayer.observer.observerables.Find(observer => observer.observerIndex == observerIndex);
+            observerObject = sourcePlayer.observer.observables.Find(observer => observer.observerIndex == observerIndex);
             if (observerObject == null)
             {
                 Debug.LogError("No observer found with this id " + receivedEvent.integerData[1]);
