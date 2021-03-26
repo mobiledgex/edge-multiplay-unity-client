@@ -3,10 +3,10 @@ To Connect your Unity Project to EdgeMultiplay Server, You have 3 options:
 1. Using our sample EdgeMultiplay server:
 From Unity Toolbar Select MobiledgeX/Setup:
 OrgName: MobiledgeX-Samples
-AppName:EdgeMultiplay
-AppVers:(Same as EdgeMultiplay/Version in Unity Toolbar)
+AppName: EdgeMultiplay
+AppVers: (Same as EdgeMultiplay/Version in Unity Toolbar)
 
-2.Run the server locally on your machine:
+2. Run the server locally on your machine:
 for more instructions, please refer to https://github.com/mobiledgex/edge-multiplay-node-server.
 
 3. You can deploy your server to MobiledgeX and use your own server defintions.
