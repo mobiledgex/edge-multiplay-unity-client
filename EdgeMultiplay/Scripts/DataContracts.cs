@@ -1,4 +1,4 @@
-/**
+﻿/**
  * Copyright 2018-2021 MobiledgeX, Inc. All rights and licenses reserved.
  * MobiledgeX, Inc. 156 2nd Street #408, San Francisco, CA 94105
  *
@@ -22,10 +22,26 @@ using System.Text;
 using System.Runtime.Serialization;
 using System.Collections.Generic;
 using UnityEngine;
+using System.Collections;
+using DistributedMatchEngine;
 
 namespace EdgeMultiplay
 {
-    #region GameFlowEvents
+    #region EdgeMultiplay Data Structures
+
+    /// <summary>
+    /// Synchronization Options
+    /// </summary>
+    public enum SyncOptions
+    {
+        SyncPosition,
+        SyncRotation,
+        SyncPositionAndRotation,
+        SyncLocalPosition,
+        SyncLocalRotation,
+        SyncLocalPositionAndRotation
+    }
+
     /// <summary>
     /// Called once a notification is received from the server
     /// Example of Notifications are new room created on server 
@@ -110,7 +126,7 @@ namespace EdgeMultiplay
 
     /// <summary>
     /// Event is received once a new member joins a room that the local player is a member of
-    /// the room member have the new updated list of room members
+    /// the room member has the new updated list of room members
     /// </summary>
     [DataContract]
     public class PlayerJoinedRoom
@@ -174,60 +190,6 @@ namespace EdgeMultiplay
         [DataMember (EmitDefaultValue = false)]
         public bool[] booleanData;
 
-        /// <summary>
-        /// Returns a Vector 3 from the GamePlayEvent floatData
-        /// </summary>
-        /// <param name="startIndex"></param>
-        /// <returns>Vector3 Object</returns>
-        public Vector3 GetVector3(int startIndex = 0)
-        {
-            if (floatData.Length > (startIndex+2))
-            {
-                return new Vector3(floatData[startIndex], floatData[startIndex + 1], floatData[startIndex + 2]);
-            }
-            else
-            {
-                throw new Exception("Float Data starting from the start index doesn't qualify to create a Vector3"); 
-            }
-        }
-
-        /// <summary>
-        /// Returns a Quaternion from the GamePlayEvent floatData
-        /// </summary>
-        /// <param name="startIndex"></param>
-        /// <returns>Quaternion Object represents Rotation</returns>
-        public Quaternion GetQuaternion(int startIndex = 0)
-        {
-            if (floatData.Length > (startIndex + 2))
-            {
-                Vector3 eulers = GetVector3(startIndex);
-                return Quaternion.Euler(eulers);
-            }
-            else
-            {
-                throw new Exception("Float Data starting from the start index doesn't qualify to create a Quaternion");
-            }
-        
-        }
-
-        /// <summary>
-        /// Returns a PositionAndRotation from the GamePlayEvent floatData
-        /// </summary>
-        /// <param name="startIndex"></param>
-        /// <returns>PositionAndRotation Object</returns>
-        public PositionAndRotation GetPositionAndRotation(int startIndex = 0)
-        {
-            if (floatData.Length > (startIndex + 5))
-            {
-                Vector3 eulers = GetVector3(startIndex+3);
-                return new PositionAndRotation(GetVector3(startIndex), Quaternion.Euler(eulers));
-            }
-            else
-            {
-                throw new Exception("Float Data starting from the start index doesn't qualify to create a PositionAndRotation");
-            }
-        }
-
         public GamePlayEvent()
         {
             type = "GamePlayEvent";
@@ -237,22 +199,25 @@ namespace EdgeMultiplay
         {
             type = "GamePlayEvent";
             this.eventName = eventName;
-            floatData = new float[3] { position.x, position.y, position.z };
+            floatData = Util.ConvertVector3ToFloatArray(position);
         }
 
         public GamePlayEvent(string eventName, Quaternion rotation)
         {
             type = "GamePlayEvent";
             this.eventName = eventName;
-            floatData = new float[3] { rotation.eulerAngles.x, rotation.eulerAngles.y, rotation.eulerAngles.z };
+            floatData = Util.ConvertVector3ToFloatArray(rotation.eulerAngles);
         }
 
         public GamePlayEvent(string eventName, Vector3 position, Quaternion rotation)
         {
             type = "GamePlayEvent";
             this.eventName = eventName;
-            floatData = new float[6] { position.x, position.y, position.z ,
-                rotation.eulerAngles.x, rotation.eulerAngles.y, rotation.eulerAngles.z };
+
+            floatData = new float[6]
+            {
+                position.x, position.y, position.z,rotation.eulerAngles.x, rotation.eulerAngles.y, rotation.eulerAngles.z
+            };
         }
 
         public GamePlayEvent(string eventName, List<int> scoreArray)
@@ -288,6 +253,211 @@ namespace EdgeMultiplay
             return JsonUtility.ToJson(this); ;
         }
     }
+
+
+    [Serializable]
+    public class Observable
+    {
+        /// <summary>
+        /// The Transform you want to Sync its position and/or rotation
+        /// </summary>
+        public Transform observeredTransform;
+        /// <summary>
+        /// Synchronization Option
+        /// </summary>
+        public SyncOptions syncOption;
+        /// <summary>
+        /// Set to true if you want to smoothen the tracked position if you have network lag
+        /// </summary>
+        [Tooltip("Check if you want to smoothen the tracked position if you have network lag")]
+        public bool InterpolatePosition;
+        /// <summary>
+        /// Set to true if you want to smoothen the tracked rotation if you have network lag
+        /// </summary>
+        [Tooltip("Check if you want to smoothen the tracked rotation if you have network lag")]
+        public bool InterpolateRotation;
+        /// <summary>
+        /// Set Interpolation factor between 0.1 and 1
+        /// </summary>
+        [Tooltip("Set Interpolation factor between 0.1 and 1")]
+        [Range(0.1f, 1f)]
+        public float InterpolationFactor;
+        [HideInInspector]
+        public int observerIndex;
+        [HideInInspector]
+        public Vector3 lastPosition;
+        [HideInInspector]
+        public Vector3 lastRotation;
+        [HideInInspector]
+        public NetworkedPlayer owner;
+        [HideInInspector]
+        public bool attachedToPlayer;
+        /// <summary>
+        /// Observable Constructor
+        /// </summary>
+        /// <param name="targetTransform">The Transform you want to Sync its position and/or rotation</param>
+        /// <param name="syncOption">Synchronization Option</param>
+        /// <param name="interpolatePosition">Set to true if you want to smoothen the tracked position if there is network lag</param>
+        /// <param name="interpolateRotation">Set to true if you want to smoothen the tracked rotation if there is network lag</param>
+        /// <param name="interpolationFactor">Set Interpolation factor value between 0.1 and 1</param>
+        /// <param name="observerIndex">Observable index in observer.observables list</param>
+        public Observable(Transform targetTransform, SyncOptions syncOption, bool interpolatePosition, bool interpolateRotation, float interpolationFactor, int observerIndex = 0)
+        {
+            this.observeredTransform = targetTransform;
+            this.syncOption = syncOption;
+            InterpolatePosition = interpolatePosition;
+            InterpolateRotation = interpolateRotation;
+            InterpolationFactor = interpolationFactor;
+            this.observerIndex = observerIndex;
+            
+        }
+        /// <summary>
+        /// Observable Constructor
+        /// </summary>
+        /// <param name="targetTransform">The Transform you want to Sync its position and/or rotation</param>
+        /// <param name="syncOption">Synchronization Option</param>
+        /// <param name="interpolatePosition">Set to true if you want to smoothen the tracked rotation if there is network lag</param>
+        /// <param name="interpolateRotation">Set to true if you want to smoothen the tracked rotation if there is network lag</param>
+        /// <param name="interpolationFactor">Set Interpolation factor value between 0.1 and 1</param>
+        public Observable(Transform targetTransform, SyncOptions syncOption, bool interpolatePosition, bool interpolateRotation, float interpolationFactor)
+        {
+            this.observeredTransform = targetTransform;
+            this.syncOption = syncOption;
+            InterpolatePosition = interpolatePosition;
+            InterpolateRotation = interpolateRotation;
+            InterpolationFactor = interpolationFactor;
+        }
+
+        public void SetObservableIndex(int index)
+        {
+            observerIndex = index;
+        }
+
+        public void SetupObservable(NetworkedPlayer observerOwner)
+        {
+            owner = observerOwner;
+            switch (syncOption)
+            {
+                case SyncOptions.SyncPosition:
+                    lastPosition = observeredTransform.transform.position;
+                    break;
+                case SyncOptions.SyncRotation:
+                    lastRotation = observeredTransform.transform.rotation.eulerAngles;
+                    break;
+                case SyncOptions.SyncPositionAndRotation:
+                    lastPosition = observeredTransform.transform.position;
+                    lastRotation = observeredTransform.transform.rotation.eulerAngles;
+                    break;
+                case SyncOptions.SyncLocalPosition:
+                    lastPosition = observeredTransform.transform.localPosition;
+                    break;
+                case SyncOptions.SyncLocalRotation:
+                    lastRotation = observeredTransform.transform.localRotation.eulerAngles;
+                    break;
+                case SyncOptions.SyncLocalPositionAndRotation:
+                    lastPosition = observeredTransform.transform.localPosition;
+                    lastRotation = observeredTransform.transform.localRotation.eulerAngles;
+                    break;
+            }
+        }
+
+        public void SendDataToServer()
+        {
+            GamePlayEvent observerEvent = new GamePlayEvent();
+            observerEvent.eventName = "EdgeMultiplayObserver";
+            observerEvent.integerData = new int[2] { (int)syncOption, observerIndex };
+            switch (syncOption)
+            {
+                case SyncOptions.SyncPosition:
+                    observerEvent.floatData = Util.GetPositionData(observeredTransform.transform);
+                    lastPosition = observeredTransform.transform.position;
+                    break;
+                case SyncOptions.SyncRotation:
+                    observerEvent.floatData = Util.GetRotationEulerData(observeredTransform.transform);
+                    lastRotation = observeredTransform.transform.rotation.eulerAngles;
+                    break;
+                case SyncOptions.SyncPositionAndRotation:
+                    observerEvent.floatData = Util.GetPositionAndRotationData(observeredTransform.transform);
+                    lastRotation = observeredTransform.transform.rotation.eulerAngles;
+                    lastPosition = observeredTransform.transform.position;
+                    break;
+                case SyncOptions.SyncLocalPosition:
+                    observerEvent.floatData = Util.GetLocalPositionData(observeredTransform.transform);
+                    lastPosition = observeredTransform.localPosition;
+                    break;
+                case SyncOptions.SyncLocalRotation:
+                    observerEvent.floatData = Util.GetLocalRotationData(observeredTransform.transform);
+                    lastRotation = observeredTransform.transform.rotation.eulerAngles;
+                    break;
+                case SyncOptions.SyncLocalPositionAndRotation:
+                    observerEvent.floatData = Util.GetLocalPositionAndRotationData(observeredTransform.transform);
+                    lastPosition = observeredTransform.transform.localRotation.eulerAngles;
+                    lastRotation = observeredTransform.transform.localPosition;
+                    break;
+            }
+            EdgeManager.SendUDPMessage(observerEvent);
+        }
+
+        public void SetOwnership(string ownerId)
+        {
+            owner = EdgeManager.GetPlayer(ownerId);
+            if(owner == null)
+            {
+                throw new Exception("EdgeMultiplay: Couldn't find player with id: " + ownerId);
+            }
+
+            if (owner.observer == null)
+            {
+                owner.gameObject.AddComponent<EdgeMultiplayObserver>();
+            }
+            owner.observer.observables.Add(this);
+            owner.observer.UpdateObservables();
+        }
+        /// <summary>
+        /// Changes the owner of an Observable object
+        /// <para>ChangeOwnership() will change the owner in the local player's world and </para>
+        /// <para>update all room members about Ownership change.</para>
+        /// </summary>
+        /// <param name="newOwnerId">The new owner player id</param>
+        public void ChangeOwnership(string newOwnerId)
+        {
+            if (owner != null)
+            {
+                if (newOwnerId == owner.playerId)
+                {
+                    return;// ownership already sat
+                }
+                if (owner.observer != null)
+                {
+                    owner.observer.observables.Remove(this);
+                }
+                owner = EdgeManager.GetPlayer(newOwnerId);
+                if(owner == null)
+                {
+                    throw new Exception("EdgeMultiplay: Couldn't find player with id: " + newOwnerId);
+                }
+                if (owner.observer == null)
+                {
+                    owner.gameObject.AddComponent<EdgeMultiplayObserver>();
+                }
+                owner.observer.observables.Add(this);
+                owner.observer.UpdateObservables();
+                GamePlayEvent changeOwnershipEvent = new GamePlayEvent()
+                {
+                    eventName = "ObservableOwnershipChange",
+                    stringData = new string[1] { newOwnerId },
+                    integerData = new int[1] { observerIndex }
+                };
+                EdgeManager.MessageSender.BroadcastMessage(changeOwnershipEvent);
+            }
+            else
+            {
+                Debug.LogError("EdgeMultiplay: Observer has no owner, Use observer.SetOwnership() first");
+                return;
+            }
+        }
+    }
+
     #endregion
     #region Requests
 
@@ -307,21 +477,23 @@ namespace EdgeMultiplay
         public int playerAvatar;
         [DataMember]
         public int maxPlayersPerRoom;
-
-        public CreateRoomRequest(string PlayerName, int PlayerAvatar, int MaxPlayersPerRoom)
+        [DataMember (EmitDefaultValue = false)]
+        public Hashtable playerTags;
+        public CreateRoomRequest(string PlayerName, int PlayerAvatar, int MaxPlayersPerRoom , Hashtable playerTags = null)
         {
             type = "CreateRoom";
             playerId = EdgeManager.gameSession.playerId;
             playerName = PlayerName;
             playerAvatar = PlayerAvatar;
             maxPlayersPerRoom = MaxPlayersPerRoom;
+            this.playerTags = playerTags;
         }
     }
 
-        /// <summary>
-        /// JoinOrCreateRoomRequest is sent to the server to join a room or create a new room if it there is no available rooms
-        /// </summary>
-        [DataContract]
+    /// <summary>
+    /// JoinOrCreateRoomRequest is sent to the server to join a room or create a new room if there are no available rooms
+    /// </summary>
+    [DataContract]
     public class JoinOrCreateRoomRequest
     {
         [DataMember]
@@ -334,17 +506,19 @@ namespace EdgeMultiplay
         public int playerAvatar;
         [DataMember]
         public int maxPlayersPerRoom;
+        [DataMember (EmitDefaultValue = false)]
+        public Hashtable playerTags;
 
-        public JoinOrCreateRoomRequest(string PlayerName, int PlayerAvatar, int MaxPlayersPerRoom)
+        public JoinOrCreateRoomRequest(string PlayerName, int PlayerAvatar, int MaxPlayersPerRoom, Hashtable playerTags = null)
         {
             type = "JoinOrCreateRoom";
             playerId = EdgeManager.gameSession.playerId;
             playerName = PlayerName;
             playerAvatar = PlayerAvatar;
             maxPlayersPerRoom = MaxPlayersPerRoom;
+            this.playerTags = playerTags;
         }
     }
-
 
     /// <summary>
     /// JoinRoomRequest is sent to the server to join a specific room
@@ -362,14 +536,17 @@ namespace EdgeMultiplay
         public int playerAvatar;
         [DataMember]
         public string roomId;
+        [DataMember (EmitDefaultValue = false)]
+        public Hashtable playerTags;
 
-        public JoinRoomRequest(string RoomId, string PlayerName, int PlayerAvatar)
+        public JoinRoomRequest(string RoomId, string PlayerName, int PlayerAvatar, Hashtable playerTags = null)
         {
             type = "JoinRoom";
             roomId = RoomId;
             playerId = EdgeManager.gameSession.playerId;
             playerName = PlayerName;
             playerAvatar = PlayerAvatar;
+            this.playerTags = playerTags;
         }
     }
 
@@ -437,6 +614,7 @@ namespace EdgeMultiplay
         public int playerIndex;
         public Player[] currentPlayers;
     }
+
     /// <summary>
     /// Wrapper class for room info received the server
     /// </summary>
@@ -460,7 +638,6 @@ namespace EdgeMultiplay
         /// </summary>
         [DataMember]
         public int maxPlayersPerRoom;
-
     }
 
     /// <summary>
@@ -490,6 +667,30 @@ namespace EdgeMultiplay
         /// </summary>
         [DataMember]
         public int playerAvatar = 0;
+
+        /// <summary>
+        /// helper instance variable for serializing and deserializing playerTags
+        /// </summary>
+        [DataMember (EmitDefaultValue = false)]
+        internal Hashtable playerTags;
+
+        /// <summary>
+        /// Dictionary<string,string> custom data associated with the player
+        /// </summary>
+        public Dictionary<string, string> playerTagsDict
+        {
+            get
+            {
+                if(playerTags != null)
+                {
+                    return Tag.HashtableToDictionary(playerTags);
+                }
+                else
+                {
+                    return null;
+                }
+            }
+        }
     }
 
     /// <summary>
@@ -522,6 +723,7 @@ namespace EdgeMultiplay
 
     #endregion
     #region Serialization Helpers
+
     [DataContract]
     class MessageWrapper
     {
@@ -578,5 +780,6 @@ namespace EdgeMultiplay
             return t;
         }
     }
+
     #endregion
 }

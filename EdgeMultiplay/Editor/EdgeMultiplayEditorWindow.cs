@@ -1,4 +1,4 @@
-/**
+﻿/**
  * Copyright 2018-2021 MobiledgeX, Inc. All rights and licenses reserved.
  * MobiledgeX, Inc. 156 2nd Street #408, San Francisco, CA 94105
  *
@@ -40,13 +40,6 @@ namespace EdgeMultiplay
             AssetDatabase.ImportPackage(Path.Combine(assetsFolder, "EdgeMultiplay/Examples/PingPongExample.unitypackage"), true);
         }
 
-        [MenuItem("EdgeMultiplay/Examples/AR PingPong", false, 40)]
-        public static void ImportARPingPongExample()
-        {
-            string assetsFolder = Path.GetFullPath(Application.dataPath);
-            AssetDatabase.ImportPackage(Path.Combine(assetsFolder, "EdgeMultiplay/Examples/AR_PingPongExample.unitypackage"), true);
-        }
-
         [MenuItem("EdgeMultiplay/Examples/Chat", false, 40)]
         public static void ImportChatExample()
         {
@@ -76,6 +69,12 @@ namespace EdgeMultiplay
         public static void ReportBug()
         {
             Application.OpenURL("https://github.com/mobiledgex/edge-multiplay-unity-client/issues/new/choose");
+        }
+
+        [MenuItem("EdgeMultiplay/Version 1.1", false, 80)]
+        public static void Version()
+        {
+            //placeholder for version number
         }
     }
 }
