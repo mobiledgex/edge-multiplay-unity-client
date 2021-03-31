@@ -1,4 +1,4 @@
-/**
+﻿/**
  * Copyright 2018-2021 MobiledgeX, Inc. All rights and licenses reserved.
  * MobiledgeX, Inc. 156 2nd Street #408, San Francisco, CA 94105
  *
@@ -40,13 +40,15 @@ namespace EdgeMultiplay
         public static Action leftRoom;
         public static Action gameStart;
         public static Action gameEnd;
+        public static Action<Observable> newObservableCreated;
 
         /// <summary>
         /// Starts the connection to your Edge server, server discovery is based on GPS location and the telecommunication carrier
         /// </summary>
         /// <param name="useAnyCarrierNetwork">True by default, set to false to connect to a specific carrier, set carrier name using EdgeManager.integration.carrierName </param>
         /// <param name="useFallBackLocation">False by default, location is acquired from user GPS location, if you are using location blind device like Oculus, use EdgeManager.integration.SetFallbackLocation()</param>
-        public void ConnectToEdge(bool useAnyCarrierNetwork = true, bool useFallBackLocation = false)
+        /// <param name="path"> You can specify a path for your connection to be verified on the server side </param>
+        public void ConnectToEdge(bool useAnyCarrierNetwork = true, bool useFallBackLocation = false, string path = "")
         {
             connectedToEdge += OnConnectionToEdge;
             failureToConnect += OnFaliureToConnect;
@@ -63,10 +65,11 @@ namespace EdgeMultiplay
             leftRoom += OnLeftRoom;
             eventReceived += OnWebSocketEventReceived;
             udpEventReceived += OnUDPEventReceived;
-            StartCoroutine(ConnectToEdgeCoroutine(useAnyCarrierNetwork, useFallBackLocation));
+            newObservableCreated += OnNewObservableCreated;
+            StartCoroutine(ConnectToEdgeCoroutine(useAnyCarrierNetwork, useFallBackLocation, path));
         }
 
-        IEnumerator ConnectToEdgeCoroutine(bool useAnyCarrierNetwork = true, bool useFallBackLocation = false)
+        IEnumerator ConnectToEdgeCoroutine(bool useAnyCarrierNetwork = true, bool useFallBackLocation = false, string path = "")
         {
             EdgeManager edgeManager = FindObjectOfType<EdgeManager>();
             if(edgeManager.useLocalHostServer == false)
@@ -81,7 +84,7 @@ namespace EdgeMultiplay
                     yield return null;
                 }
             }
-            edgeManager.ConnectToServer(useAnyCarrierNetwork, useFallBackLocation).ConfigureAwait(false);
+            edgeManager.ConnectToServer(useAnyCarrierNetwork, useFallBackLocation, path).ConfigureAwait(false);
         }
 
         /// <summary>
@@ -89,7 +92,6 @@ namespace EdgeMultiplay
         /// </summary>
         public virtual void OnConnectionToEdge()
         {
-
             Debug.Log("Connected to Edge");
         }
 
@@ -99,7 +101,6 @@ namespace EdgeMultiplay
         /// <param name="reason"> Reason of connection faliure </param>
         public virtual void OnFaliureToConnect(string reason)
         {
-
             Debug.Log("Edge Connection Falied because " + reason);
         }
 
@@ -187,6 +188,8 @@ namespace EdgeMultiplay
 
         /// <summary>
         /// Called once a player in the same room as the local player leaves the room
+        /// <para>If the player who left was tracking any transforms
+        /// this callback will be where you should transfer observables ownership to another player if the game is still running.</para>
         /// </summary>
         /// <param name="RoomMemberLeft">Info about the player who left the room </param>
         public virtual void OnPlayerLeft(RoomMemberLeft playerLeft)
@@ -208,7 +211,16 @@ namespace EdgeMultiplay
         /// <param name="gamePlayEvent">received GamePlayEvent</param>
         public virtual void OnWebSocketEventReceived(GamePlayEvent gamePlayEvent)
         {
-            Debug.Log("WebSocket Event Received Event From Server : " + gamePlayEvent.eventName);
+            Debug.Log("WebSocket Event Received From Server : " + gamePlayEvent.eventName);
+        }
+
+        /// <summary>
+        /// Server Callback when a new Observable is created by one of the players
+        /// </summary>
+        /// <param name="observable"> The created Observable object </param>
+        public virtual void OnNewObservableCreated(Observable observable)
+        {
+            Debug.Log("New Observable created, owner name : " + observable.owner.playerName);
         }
 
         /// <summary>
@@ -237,6 +249,7 @@ namespace EdgeMultiplay
             playerLeft -= OnPlayerLeft;
             eventReceived -= OnWebSocketEventReceived;
             udpEventReceived -= OnUDPEventReceived;
+            newObservableCreated -= OnNewObservableCreated;
         }
     }
 }

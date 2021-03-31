@@ -15,6 +15,7 @@
  * limitations under the License.
  */
 
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System;
@@ -52,7 +53,6 @@ namespace EdgeMultiplay
         /// </summary>
         public static NetworkedPlayer MessageSender;
         public static NetworkedPlayer localPlayer;
-        public static bool localPlayerIsMaster;
         /// <summary>
         /// Indicates that the game have already started
         /// </summary>
@@ -82,7 +82,7 @@ namespace EdgeMultiplay
         /// </summary>
         [Header("Players", order = 0)]
         [Tooltip("Player Avatars to be instatiated in once the Game starts")]
-        public List<GameObject> SpawnPrefabs;
+        public List<NetworkedPlayer> SpawnPrefabs;
 
         /// <summary>
         /// List of Spawn Info, Spawn Info consists of Position and the Rotation Eulers
@@ -178,16 +178,18 @@ namespace EdgeMultiplay
         /// </summary>
         /// <param name="useAnyCarrierNetwork"> set to true for connection based on location info only </param>
         /// <param name="useFallBackLocation"> set to true to use overloaded location sat in setFallbackLocation()</param>
+        /// <param name="path"> You can specify a path for your connection to be verified on the server side </param>
         /// <returns> Connection Task, use OnConnectionToEdge() to listen to the async task result </returns>
-        public async Task ConnectToServer(bool useAnyCarrierNetwork = true, bool useFallBackLocation = false)
+        public async Task ConnectToServer(bool useAnyCarrierNetwork = true, bool useFallBackLocation = false, string path = "")
         {
             if (useLocalHostServer)
             {
                 try
                 {
-                    gameSession = new Session();
+                    integration = new MobiledgeXIntegration();
+                    gameSession = new Session(); 
                     wsClient = new MobiledgeXWebSocketClient();
-                    Uri uri = new Uri("ws://" + hostIPAddress + ":" + defaultEdgeMultiplayServerTCPPort);
+                    Uri uri = new Uri("ws://" + hostIPAddress + ":" + defaultEdgeMultiplayServerTCPPort + path);
                     if (wsClient.isOpen())
                     {
                         wsClient.Dispose();
@@ -213,7 +215,7 @@ namespace EdgeMultiplay
                     wsClient = new MobiledgeXWebSocketClient();
                     await integration.RegisterAndFindCloudlet();
                     integration.GetAppPort(LProto.L_PROTO_TCP);
-                    string url = integration.GetUrl("ws");
+                    string url = integration.GetUrl("ws") + path;
                     Uri uri = new Uri(url);
                     if (wsClient.isOpen())
                     {
@@ -232,13 +234,23 @@ namespace EdgeMultiplay
         }
 
         /// <summary>
-        /// Get Player based on playerId
+        /// Get Player using the player id
         /// </summary>
         /// <param name="playerId"> playerId is a unique Id assigned to player during OnRegister() and saved into EdgeManager.gameSession.playerId</param>
         /// <returns> The NetworkedPlayer of the supplied playerId </returns>
         public static NetworkedPlayer GetPlayer(string playerId)
         {
             return currentRoomPlayers.Find(player => player.playerId == playerId);
+        }
+
+        /// <summary>
+        /// Get Player  using the player index in the room
+        /// </summary>
+        /// <param name="playerIndex"> playerIndex is an id assigned to player based on the precedence of joining the room </param>
+        /// <returns> The NetworkedPlayer of the supplied playerIndex </returns>
+        public static NetworkedPlayer GetPlayer(int playerIndex)
+        {
+            return currentRoomPlayers.Find(player => player.playerIndex == playerIndex);
         }
 
         /// <summary>
@@ -251,14 +263,24 @@ namespace EdgeMultiplay
         /// <param name="playerName"> player name to be assigned to player</param>
         /// <param name="playerAvatar">(integer value) Avatar Index from EdgeManager Spawn Prefabs</param>
         /// <param name="maxPlayersPerRoom">In case of room creation, the maximum players allowed in the room</param>
-        public static void JoinOrCreateRoom(string playerName, int playerAvatar, int maxPlayersPerRoom)
+        /// <param name="playerTags">Dictionary<string,string> custom data associated with the player</param> 
+        public static void JoinOrCreateRoom(string playerName, int playerAvatar, int maxPlayersPerRoom, Dictionary<string,string> playerTags = null)
         {
-            if(maxPlayersPerRoom < 2)
+            if (maxPlayersPerRoom < 2)
             {
                 Debug.LogError("EdgeMultiplay : maxPlayersPerRoom must be greater than 1");
                 return;
             }
-            JoinOrCreateRoomRequest createOrJoinRoomRequest = new JoinOrCreateRoomRequest(playerName, playerAvatar, maxPlayersPerRoom);
+            Hashtable playertagsHashtable;
+            if (playerTags != null)
+            {
+                playertagsHashtable = Tag.DictionaryToHashtable(playerTags);
+            }
+            else
+            {
+                playertagsHashtable = null;
+            }
+            JoinOrCreateRoomRequest createOrJoinRoomRequest = new JoinOrCreateRoomRequest(playerName, playerAvatar, maxPlayersPerRoom, playertagsHashtable);
             wsClient.Send(Messaging<JoinOrCreateRoomRequest>.Serialize(createOrJoinRoomRequest));
         }
 
@@ -295,7 +317,8 @@ namespace EdgeMultiplay
         /// <param name="playerName">player name to be assigned to player</param>
         /// <param name="playerAvatar">(integer value) Avatar Index from EdgeManager Spawn Prefabs</param>
         /// <param name="maxPlayersPerRoom">The maximum players allowed in the room</param>
-        public static void CreateRoom(string playerName, int playerAvatar, int maxPlayersPerRoom)
+        /// <param name="playerTags">Dictionary<string,string> custom data associated with the player</param>
+        public static void CreateRoom(string playerName, int playerAvatar, int maxPlayersPerRoom, Dictionary<string, string> playerTags = null)
         {
             if (maxPlayersPerRoom < 2)
             {
@@ -305,7 +328,16 @@ namespace EdgeMultiplay
             // Assure Player is not already a member of another room  
             if (gameSession.roomId == "")
             {
-                CreateRoomRequest createRoomRequest = new CreateRoomRequest(playerName, playerAvatar, maxPlayersPerRoom);
+                Hashtable playertagsHashtable;
+                if (playerTags != null)
+                {
+                    playertagsHashtable = Tag.DictionaryToHashtable(playerTags);
+                }
+                else
+                {
+                    playertagsHashtable = null;
+                }
+                CreateRoomRequest createRoomRequest = new CreateRoomRequest(playerName, playerAvatar, maxPlayersPerRoom, playertagsHashtable);
                 wsClient.Send(Messaging<CreateRoomRequest>.Serialize(createRoomRequest));
             }
             else
@@ -322,11 +354,21 @@ namespace EdgeMultiplay
         /// </summary>
         /// <param name="roomId">Id of the room intended to join</param>
         /// <param name="playerAvatar">(integer value) Avatar Index from EdgeManager Spawn Prefabs</param>
-        public static void JoinRoom(string roomId, string playerName, int playerAvatar)
+        /// <param name="playerTags">Dictionary<string,string> custom data associated with the player</param>
+        public static void JoinRoom(string roomId, string playerName, int playerAvatar, Dictionary<string, string> playerTags = null)
         {
             if (gameSession.roomId == "")
             {
-                JoinRoomRequest joinRoomRequest = new JoinRoomRequest(roomId, playerName, playerAvatar);
+                Hashtable playertagsHashtable;
+                if (playerTags != null)
+                {
+                    playertagsHashtable = Tag.DictionaryToHashtable(playerTags);
+                }
+                else
+                {
+                    playertagsHashtable = null;
+                }
+                JoinRoomRequest joinRoomRequest = new JoinRoomRequest(roomId, playerName, playerAvatar, playertagsHashtable);
                 wsClient.Send(Messaging<JoinRoomRequest>.Serialize(joinRoomRequest));
             }
             else
@@ -360,6 +402,10 @@ namespace EdgeMultiplay
             if (udpClient.run)
             {
                 udpClient.Send(gameplayEvent.ToJson());
+            }
+            else
+            {
+                Debug.LogError("EdgeMultiplay: Error in sending UDP Message");
             }
         }
 
@@ -479,8 +525,19 @@ namespace EdgeMultiplay
                     break;
 
                 case "GamePlayEvent":
-                    GamePlayEvent mobiledgexEvent = Messaging<GamePlayEvent>.Deserialize(message);
-                    ReflectEvent(mobiledgexEvent);
+                    GamePlayEvent gamePlayEvent = Messaging<GamePlayEvent>.Deserialize(message);
+                    switch (gamePlayEvent.eventName)
+                    {
+                        case "NewObservableCreated":
+                            CreateObserverableObject(gamePlayEvent);
+                            break;
+                        case "ObservableOwnershipChange":
+                            UpdateObserverOwnership(gamePlayEvent);
+                            break;
+                        default:
+                            ReflectEvent(gamePlayEvent);
+                            break;
+                    }
                     break;
 
                 case "memberLeft":
@@ -517,33 +574,102 @@ namespace EdgeMultiplay
             }
         }
 
-        void SyncObject(GamePlayEvent receivedEvent)
+        void CreateObserverableObject(GamePlayEvent newObserverableEvent)
         {
-            if (receivedEvent.senderId == gameSession.playerId)
+            if(localPlayer.playerId == newObserverableEvent.stringData[0])
             {
                 return;
             }
-            EdgeMultiplayObserver observedObject;
-            if (receivedEvent.booleanData[0]) // player object
+            NetworkedPlayer playerCreatedObserver = GetPlayer(newObserverableEvent.stringData[0]);
+            Observable observerable = playerCreatedObserver.CreateObservableObject(
+                prefabName: newObserverableEvent.stringData[1],
+                startPosition: Util.ConvertFloatArrayToVector3(newObserverableEvent.floatData, 0),
+                startRotation: Quaternion.Euler(Util.ConvertFloatArrayToVector3(newObserverableEvent.floatData, 3)),
+                syncOption: (SyncOptions)Enum.ToObject(typeof(SyncOptions), newObserverableEvent.integerData[0]),
+                interpolatePosition: newObserverableEvent.booleanData[0],
+                interpolateRotation: newObserverableEvent.booleanData[1],
+                interpolationFactor: newObserverableEvent.floatData[6]);
+            EdgeMultiplayCallbacks.newObservableCreated(observerable);
+
+        }
+
+        /// <summary>
+        /// When an observerable object change its owner, OwnershipChangeEvent is sent from the owner to other players
+        /// Changing ownership must occur at the owner world
+        /// </summary>
+        /// <param name="ownershipChangeEvent">OwnershipChangeEvent contains (oldOwnerId, the observerable Index and the newOwnerId)</param>
+        void UpdateObserverOwnership(GamePlayEvent ownershipChangeEvent)
+        {
+            if (localPlayer.playerId == ownershipChangeEvent.senderId)
             {
-                observedObject = observers.Find(observer => observer.GetComponent<NetworkedPlayer>()
-                && observer.GetComponent<NetworkedPlayer>().playerId == receivedEvent.stringData[0]);
+                return;
+            }
+            NetworkedPlayer oldOwner = GetPlayer(ownershipChangeEvent.senderId);
+            Observable observer;
+            if(oldOwner.observer != null) {
+                observer = oldOwner.observer.observables[ownershipChangeEvent.integerData[0]];
             }
             else
             {
-                observedObject = observers.Find(observer => observer.eventId == receivedEvent.stringData[0]);
+                Debug.LogError("Couldn't find old owner.observer");
+                return;
+            }
+            NetworkedPlayer newOwner = GetPlayer(ownershipChangeEvent.stringData[0]);
+            if(newOwner.observer == null)
+            {
+                newOwner.gameObject.AddComponent<EdgeMultiplayObserver>();
+            }
+            newOwner.observer.observables.Add(observer);
+            newOwner.observer.UpdateObservables();
+            oldOwner.observer.observables.RemoveAt(ownershipChangeEvent.integerData[0]);
+        }
+
+        /// <summary>
+        /// If the LocalPlayer is observing any transforms, once there is any update to the observed transform
+        /// the local player will send the updated transfrom to its clones in the other players' world.
+        /// </summary>
+        /// <param name="receivedEvent"> the received gameplay event contains (obsverable owner id, observerable index, syncOption, updated transform data) </param>
+        void SyncObject(GamePlayEvent receivedEvent)
+        {
+            if (receivedEvent.senderId == localPlayer.playerId)
+            {
+                return;
+            }
+            NetworkedPlayer sourcePlayer = GetPlayer(receivedEvent.senderId);
+            if (sourcePlayer.isLocalPlayer)
+            {
+                return;
+            }
+            int observerIndex;
+            Observable observerObject;
+            observerIndex = receivedEvent.integerData[1];
+            observerObject = sourcePlayer.observer.observables.Find(observer => observer.observerIndex == observerIndex);
+            if (observerObject == null)
+            {
+                Debug.LogError("No observer found with this id " + receivedEvent.integerData[1]);
+                return;
             }
             switch (receivedEvent.integerData[0])
             {
-                case (int)EdgeMultiplayObserver.SyncOptions.SyncPosition:
-                    observedObject.positionFromServer = new Vector3(receivedEvent.floatData[0], receivedEvent.floatData[1], receivedEvent.floatData[2]);
+                case (int)SyncOptions.SyncPosition:
+                    observerObject.observeredTransform.transform.position = Util.ConvertFloatArrayToVector3(receivedEvent.floatData, 0);
                     break;
-                case (int)EdgeMultiplayObserver.SyncOptions.SyncRotation:
-                    observedObject.rotationFromServer = new Vector3(receivedEvent.floatData[0], receivedEvent.floatData[1], receivedEvent.floatData[2]);
+                case (int)SyncOptions.SyncRotation:
+                    observerObject.observeredTransform.transform.rotation = Quaternion.Euler(Util.ConvertFloatArrayToVector3(receivedEvent.floatData, 0));
                     break;
-                case (int)EdgeMultiplayObserver.SyncOptions.SyncPositionAndRotation:
-                    observedObject.positionFromServer = new Vector3(receivedEvent.floatData[0], receivedEvent.floatData[1], receivedEvent.floatData[2]);
-                    observedObject.rotationFromServer = new Vector3(receivedEvent.floatData[3], receivedEvent.floatData[4], receivedEvent.floatData[5]);
+                case (int)SyncOptions.SyncPositionAndRotation:
+                    observerObject.observeredTransform.transform.position = Util.ConvertFloatArrayToVector3(receivedEvent.floatData, 0);
+                    observerObject.observeredTransform.transform.rotation = Quaternion.Euler(Util.ConvertFloatArrayToVector3(receivedEvent.floatData, 3));
+                    break;
+                case (int)SyncOptions.SyncLocalPosition:
+                    Util.SetLocalPostion(observerObject.observeredTransform.transform, Util.ConvertFloatArrayToVector3(receivedEvent.floatData, 0));
+                    break;
+                case (int)SyncOptions.SyncLocalRotation:
+                    Util.SetLocalRotation(observerObject.observeredTransform.transform, Util.ConvertFloatArrayToVector3(receivedEvent.floatData, 0));
+                    break;
+                case (int)SyncOptions.SyncLocalPositionAndRotation:
+                    Util.SetLocalPostion(observerObject.observeredTransform.transform, Util.ConvertFloatArrayToVector3(receivedEvent.floatData, 0));
+                    Util.SetLocalRotation(observerObject.observeredTransform.transform, Util.ConvertFloatArrayToVector3(receivedEvent.floatData, 3));
                     break;
             }
         }
@@ -561,21 +687,15 @@ namespace EdgeMultiplay
                 {
                     foreach (Player player in gamePlayers)
                     {
-                        GameObject playerObj = SpawnPrefabs[player.playerAvatar];
+                        GameObject playerObj = SpawnPrefabs[player.playerAvatar].gameObject;
                         playerObj.GetComponent<NetworkedPlayer>().SetUpPlayer(player, gameSession.roomId, player.playerId == gameSession.playerId);
 
                         GameObject playerCreated;
                         if (WorldOriginTransform != null)
                         {
                             playerCreated = Instantiate(playerObj, WorldOriginTransform);
-                            var position = playerCreated.transform.localPosition;
-                            position.Set(SpawnInfo[player.playerIndex].position.x, SpawnInfo[player.playerIndex].position.y, SpawnInfo[player.playerIndex].position.z);
-                            playerCreated.transform.localPosition = position;
-
-                            var rotation = playerCreated.transform.localRotation;
-                            Quaternion tempRotation = Quaternion.Euler(SpawnInfo[player.playerIndex].rotation);
-                            rotation.Set(tempRotation.x, tempRotation.y, tempRotation.z, tempRotation.w);
-                            playerCreated.transform.localRotation = rotation;
+                            Util.SetLocalPostion(playerCreated.transform, SpawnInfo[player.playerIndex].position);
+                            Util.SetLocalRotation(playerCreated.transform, SpawnInfo[player.playerIndex].rotation);
                         }
                         else
                         {
@@ -596,17 +716,16 @@ namespace EdgeMultiplay
                         if (player.playerId == gameSession.playerId)
                         {
                             localPlayer = MessageSender = networkedPlayer;
-                            localPlayerIsMaster = player.playerIndex == 0;
                         }
                     }
                 }
                 catch (NullReferenceException)
                 {
-                    throw new Exception("EdgeMultiplay: Error in creating players, Make sure all your EdgeManager Spawn prefabs have a script that inherits from NetworkedPlayer ");
+                    throw new Exception("EdgeMultiplay: Error in creating players, Make sure to attach your Prefabs to EdgeManager.SpawnInfo in the inspector");
                 }
                 catch (ArgumentOutOfRangeException)
                 {
-                    throw new Exception("EdgeMultiplay: Error in creating players, Make sure Size of EdgeManager Spawn Info equal or greater than number of players in the room ");
+                    throw new Exception("EdgeMultiplay: Error in creating players, Make sure Size of EdgeManager Spawn Info equal or greater than number of players in the room");
                 }
                 catch (Exception)
                 {

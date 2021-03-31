@@ -1,4 +1,4 @@
-/**
+﻿/**
  * Copyright 2018-2021 MobiledgeX, Inc. All rights and licenses reserved.
  * MobiledgeX, Inc. 156 2nd Street #408, San Francisco, CA 94105
  *
@@ -51,6 +51,24 @@ namespace EdgeMultiplay
         /// </summary>
         public bool ActivePlayer = true;
         EdgeManager edgeManager;
+        /// <summary>
+        /// The observer responsible for tracking the observable transforms
+        /// </summary>
+        public EdgeMultiplayObserver observer
+        {
+            get
+            {
+                if (GetComponent<EdgeMultiplayObserver>())
+                {
+                    return GetComponent<EdgeMultiplayObserver>();
+                }
+                else
+                {
+                    return null;
+                }
+            }
+            set { }
+        }
 
         #endregion
 
@@ -69,11 +87,6 @@ namespace EdgeMultiplay
             if (!isLocalPlayer)
             {
                 playerEvent += OnMessageReceived;
-                if (GetComponent<Rigidbody>())
-                    GetComponent<Rigidbody>().isKinematic = true;
-                if (GetComponent<Rigidbody2D>())
-                    GetComponent<Rigidbody2D>().isKinematic = true;
-
             }
         }
         /// <summary>
@@ -198,6 +211,46 @@ namespace EdgeMultiplay
         {
             GamePlayEvent gamePlayEvent = new GamePlayEvent(this.roomId, playerId, eventName, stringData, commandInts, floatData, booleanData);
             edgeManager.SendGamePlayEvent(gamePlayEvent);
+        }
+
+        /// <summary>
+        /// Creates synced GameObject in runtime in the local player's world
+        /// and sends an event to all players in the room to create the observable in their worlds
+        /// </summary>
+        /// <param name="prefabName">The name of your prefab (Game Object) stored in Resources Folder without extensions ex. 'Ball' </param>
+        /// <param name="startPosition"> the inital position of the spawning </param>
+        /// <param name="startRotation">  the inital rotation of the spawning </param>
+        /// <param name="syncOption"> Which Synchronization option will be applied </param>
+        /// <param name="interpolatePosition"> Set to true if you want to smoothen the tracked position if you have network lag </param>
+        /// <param name="interpolateRotation"> Set to true if you want to smoothen the tracked rotation if you have network lag</param>
+        /// <param name="interpolationFactor"> Set Interpolation factor between 0.1 and 1 </param>
+        /// <returns> The created Observer object </returns>
+        public Observable CreateObservableObject(string prefabName, Vector3 startPosition, Quaternion startRotation, SyncOptions syncOption, bool interpolatePosition = false, bool interpolateRotation = false, float interpolationFactor = 0)
+        {
+            GameObject prefab = Resources.Load<GameObject>(prefabName);
+            GameObject syncedObject;
+            syncedObject = Instantiate(prefab, startPosition, startRotation);
+            if (!observer)
+            {
+                observer =  gameObject.AddComponent<EdgeMultiplayObserver>();
+            }
+            Observable newObservable = new Observable(syncedObject.transform, syncOption, interpolatePosition, interpolateRotation, Mathf.Clamp(interpolationFactor, 0.1f, 1f), observer.observables.Count);
+            observer.observables.Add(newObservable);
+            newObservable.SetupObservable(this);
+            observer.UpdateObservables();
+            if (isLocalPlayer)
+            {
+                GamePlayEvent newObserverEvent = new GamePlayEvent
+                {
+                    eventName = "NewObservableCreated",
+                    booleanData = new bool[2] { interpolatePosition, interpolateRotation },
+                    stringData = new string[2] { playerId, prefabName },
+                    integerData = new int[1] { (int)syncOption },
+                    floatData = new float[7] { startPosition.x, startPosition.y, startPosition.z, startRotation.eulerAngles.x, startRotation.eulerAngles.y, startRotation.eulerAngles.z, interpolationFactor },
+                };
+                edgeManager.SendGamePlayEvent(newObserverEvent);
+            }
+            return newObservable;
         }
 
         #endregion
