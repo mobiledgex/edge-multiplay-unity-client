@@ -1,0 +1,211 @@
+// Define Modules for Doxygen Parsing
+
+
+// Callbacks Modules
+/*!
+ * \defgroup callbacks Main Callbacks
+
+   * \defgroup edgemultiplaycallbacks EdgeMultiplayCallbacks
+   * \ingroup callbacks
+
+   * \defgroup networkedplayercallbacks NetworkedPlayer Callbacks
+   * \ingroup callbacks
+
+ */
+
+// Function Groups Modules
+/*!
+ * \defgroup functiongroups Main Functions
+
+   * \defgroup edgemanager EdgeManager
+   * \ingroup functiongroups
+
+   * \defgroup networkedplayer NetworkedPlayer
+   * \ingroup functiongroups
+
+   * \defgroup connecttoedge ConnectToEdge
+   * \ingroup functiongroups
+
+ */
+
+// Add Information to index.html (main landing page)
+/*!
+ * \mainpage
+ *
+ * \section intro_section Introduction
+ * EdgeMultiplay is a sample for Creating Multiplayer experiences on Unity using servers deployed on MobiledgeX Cloudlets
+ * The solution consists of an EdgeMultiplay server and EdgeMultiplay Unity client
+ * /section EdgeMultiplayServer
+ * The EdgeMultiplay server does two specific functions:
+ * - MatchMaking (Creating rooms & assigning Players to rooms).
+ * - Forwarding messages between players.
+ * 
+ * This is the documentation of the EdgeMultiplay Unity client
+ *
+ *
+ * <H2>Navigating EdgeMultiplay Documentation</H2>
+ * Use either the tabs or the treeview to find the desired page.<BR>
+ * Here are some of the featured links to get you started:
+ * + \link configuration Configuration \endlink
+ * + \link getting_started Getting Started Page \endlink
+ * + \link how_it_works How it works? \endlink
+ * + \link functiongroups Main Functions \endlink
+ * + \link callbacks Main Callbacks \endlink
+ */
+
+
+
+/*!
+ * \page getting_started Getting Started
+ * This tutorial will create a simple multiplayer game to show how to use EdgeMultiplay in your Unity Project
+ * \section configuration Configuration
+ *Step 1: Add the MobiledgeX Unity SDK Package 
+ *In your Unity Project, select Window/Package Manager.
+ * \image html packagemanager.png  height=200cm
+ *
+ *In the Unity Package Manager, select Add package from git URL.
+ * \image html giturl.png height=200cm
+ *
+ *Add package from git URL option
+ *Copy and paste this URL: https://github.com/mobiledgex/edge-cloud-sdk-unity.git
+ * <BR> Now, the MobiledgeX SDK is added to your Project packages.
+ *
+ *
+ *If you have a Unity version older than 2019.3, please check our Unity SDK doc for installation steps. We also recommended that you upgrade your Unity version
+ *
+ *Step 2: Import EdgeMultiplay to your Unity Project
+ *From the menu bar, select MobiledgeX and navigate to Examples: EdgeMultiplay & Import it to your Project.
+ * \image html EdgeMultiplayMenu.png height=200cm
+ *
+ *Step 3: Add Application Credentials
+ *Select MobiledgeX/Setup.
+ * \image html setup.png height=200cm
+ *
+ *If you don't have access to MobiledgeX Console
+ *Use MobiledgeX-Samples, EdgeMultiplay, 2.2
+ * \image html credentials.png height=400cm
+ *
+ *Click Setup. Your Unity Project is ready for EdgeMultiplay.
+ * If you are using the shared EdgeMultiplay server, consider that other developers might be using the same server, <A HREF="https://developers.mobiledgex.com/getting-started">reach out to us to get a dedicated server </A> through our Early Access Program for free for a certain time. 
+ *
+ * \section creating_game  Creating the Game in the Editor
+ *
+ *Create empty object in the scene and rename it to GameManager
+ * \image html CreateGameManagerObj.gif height=500cm
+ *Create GameManager.cs, Click Assets/Create/EdgeMultiplay/GameManager
+ * \image html CreateGameManager.png height=200cm
+ *You will find your GameManager.cs in the Project tab. <BR>
+ *Drag and Drop GameManager.cs on to GameManager GameObject
+ *
+ *Create a Cube and make it a prefab
+ * \image html CreateCube.gif height=500cm
+ *Create PlayerManager.cs & Click Assets/Create/EdgeMultiplay/PlayerManager
+ * \image html CreatePlayerManager.png height=200cm
+ * Drag and Drop PlayerManager.cs to the Cube Prefab
+ *In PlayerManager.cs <BR>
+ *We want to track the player position and rotation for this will we will use EdgeMultiplayObserver<BR>
+ *In the inspector Select AddComponent and add EdgeMultiplayObserver<BR>
+ * \image html AddComponent_EdgeMultiplayObserver.png height=200cm
+ *Make sure to check “Attached To Player” checkmark and select “Sync Position & Rotation”
+ * \image html EdgeMultiplayObserverSetup.png height=200cm
+ *
+ *We will add some some logic to move our local player<BR>
+ *In PlayerManager.cs add this snippet to move the player by keyboard input<BR>
+ *(Up & Down) for moving forward and backward<BR>
+ *(Left & Right) for rotating the player<BR>
+ *<BR><CODE>
+ *private void Update()<BR>
+ *    {<BR>
+ *        if (isLocalPlayer)<BR>
+ *        {<BR>
+ *            float h = Input.GetAxis("Horizontal");<BR>
+ *            float v = Input.GetAxis("Vertical");<BR>
+ *            transform.Translate(new Vector3(0, 0, v));<BR>
+ *            transform.Rotate(new Vector3(0, h, 0));<BR>
+ *        }<BR>
+ *    }<BR>
+ * </CODE>
+ *<BR>
+ *Also we want the camera to follow the player so we will add a snippet in PlayerManager.cs
+ *In the Start Function add this 
+ *<BR>
+ *<CODE>
+ *void Start () {<BR>
+ *       ListenToMessages();<BR>
+ *    if (isLocalPlayer)<BR>
+ *      {<BR>
+ *Camera.main.transform.parent = transform;<BR>   Camera.main.transform.localPosition = new Vector3(0, 1, -4); <BR> Camera.main.transform.localRotation = Quaternion.Euler(Vector3.zero);<BR>
+ *        }<BR>
+ *    }<BR>
+ *</CODE>
+ *<BR>
+ *Since we want to test this on PC or Mac we need to change a line in GameManager.cs <BR>
+ *In the Start function change <BR>
+ *<BR><CODE>
+ *ConnectToEdge(); 
+ *</CODE> <BR>
+ *to
+ * <BR>
+ *<CODE>ConnectToEdge(testingMode: true, useFallBackLocation: true); 
+ *</CODE>
+ * 
+ *
+ *Now, 
+ *Play the Scene <CENTER>
+ * \image html GamePlay.gif height=500cm
+ * </CENTER>
+ */
+
+/*!
+ * \page how_it_works How it works?
+ *
+ * This page will explain how the Unity EdgeMultiplay solution works, If you want information about how to add EdgeMultiplay to your Unity project, please check the \link configuration Configuration \endlink section.
+ *
+ *
+ * EdgeMultiplay is Unity Multiplayer Solution, EdgeMultiplay client uses Websockets & UDP Messages to communicate with a NodeJS Server that uses  cluster module for scalability. <BR>
+ *
+ * 
+ * 
+ * to use EdgeMultiplay in Unity you need to have a GameManager & a PlayerManager <BR>
+ * You can find a template of both in Assets/Create/EdgeMultiplay <BR>
+ * \image html CreateGameManager.png height=200cm
+ * Let's start with the <B> GameManager </B> these are the requirements for your GameManager :
+ * - inherits for EdgeMultiplayCallbacks
+ * - Add EdgeMultiplay namespace
+ * - Requires EdgeManager Component
+ * Similar to this 
+ * \snippet GameManager.cs requirements
+ *
+ *
+ *
+ * In your GameManager you can start the Connection to the server by using \link connecttoedge ConnectToEdge() \endlink <BR>
+ * \snippet GameManager.cs connecttoedge 
+ * In your GameManager you can access all of the EdgeMultiplay callbacks,
+ * A callback is a function that is to be executed after another function has finished executing
+ *
+ * See full list of EdgeMultiplayCallbacks \link edgemultiplaycallbacks here \endlink
+ * \image html howitworks0.png  height=400cm width=700cm
+ *
+ * Once the player is registered on the server, It is the best time to call  CreateRoom() or JoinRoom() or JoinOrCreateRoom() 
+ * \snippet GameManager.cs OnRegisterEvent 
+ * \image html howitworks1.png  height=400cm width=700cm
+ *
+ *
+ * Once the Game Starts, EdgeManager will spawn players in the specified positions in EdgeManager.SpawnInfo 
+ *
+ * \image html howitworks2.png  height=400cm width=700cm
+ *
+ * Players can send GamePlay Events using EdgeManager.BroadcastMessage() 
+ *  \snippet PlayerManager.cs BroadcastMessage 
+ * If a player received a message it will be available in OnMessageReceived()
+ * \snippet PlayerManager.cs OnMessageReceived 
+ *
+ * \image html howitworks3.png  height=400cm width=700cm
+ *
+ * If you want to sync a player position and/or rotation add EdgeMultiplayObserver, Syncing Objects is done using UDP messages.
+ * 
+ * \image html howitworks4.png  height=400cm width=700cm
+ * 
+ * 
+ *
+ */
