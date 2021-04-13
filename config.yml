@@ -1,0 +1,32 @@
+    project-name : EdgeMultiplay
+    output-directory : docs
+    layout-file: config/DoxygenLayout.xml
+    input-directory: 
+     main/EdgeMultiplay/Scripts
+     config/DoxygenModules.txt
+    example-path: 
+     config/examples/GameManager.cs
+     config/examples/PlayerManager.cs
+    html-header: config/html/header.html
+    html-footer: 
+    html-style-sheet: config/style/customdoxygen.css
+    html-extra-style-sheet: config/style/doxygen_extra.css
+    html-extra-files: 
+      config/img/howitworks0.png
+      config/img/howitworks1.png
+      config/img/howitworks2.png
+      config/img/howitworks3.png
+      config/img/howitworks4.png
+      config/img/GamePlay.gif
+      config/img/giturl.png 
+      config/img/packagemanager.png
+      config/img/Setup.png
+      config/img/AddComponent_EdgeMultiplayObserver.png
+      config/img/CreateGameManagerObj.gif
+      config/img/CreateCube.gif
+      config/img/CreatePlayerManager.png
+      config/img/CreateGameManager.png
+      config/img/credentials.png
+      config/img/EdgeMultiplayMenu.png
+      config/img/EdgeMultiplayObserverSetup.png
+      config/img/terrain-background-pale.svg
