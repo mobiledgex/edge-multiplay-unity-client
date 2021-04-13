@@ -1,0 +1,49 @@
+name: Update Documentation
+
+on:
+  release:
+    types: [published]
+
+jobs:
+ updatdocs:
+    name: Update Doxygen Documentation
+    runs-on: macos-latest
+    steps:
+      - name: Check out docs branch
+        uses: actions/checkout@v2
+        with:
+          ref: docs
+
+      - name: Download doxygen cli
+        run: |
+          brew install doxygen
+          pip install PyYAML
+          mkdir main
+        shell: bash
+        
+      - name: Check out main (master) branch
+        uses: actions/checkout@v2
+        with:
+          ref: main
+          path: main
+
+      - name: Generate Docs
+        run: |
+          python setupdoxyfile.py
+          rm -rf main
+        shell: bash
+        
+      - name: Get release version
+        id: get_release_version
+        run: echo ::set-output name=VERSION::${GITHUB_REF/refs\/tags\//}
+        
+      - name: push changes to docs branch
+        run: |
+          cd docs/html
+          mv * ../
+          cd ../
+          rmdir html
+          git add .
+          git commit -m "docs '${{ steps.get_release_version.outputs.VERSION }}'"
+          git push origin docs
+        shell: bash
