@@ -47,6 +47,13 @@ namespace EdgeMultiplay
             AssetDatabase.ImportPackage(Path.Combine(assetsFolder, "EdgeMultiplay/Examples/ChatExample.unitypackage"), true);
         }
 
+        [MenuItem("EdgeMultiplay/Examples/OwnershipExamples", false, 40)]
+        public static void ImportOwnershipExamples()
+        {
+            string assetsFolder = Path.GetFullPath(Application.dataPath);
+            AssetDatabase.ImportPackage(Path.Combine(assetsFolder, "EdgeMultiplay/Examples/OwnershipExamples.unitypackage"), true);
+        }
+
         [MenuItem("EdgeMultiplay/Docs/How It Works?", false, 20)]
         public static void OpenHowItWorksURL()
         {

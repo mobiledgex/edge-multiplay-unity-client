@@ -43,7 +43,9 @@ namespace EdgeMultiplay
         /// </summary>
         public string playerId;
         public string playerName;
-        //public Player gamePlayer;
+
+        public Action<NetworkedPlayer, Observable> ownershipRequested;
+
         public Action<GamePlayEvent> playerEvent;
         public bool isLocalPlayer;
         /// <summary>
@@ -88,6 +90,10 @@ namespace EdgeMultiplay
             {
                 playerEvent += OnMessageReceived;
             }
+            else
+            {
+                ownershipRequested += OnOwnershipRequestReceived;
+            }
         }
         /// <summary>
         /// Add StopListening when you want to stop listening to messages from the server
@@ -99,15 +105,19 @@ namespace EdgeMultiplay
             {
                 playerEvent -= OnMessageReceived;
             }
+            else
+            {
+                ownershipRequested += OnOwnershipRequestReceived;
+            }
         }
 
-        public override void OnWebSocketEventReceived(GamePlayEvent mobiledgexEvent)
+        public override void OnWebSocketEventReceived(GamePlayEvent gameplayEvent)
         {
             if (!isLocalPlayer)
             {
-                if (mobiledgexEvent.senderId == playerId)
+                if (gameplayEvent.senderId == playerId)
                 {
-                    playerEvent(mobiledgexEvent);
+                    playerEvent(gameplayEvent);
                 }
             }
         }
@@ -132,6 +142,17 @@ namespace EdgeMultiplay
             Debug.Log("GamePlayEvent Received");
         }
 
+        /// <summary>
+        /// OnOwnershipRequestReceived is Received from the server
+        /// once another player requests the ownership of an observable
+        /// </summary>
+        /// <param name="requestee">The player who requested the ownership</param>
+        /// <param name="observable">The observable which the request is about</param>
+        public virtual void OnOwnershipRequestReceived(NetworkedPlayer requestee, Observable observable)
+        {
+            Debug.Log("Ownership Request Received");//To Approve the transfer  >> observable.ChangeOwnership(requestee.playerId);
+        }
+
         public void SetUpPlayer(Player playerFromServer, string roomId, bool isLocalPlayer =false)
         {
             this.roomId = roomId;
@@ -141,6 +162,41 @@ namespace EdgeMultiplay
             this.isLocalPlayer = isLocalPlayer;
             ActivePlayer = true;
         }
+
+        /// <summary>
+        /// Sends an event to all players in the room
+        /// </summary>
+        /// <param name="gamePlayEvent">The GamePlayEvent to send</param>
+        public void SendGamePlayEvent(GamePlayEvent gamePlayEvent)
+        {
+            GamePlayEvent gameplayEvent = new GamePlayEvent()
+            {
+                eventName = gamePlayEvent.eventName,
+                booleanData = gamePlayEvent.booleanData,
+                stringData = gamePlayEvent.stringData,
+                integerData = gamePlayEvent.integerData,
+                floatData = gamePlayEvent.floatData,
+            };
+            edgeManager.SendGamePlayEvent(gameplayEvent);
+        }
+
+        /// <summary>
+        /// Sends an event to all players in the room (UDP)
+        /// </summary>
+        /// <param name="gamePlayEvent">The GamePlayEvent to send</param>
+        public void SendGamePlayEventUDP(GamePlayEvent gamePlayEvent)
+        {
+            GamePlayEvent gameplayEvent = new GamePlayEvent()
+            {
+                eventName = gamePlayEvent.eventName,
+                booleanData = gamePlayEvent.booleanData,
+                stringData = gamePlayEvent.stringData,
+                integerData = gamePlayEvent.integerData,
+                floatData = gamePlayEvent.floatData,
+            };
+            EdgeManager.SendUDPMessage(gameplayEvent);
+        }
+
         /// <summary>
         /// Sends an event to all players in the room except the sender
         /// </summary>

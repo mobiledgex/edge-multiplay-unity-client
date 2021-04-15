@@ -254,7 +254,6 @@ namespace EdgeMultiplay
         }
     }
 
-
     [Serializable]
     public class Observable
     {
@@ -283,7 +282,7 @@ namespace EdgeMultiplay
         [Range(0.1f, 1f)]
         public float InterpolationFactor;
         [HideInInspector]
-        public int observerIndex;
+        public int observableIndex;
         [HideInInspector]
         public Vector3 lastPosition;
         [HideInInspector]
@@ -292,6 +291,13 @@ namespace EdgeMultiplay
         public NetworkedPlayer owner;
         [HideInInspector]
         public bool attachedToPlayer;
+
+        /// <summary>
+        /// Set to true to allow ownership takeover by other players
+        /// </summary>
+        [Tooltip("Set to true to allow ownership takeover by other players")]
+        public bool squattingAllowed;
+
         /// <summary>
         /// Observable Constructor
         /// </summary>
@@ -301,14 +307,14 @@ namespace EdgeMultiplay
         /// <param name="interpolateRotation">Set to true if you want to smoothen the tracked rotation if there is network lag</param>
         /// <param name="interpolationFactor">Set Interpolation factor value between 0.1 and 1</param>
         /// <param name="observerIndex">Observable index in observer.observables list</param>
-        public Observable(Transform targetTransform, SyncOptions syncOption, bool interpolatePosition, bool interpolateRotation, float interpolationFactor, int observerIndex = 0)
+        public Observable(Transform targetTransform, SyncOptions syncOption, bool interpolatePosition, bool interpolateRotation, float interpolationFactor, int observableIndex = 0)
         {
             this.observeredTransform = targetTransform;
             this.syncOption = syncOption;
             InterpolatePosition = interpolatePosition;
             InterpolateRotation = interpolateRotation;
             InterpolationFactor = interpolationFactor;
-            this.observerIndex = observerIndex;
+            this.observableIndex = observableIndex;
             
         }
         /// <summary>
@@ -330,12 +336,12 @@ namespace EdgeMultiplay
 
         public void SetObservableIndex(int index)
         {
-            observerIndex = index;
+            observableIndex = index;
         }
 
-        public void SetupObservable(NetworkedPlayer observerOwner)
+        public void SetupObservable(NetworkedPlayer observableOwner)
         {
-            owner = observerOwner;
+            owner = observableOwner;
             switch (syncOption)
             {
                 case SyncOptions.SyncPosition:
@@ -365,7 +371,7 @@ namespace EdgeMultiplay
         {
             GamePlayEvent observerEvent = new GamePlayEvent();
             observerEvent.eventName = "EdgeMultiplayObserver";
-            observerEvent.integerData = new int[2] { (int)syncOption, observerIndex };
+            observerEvent.integerData = new int[2] { (int)syncOption, observableIndex };
             switch (syncOption)
             {
                 case SyncOptions.SyncPosition:
@@ -425,7 +431,8 @@ namespace EdgeMultiplay
             {
                 if (newOwnerId == owner.playerId)
                 {
-                    return;// ownership already sat
+                    Debug.LogWarning("EdgeMultiplay: No ownership change needed you already own the observable object");
+                    return;
                 }
                 if (owner.observer != null)
                 {
@@ -446,7 +453,7 @@ namespace EdgeMultiplay
                 {
                     eventName = "ObservableOwnershipChange",
                     stringData = new string[1] { newOwnerId },
-                    integerData = new int[1] { observerIndex }
+                    integerData = new int[1] { observableIndex }
                 };
                 EdgeManager.MessageSender.BroadcastMessage(changeOwnershipEvent);
             }

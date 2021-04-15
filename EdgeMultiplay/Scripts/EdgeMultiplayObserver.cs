@@ -23,6 +23,15 @@ using UnityEngine;
 namespace EdgeMultiplay
 {
     /// <summary>
+    /// The rate which the observer checks if the observed objects' transform data have been updated
+    /// </summary>
+    public enum UpdateRate
+    {
+        EveryFrame,
+        FixedUpdate
+    }
+
+    /// <summary>
     /// EdgeMultiplayObserver can be added to on an object to sync its position and/or rotation between all players
     /// You can sync a PlayerObject or Non PlayerObject
     /// </summary>
@@ -33,6 +42,13 @@ namespace EdgeMultiplay
         ///
         [HideInInspector]
         public NetworkedPlayer networkedPlayer;
+
+        /// <summary>
+        /// The rate which the observer checks if the observed objects' transform data have been updated
+        /// <para>Default is <b>EveryFrame</b> (Update) </para>
+        /// <para>If you see the observed Game Object movement stutters use <b>FixedUpdate</b></para>
+        /// </summary>
+        public UpdateRate updateRate;
 
         /// <summary>
         /// List of observed objects
@@ -55,7 +71,7 @@ namespace EdgeMultiplay
         {
             if (!GetComponent<NetworkedPlayer>())
             {
-                Debug.LogError("EdgeMultiplayObserver requires PlayerManager or a class that inherits from NetworkedPlayer," +
+                Debug.LogWarning("EdgeMultiplay: EdgeMultiplayObserver requires PlayerManager or a class that inherits from NetworkedPlayer," +
                     "\nRemove EdgeMultiplayObserver Component from "+gameObject.name);
             }
             if (observables.Count > 0)
@@ -71,18 +87,41 @@ namespace EdgeMultiplay
             }
         }
 
+        private void FixedUpdate()
+        {
+            if (updateRate == UpdateRate.FixedUpdate)
+            {
+                if (EdgeManager.gameStarted)
+                {
+                    foreach (Observable observable in observables)
+                    {
+                        if (RequiresUpdate(observable))
+                        {
+                            if (networkedPlayer && networkedPlayer.isLocalPlayer)
+                            {
+                                observable.SendDataToServer();
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
         private void Update()
         {
-            if (EdgeManager.gameStarted)
+            if (updateRate == UpdateRate.EveryFrame)
             {
-                foreach (Observable observable in observables)
+                if (EdgeManager.gameStarted)
                 {
-                    if (RequiresUpdate(observable))
+                    foreach (Observable observable in observables)
                     {
-                       if (networkedPlayer && networkedPlayer.isLocalPlayer)
-                       {
-                           observable.SendDataToServer();
-                       }
+                        if (RequiresUpdate(observable))
+                        {
+                            if (networkedPlayer && networkedPlayer.isLocalPlayer)
+                            {
+                                observable.SendDataToServer();
+                            }
+                        }
                     }
                 }
             }
@@ -185,6 +224,98 @@ namespace EdgeMultiplay
             }
         }
 
+        /// <summary>
+        /// Call TakeOverObservable() to take over the ownership of an observable you don't own 
+        /// <para>For TakeOverObservable() to work, the observable must have the squattingAllowed boolean sat to true</para>
+        /// </summary>
+        /// <param name="observableView">The ObservableView component attached to the Synced GameObject
+        /// <para>
+        /// All Synced GameObjects have ObservableView component added at runtime
+        /// </para>
+        /// </param>
+        public void TakeOverObservable(ObservableView observableView)
+        {
+           EdgeMultiplayObserver currentOwner = EdgeManager.observers.Find(observer => observer.networkedPlayer.playerId == observableView.ownerId);
+           if(currentOwner == null)
+            {
+                Debug.LogWarning("EdgeMultiplay: Couldn't find the owner");
+                return;
+            }
+
+            if (currentOwner.networkedPlayer.playerId == networkedPlayer.playerId)
+            {
+                Debug.LogWarning("EdgeMultiplay: No ownership change needed you already own the observable object");
+                return;
+            }
+
+            Observable observable =  currentOwner.observables.Find(observable => observable.observableIndex == observableView.observableIndex);
+
+            if (observable == null)
+            {
+                Debug.LogWarning("EdgeMultiplay: Couldn't find the observable");
+                return;
+            }
+
+            if (!observable.squattingAllowed)
+            {
+                Debug.LogWarning("EdgeMultiplay: Couldn't TakeOver Observable, Squatting is not Allowed");
+                return;
+            }
+            else
+            {
+                EdgeManager.MessageSender.SendGamePlayEvent(new GamePlayEvent()
+                {
+                    eventName = "TakeOverObservable",
+                    stringData = new string[1]{ observableView.ownerId },
+                    integerData = new int[1] { observableView.observableIndex}
+                });
+            }
+        }
+
+        /// <summary>
+        /// Call RequestOwnership() to request the ownership transfer of an observable from its owner
+        /// It's up to the owner to approve or reject the ownership transfer
+        /// <para>This will trigger OnOwnershipRequestReceived() callback on the observable owner</para>
+        /// </summary>
+        /// <param name="observableView">The ObservableView component attached to the Synced GameObject
+        /// <para>
+        /// All Synced GameObjects have ObservableView component added at runtime
+        /// </para>
+        /// </param>
+        public void RequestOwnership(ObservableView observableView)
+        {
+            EdgeMultiplayObserver currentOwner =
+                EdgeManager.observers.Find(observer => observer.networkedPlayer.playerId == observableView.ownerId);
+
+            if (currentOwner == null)
+            {
+                Debug.LogWarning("EdgeMultiplay: Couldn't find the owner");
+                return;
+            }
+
+            if (currentOwner.networkedPlayer.playerId == networkedPlayer.playerId)
+            {
+                Debug.LogWarning("EdgeMultiplay: No ownership change needed you already own the observable object");
+                return;
+            }
+
+            Observable observable = currentOwner.observables
+                .Find(observable => observable.observableIndex == observableView.observableIndex);
+
+            if (observable == null)
+            {
+                Debug.LogWarning("EdgeMultiplay: Couldn't find the observable");
+                return;
+            }
+
+            EdgeManager.MessageSender.SendGamePlayEvent(new GamePlayEvent()
+            {
+                eventName = "OwnershipRequest",
+                stringData = new string[1] { observableView.ownerId },
+                integerData = new int[1] { observableView.observableIndex }
+            });
+            
+        }
         #endregion
     }
 }
