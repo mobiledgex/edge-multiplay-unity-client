@@ -43,9 +43,7 @@ namespace EdgeMultiplay
         /// </summary>
         public string playerId;
         public string playerName;
-
         public Action<NetworkedPlayer, Observable> ownershipRequested;
-
         public Action<GamePlayEvent> playerEvent;
         public bool isLocalPlayer;
         /// <summary>
