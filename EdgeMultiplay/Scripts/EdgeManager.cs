@@ -473,6 +473,9 @@ namespace EdgeMultiplay
                         case "new-room-created-in-lobby":
                             EdgeMultiplayCallbacks.newRoomCreatedInLobby();
                             break;
+                        case "room-removed-from-lobby":
+                            EdgeMultiplayCallbacks.roomRemovedFromLobby();
+                            break;
                     }
                     EdgeMultiplayCallbacks.notificationEvent(notification);
                     break;
@@ -528,7 +531,7 @@ namespace EdgeMultiplay
                     switch (gamePlayEvent.eventName)
                     {
                         case "NewObservableCreated":
-                            CreateObserverableObject(gamePlayEvent);
+                            CreateObservableObject(gamePlayEvent);
                             break;
                         case "ObservableOwnershipChange":
                             UpdateObserverOwnership(gamePlayEvent);
@@ -579,30 +582,30 @@ namespace EdgeMultiplay
             }
         }
 
-        void CreateObserverableObject(GamePlayEvent newObserverableEvent)
+        void CreateObservableObject(GamePlayEvent newObservableEvent)
         {
-            if(localPlayer.playerId == newObserverableEvent.stringData[0])
+            if(localPlayer.playerId == newObservableEvent.stringData[0])
             {
                 return;
             }
-            NetworkedPlayer playerCreatedObserver = GetPlayer(newObserverableEvent.stringData[0]);
-            Observable observerable = playerCreatedObserver.CreateObservableObject(
-                prefabName: newObserverableEvent.stringData[1],
-                startPosition: Util.ConvertFloatArrayToVector3(newObserverableEvent.floatData, 0),
-                startRotation: Quaternion.Euler(Util.ConvertFloatArrayToVector3(newObserverableEvent.floatData, 3)),
-                syncOption: (SyncOptions)Enum.ToObject(typeof(SyncOptions), newObserverableEvent.integerData[0]),
-                interpolatePosition: newObserverableEvent.booleanData[0],
-                interpolateRotation: newObserverableEvent.booleanData[1],
-                interpolationFactor: newObserverableEvent.floatData[6]);
-            EdgeMultiplayCallbacks.newObservableCreated(observerable);
+            NetworkedPlayer playerCreatedObserver = GetPlayer(newObservableEvent.stringData[0]);
+            Observable observable = playerCreatedObserver.CreateObservableObject(
+                prefabName: newObservableEvent.stringData[1],
+                startPosition: Util.ConvertFloatArrayToVector3(newObservableEvent.floatData, 0),
+                startRotation: Quaternion.Euler(Util.ConvertFloatArrayToVector3(newObservableEvent.floatData, 3)),
+                syncOption: (SyncOptions)Enum.ToObject(typeof(SyncOptions), newObservableEvent.integerData[0]),
+                interpolatePosition: newObservableEvent.booleanData[0],
+                interpolateRotation: newObservableEvent.booleanData[1],
+                interpolationFactor: newObservableEvent.floatData[6]);
+            EdgeMultiplayCallbacks.newObservableCreated(observable);
 
         }
 
         /// <summary>
-        /// When an observerable object change its owner, OwnershipChangeEvent is sent from the owner to other players
+        /// When an observable object change its owner, OwnershipChangeEvent is sent from the owner to other players
         /// Changing ownership must occur at the owner world
         /// </summary>
-        /// <param name="ownershipChangeEvent">OwnershipChangeEvent contains (oldOwnerId, the observerable Index and the newOwnerId)</param>
+        /// <param name="ownershipChangeEvent">OwnershipChangeEvent contains (oldOwnerId, the observable Index and the newOwnerId)</param>
         void UpdateObserverOwnership(GamePlayEvent ownershipChangeEvent)
         {
             if (localPlayer.playerId == ownershipChangeEvent.senderId)
@@ -636,7 +639,7 @@ namespace EdgeMultiplay
             {
                 //get the observable
                 Observable observable = localPlayer.observer.observables
-                    .Find(observable => observable.observableIndex == gamePlayEvent.integerData[0]);
+                    .Find(obs => obs.observableIndex == gamePlayEvent.integerData[0]);
                 if(observable == null)
                 {
                     Debug.LogWarning("EdgeMultiplay: couldn't find the observable");
@@ -654,7 +657,7 @@ namespace EdgeMultiplay
             {
                 //get the observable
                 Observable observable = localPlayer.observer.observables
-                    .Find(observable => observable.observableIndex == gamePlayEvent.integerData[0]);
+                    .Find(obs => obs.observableIndex == gamePlayEvent.integerData[0]);
                 if (observable == null)
                 {
                     Debug.LogWarning("EdgeMultiplay: couldn't find the observable");
@@ -672,7 +675,7 @@ namespace EdgeMultiplay
         /// If the LocalPlayer is observing any transforms, once there is any update to the observed transform
         /// the local player will send the updated transfrom to its clones in the other players' world.
         /// </summary>
-        /// <param name="receivedEvent"> the received gameplay event contains (observable owner id, observerable index, syncOption, updated transform data) </param>
+        /// <param name="receivedEvent"> the received gameplay event contains (observable owner id, observable index, syncOption, updated transform data) </param>
         void SyncObject(GamePlayEvent receivedEvent)
         {
             if (receivedEvent.senderId == localPlayer.playerId)
