@@ -153,7 +153,7 @@ namespace EdgeMultiplay
                 {
                     observerView = observables[i].observeredTransform.gameObject.AddComponent<ObservableView>();
                 }
-                observerView.SetupObserverView(networkedPlayer.playerId, i);
+                observerView.SetupObservableView(networkedPlayer.playerId, i);
               
                 if (observables[i].observeredTransform != null)
                 {
@@ -248,7 +248,7 @@ namespace EdgeMultiplay
                 return;
             }
 
-            Observable observable =  currentOwner.observables.Find(observable => observable.observableIndex == observableView.observableIndex);
+            Observable observable =  currentOwner.observables.Find(obs => obs.observableIndex == observableView.observableIndex);
 
             if (observable == null)
             {
@@ -300,7 +300,7 @@ namespace EdgeMultiplay
             }
 
             Observable observable = currentOwner.observables
-                .Find(observable => observable.observableIndex == observableView.observableIndex);
+                .Find(obs => obs.observableIndex == observableView.observableIndex);
 
             if (observable == null)
             {

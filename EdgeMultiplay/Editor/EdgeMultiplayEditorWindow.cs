@@ -40,11 +40,11 @@ namespace EdgeMultiplay
             AssetDatabase.ImportPackage(Path.Combine(assetsFolder, "EdgeMultiplay/Examples/PingPongExample.unitypackage"), true);
         }
 
-        [MenuItem("EdgeMultiplay/Examples/Chat", false, 40)]
+        [MenuItem("EdgeMultiplay/Examples/ChatRooms", false, 40)]
         public static void ImportChatExample()
         {
             string assetsFolder = Path.GetFullPath(Application.dataPath);
-            AssetDatabase.ImportPackage(Path.Combine(assetsFolder, "EdgeMultiplay/Examples/ChatExample.unitypackage"), true);
+            AssetDatabase.ImportPackage(Path.Combine(assetsFolder, "EdgeMultiplay/Examples/ChatRooms.unitypackage"), true);
         }
 
         [MenuItem("EdgeMultiplay/Examples/OwnershipExamples", false, 40)]

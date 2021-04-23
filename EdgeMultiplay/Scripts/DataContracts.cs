@@ -679,6 +679,7 @@ namespace EdgeMultiplay
         /// helper instance variable for serializing and deserializing playerTags
         /// </summary>
         [DataMember (EmitDefaultValue = false)]
+#pragma warning disable 0649
         internal Hashtable playerTags;
 
         /// <summary>
