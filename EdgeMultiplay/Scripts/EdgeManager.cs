@@ -166,6 +166,12 @@ namespace EdgeMultiplay
             {
                 udpClient.Dispose();
             }
+            if (Application.platform == RuntimePlatform.OSXPlayer
+               || Application.platform == RuntimePlatform.WindowsPlayer
+               || Application.platform == RuntimePlatform.LinuxPlayer)
+            {
+                Environment.Exit(0);
+            }
         }
 
         #endregion
