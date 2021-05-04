@@ -16,8 +16,11 @@
  */
 
 using System.IO;
+using System.Threading.Tasks;
 using UnityEditor;
 using UnityEngine;
+using MobiledgeX;
+using DistributedMatchEngine;
 
 namespace EdgeMultiplay
 {
@@ -25,7 +28,7 @@ namespace EdgeMultiplay
     public class EdgeMultiplayEditorWindow : EditorWindow
     {
 
-        #region  EdgeMultiplay ToolBar Menu items
+#region  EdgeMultiplay ToolBar Menu items
 
         [MenuItem("EdgeMultiplay/Getting Started", false, 0)]
         public static void OpenGettingStartedURL()
@@ -78,10 +81,67 @@ namespace EdgeMultiplay
             Application.OpenURL("https://github.com/mobiledgex/edge-multiplay-unity-client/issues/new/choose");
         }
 
-        [MenuItem("EdgeMultiplay/Version 1.1", false, 80)]
+        
+        [MenuItem("EdgeMultiplay/Server Stats", false, 80)]
+        public static async void ServerStats()
+        {
+            if (EditorUtility.DisplayDialog("EdgeMultiplay", "Where are you are running the server?", "Locally", "MobiledgeX"))
+            {
+                Application.OpenURL("http://localhost:7776");
+            }
+            else
+            {
+                string fqdn = await GetMobiledgeXAppFQDN();
+                if (fqdn == "")
+                {
+                    Debug.LogError("Make sure MobiledgeX Settings AppDefs and Region are correct, Check the console for more details.");
+                }
+                else
+                {
+                    Application.OpenURL("http://" + fqdn + ":7776");
+                }
+            }
+        }
+
+        [MenuItem("EdgeMultiplay/Version 1.2", false, 80)]
         public static void Version()
         {
             //placeholder for version number
+        }
+
+#endregion
+
+#region  Helper functions
+
+        public static async Task<string> GetMobiledgeXAppFQDN()
+        {
+            MobiledgeXIntegration integration = new MobiledgeXIntegration();
+            try
+            {
+                await integration.RegisterAndFindCloudlet();
+                if (integration.FindCloudletReply.status == FindCloudletReply.FindStatus.FIND_FOUND)
+                {
+                    return integration.FindCloudletReply.fqdn;
+                }
+                else
+                {
+                    return "";
+                }
+            }
+
+            //RegisterClientException is thrown if your app is not found
+            catch (RegisterClientException rce)
+            {
+                Debug.LogError("RegisterClientException: " + rce.Message + "Inner Exception: " + rce.InnerException);
+                return "";
+            }
+
+            //FindCloudletException is thrown if there is no app instance in the selected region
+            catch (FindCloudletException fce)
+            {
+                Debug.LogError("FindCloudletException: " + fce.Message + "Inner Exception: " + fce.InnerException);
+                return "";
+            }
         }
     }
 }
