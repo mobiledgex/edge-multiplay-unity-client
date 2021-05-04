@@ -81,7 +81,6 @@ namespace EdgeMultiplay
             Application.OpenURL("https://github.com/mobiledgex/edge-multiplay-unity-client/issues/new/choose");
         }
 
-        
         [MenuItem("EdgeMultiplay/Server Stats", false, 80)]
         public static async void ServerStats()
         {
