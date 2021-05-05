@@ -1,6 +1,26 @@
 # Changelog
 All notable changes to this EdgeMultiplay Unity Client will be documented in this file.
 
+## [1.2.0] - 2021-05-05
+
+### Fix & Improvements:
+- Fixed App Quiting error on PC/Mac Unity Player.
+- Fixed customizable fallback location for Oculus/Non Phone devices in your GameManager.cs
+```
+EdgeManager.integration.useFallbackLocation = true;
+EdgeManager.integration.setFallbackLocation(longitude, latitude);
+ConnectToEdge(useFallBackLocation:true);
+```
+- Use SendGamePlayEvent() and SendGamePlayEventUDP() in your PlayerManager to SendGamePlayEvents.
+
+### New Features:
+- Server Stats, Now you can see the live server stats from EdgeMultiplay Menu in Unity Editor.
+- New Ownership Transfer options : TakeOver and RequestOwnership.
+- UpdateRate (Fixed Update or EveryFrame) for EdgeMultiplayObserver.
+- New Example Scenes added (Chat Rooms, OwnershipExamples)
+- New notification callback added OnRoomRemovedFromLobby()
+
+
 ## [1.1.0] - 2021-04-01
 
 ### Fix & Improvements.
