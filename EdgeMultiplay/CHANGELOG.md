@@ -14,7 +14,7 @@ ConnectToEdge(useFallBackLocation:true);
 - Use SendGamePlayEvent() and SendGamePlayEventUDP() in your PlayerManager to SendGamePlayEvents.
 
 ### New Features:
-- Server Stats, Now you can see the live server stats from EdgeMultiplay Menu in Unity Editor.
+- Server Stats : View analytics of an Edge Multiplay instance in a web browser. To view the closest instance's stats, click on the menu button Server Stats under the EdgeMultiplay menu in the Unity Editor.
 - New Ownership Transfer options : TakeOver and RequestOwnership.
 - UpdateRate (Fixed Update or EveryFrame) for EdgeMultiplayObserver.
 - New Example Scenes added (Chat Rooms, OwnershipExamples)
