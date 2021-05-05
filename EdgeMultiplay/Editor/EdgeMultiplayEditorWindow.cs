@@ -118,6 +118,7 @@ namespace EdgeMultiplay
             try
             {
                 await integration.RegisterAndFindCloudlet();
+                Debug.Log("FindCloudletReply.status = " + integration.FindCloudletReply.status);
                 if (integration.FindCloudletReply.status == FindCloudletReply.FindStatus.FIND_FOUND)
                 {
                     return integration.FindCloudletReply.fqdn;
