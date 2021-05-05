@@ -3,7 +3,7 @@ All notable changes to this EdgeMultiplay Unity Client will be documented in thi
 
 ## [1.2.0] - 2021-05-05
 
-### Fix & Improvements:
+### Fixes & Improvements:
 - Fixed App Quiting error on PC/Mac Unity Player.
 - Fixed customizable fallback location for Oculus/Non Phone devices in your GameManager.cs
 ```
