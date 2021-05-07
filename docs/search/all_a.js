@@ -1,8 +1,7 @@
 var searchData=
 [
-  ['main_20callbacks_39',['Main Callbacks',['../group__callbacks.html',1,'']]],
-  ['main_20functions_40',['Main Functions',['../group__functiongroups.html',1,'']]],
-  ['maxplayersperroom_41',['maxPlayersPerRoom',['../class_edge_multiplay_1_1_room_ac8f6d952753fa9aeb09524cf880bbdf4.html#ac8f6d952753fa9aeb09524cf880bbdf4',1,'EdgeMultiplay::Room']]],
-  ['messagesender_42',['MessageSender',['../class_edge_multiplay_1_1_edge_manager_a510049f8d66560108db60662bb5893cf.html#a510049f8d66560108db60662bb5893cf',1,'EdgeMultiplay::EdgeManager']]],
-  ['messagewrapper_43',['MessageWrapper',['../class_edge_multiplay_1_1_message_wrapper.html',1,'EdgeMultiplay']]]
+  ['lastposition_60',['lastPosition',['../class_edge_multiplay_1_1_observable_a4cb6c1497a44d63c0a65f7cb9a9d9ff5.html#a4cb6c1497a44d63c0a65f7cb9a9d9ff5',1,'EdgeMultiplay::Observable']]],
+  ['lastrotation_61',['lastRotation',['../class_edge_multiplay_1_1_observable_a07383b7a939da5ff14375dbaf735bfe2.html#a07383b7a939da5ff14375dbaf735bfe2',1,'EdgeMultiplay::Observable']]],
+  ['listentomessages_62',['ListenToMessages',['../group__networkedplayer_gac85bb9acf86c393e598c0cc5d68b0b47.html#gac85bb9acf86c393e598c0cc5d68b0b47',1,'EdgeMultiplay::NetworkedPlayer']]],
+  ['localplayer_63',['localPlayer',['../class_edge_multiplay_1_1_edge_manager_ad86880cb665b43ff328ba9da1c6fd747.html#ad86880cb665b43ff328ba9da1c6fd747',1,'EdgeMultiplay::EdgeManager']]]
 ];

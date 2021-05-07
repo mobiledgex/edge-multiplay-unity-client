@@ -1,5 +1,6 @@
 var searchData=
 [
-  ['edgemanager_166',['EdgeManager',['../group__edgemanager.html',1,'']]],
-  ['edgemultiplaycallbacks_167',['EdgeMultiplayCallbacks',['../group__edgemultiplaycallbacks.html',1,'']]]
+  ['gamemanager_294',['GameManager',['../group__edgemanager.html',1,'']]],
+  ['game_20flow_20callbacks_295',['Game Flow Callbacks',['../group__gameflowcallbacks.html',1,'']]],
+  ['gameplayevent_20callbacks_296',['GamePlayEvent Callbacks',['../group__gameplayeventcallbacks.html',1,'']]]
 ];

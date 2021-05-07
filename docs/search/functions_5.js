@@ -1,5 +1,5 @@
 var searchData=
 [
-  ['joinorcreateroom_123',['JoinOrCreateRoom',['../group__edgemanager_ga4d8fd50a5824fbd5e10ca176ea0109b8.html#ga4d8fd50a5824fbd5e10ca176ea0109b8',1,'EdgeMultiplay::EdgeManager']]],
-  ['joinroom_124',['JoinRoom',['../group__edgemanager_gaccf5059b002c97ee69931692e8ce4537.html#gaccf5059b002c97ee69931692e8ce4537',1,'EdgeMultiplay::EdgeManager']]]
+  ['joinorcreateroom_201',['JoinOrCreateRoom',['../group__edgemanager_ga11b149587667d236fe7dfa7fccd3c59e.html#ga11b149587667d236fe7dfa7fccd3c59e',1,'EdgeMultiplay::EdgeManager']]],
+  ['joinroom_202',['JoinRoom',['../group__edgemanager_ga9e05df94bb2c7a880bfb24f59ecab17f.html#ga9e05df94bb2c7a880bfb24f59ecab17f',1,'EdgeMultiplay::EdgeManager']]]
 ];

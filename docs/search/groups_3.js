@@ -1,5 +1,5 @@
 var searchData=
 [
-  ['networkedplayer_170',['NetworkedPlayer',['../group__networkedplayer.html',1,'']]],
-  ['networkedplayer_20callbacks_171',['NetworkedPlayer Callbacks',['../group__networkedplayercallbacks.html',1,'']]]
+  ['observer_20callbacks_299',['Observer Callbacks',['../group__observercallbacks.html',1,'']]],
+  ['observer_300',['Observer',['../group__observerfunctions.html',1,'']]]
 ];

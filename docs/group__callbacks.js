@@ -1,5 +1,5 @@
 var group__callbacks =
 [
-    [ "EdgeMultiplayCallbacks", "group__edgemultiplaycallbacks.html", "group__edgemultiplaycallbacks" ],
-    [ "NetworkedPlayer Callbacks", "group__networkedplayercallbacks.html", "group__networkedplayercallbacks" ]
+    [ "EdgeMultiplayCallbacks", "group__edgemultiplaycallbacks.html", null ],
+    [ "NetworkedPlayer Callbacks", "group__networkedplayercallbacks.html", null ]
 ];

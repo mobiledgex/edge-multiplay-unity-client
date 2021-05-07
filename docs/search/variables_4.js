@@ -1,6 +1,4 @@
 var searchData=
 [
-  ['interpolateposition_150',['InterpolatePosition',['../class_edge_multiplay_1_1_edge_multiplay_observer_a7db50ef525b016d04f913aa3d972d671.html#a7db50ef525b016d04f913aa3d972d671',1,'EdgeMultiplay::EdgeMultiplayObserver']]],
-  ['interpolaterotation_151',['InterpolateRotation',['../class_edge_multiplay_1_1_edge_multiplay_observer_aa366345dc3b9be28f4d1a67bc12ab6ba.html#aa366345dc3b9be28f4d1a67bc12ab6ba',1,'EdgeMultiplay::EdgeMultiplayObserver']]],
-  ['interpolationfactor_152',['InterpolationFactor',['../class_edge_multiplay_1_1_edge_multiplay_observer_a0c3737a929ef0eb3bab43d78b90ff48f.html#a0c3737a929ef0eb3bab43d78b90ff48f',1,'EdgeMultiplay::EdgeMultiplayObserver']]]
+  ['eventname_243',['eventName',['../class_edge_multiplay_1_1_game_play_event_a4887d09ce8a20d4b17ad5eaf3bc7c166.html#a4887d09ce8a20d4b17ad5eaf3bc7c166',1,'EdgeMultiplay::GamePlayEvent']]]
 ];

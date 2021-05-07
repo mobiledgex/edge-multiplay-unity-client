@@ -15,6 +15,9 @@ var namespace_edge_multiplay =
     [ "MessageWrapper", "class_edge_multiplay_1_1_message_wrapper.html", "class_edge_multiplay_1_1_message_wrapper" ],
     [ "NetworkedPlayer", "class_edge_multiplay_1_1_networked_player.html", "class_edge_multiplay_1_1_networked_player" ],
     [ "Notification", "class_edge_multiplay_1_1_notification.html", "class_edge_multiplay_1_1_notification" ],
+    [ "Observable", "class_edge_multiplay_1_1_observable.html", "class_edge_multiplay_1_1_observable" ],
+    [ "ObservableView", "class_edge_multiplay_1_1_observable_view.html", "class_edge_multiplay_1_1_observable_view" ],
+    [ "OrphanObservable", "class_edge_multiplay_1_1_orphan_observable.html", "class_edge_multiplay_1_1_orphan_observable" ],
     [ "Player", "class_edge_multiplay_1_1_player.html", "class_edge_multiplay_1_1_player" ],
     [ "PlayerJoinedRoom", "class_edge_multiplay_1_1_player_joined_room.html", "class_edge_multiplay_1_1_player_joined_room" ],
     [ "PositionAndRotation", "class_edge_multiplay_1_1_position_and_rotation.html", "class_edge_multiplay_1_1_position_and_rotation" ],
@@ -25,5 +28,6 @@ var namespace_edge_multiplay =
     [ "RoomJoin", "class_edge_multiplay_1_1_room_join.html", "class_edge_multiplay_1_1_room_join" ],
     [ "RoomMemberLeft", "class_edge_multiplay_1_1_room_member_left.html", "class_edge_multiplay_1_1_room_member_left" ],
     [ "RoomsList", "class_edge_multiplay_1_1_rooms_list.html", "class_edge_multiplay_1_1_rooms_list" ],
-    [ "Session", "class_edge_multiplay_1_1_session.html", "class_edge_multiplay_1_1_session" ]
+    [ "Session", "class_edge_multiplay_1_1_session.html", "class_edge_multiplay_1_1_session" ],
+    [ "Util", "class_edge_multiplay_1_1_util.html", null ]
 ];

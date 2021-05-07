@@ -1,5 +1,22 @@
 var searchData=
 [
-  ['hostipaddress_29',['hostIPAddress',['../class_edge_multiplay_1_1_edge_manager_a112e7c325e42f106798b6a3101ca639f.html#a112e7c325e42f106798b6a3101ca639f',1,'EdgeMultiplay::EdgeManager']]],
-  ['how_20it_20works_3f_30',['How it works?',['../how_it_works.html',1,'']]]
+  ['gamemanager_29',['GameManager',['../group__edgemanager.html',1,'']]],
+  ['game_20flow_20callbacks_30',['Game Flow Callbacks',['../group__gameflowcallbacks.html',1,'']]],
+  ['gameplayevent_31',['GamePlayEvent',['../class_edge_multiplay_1_1_game_play_event.html',1,'EdgeMultiplay.GamePlayEvent'],['../class_edge_multiplay_1_1_game_play_event_a6bec701cc2c3b03811f510338aa31458.html#a6bec701cc2c3b03811f510338aa31458',1,'EdgeMultiplay.GamePlayEvent.GamePlayEvent(string eventName, Vector3 position)'],['../class_edge_multiplay_1_1_game_play_event_a68c7ef3f9d5b64f0e3d3b911710ef9a4.html#a68c7ef3f9d5b64f0e3d3b911710ef9a4',1,'EdgeMultiplay.GamePlayEvent.GamePlayEvent(string eventName, Quaternion rotation)'],['../class_edge_multiplay_1_1_game_play_event_aa28243b3a5c069b55e8ab5d6d4e428fa.html#aa28243b3a5c069b55e8ab5d6d4e428fa',1,'EdgeMultiplay.GamePlayEvent.GamePlayEvent(string eventName, Vector3 position, Quaternion rotation)'],['../class_edge_multiplay_1_1_game_play_event_af80ba1e104aa5f988945843de439a39b.html#af80ba1e104aa5f988945843de439a39b',1,'EdgeMultiplay.GamePlayEvent.GamePlayEvent(string eventName, List&lt; int &gt; scoreArray)'],['../class_edge_multiplay_1_1_game_play_event_ab4ae742bbb03062e7d24d049ce9988bd.html#ab4ae742bbb03062e7d24d049ce9988bd',1,'EdgeMultiplay.GamePlayEvent.GamePlayEvent(string eventName, List&lt; float &gt; scoreArray)'],['../class_edge_multiplay_1_1_game_play_event_ad74eece28b3702337b03fcfb7669f83b.html#ad74eece28b3702337b03fcfb7669f83b',1,'EdgeMultiplay.GamePlayEvent.GamePlayEvent(string roomId, string playerId, string eventName, string[] stringData, int[] integerData, float[] floatData, bool[] booleanData)']]],
+  ['gameplayevent_20callbacks_32',['GamePlayEvent Callbacks',['../group__gameplayeventcallbacks.html',1,'']]],
+  ['gamesession_33',['gameSession',['../class_edge_multiplay_1_1_edge_manager_ac2f8445a093259c8d0f5eeba777be1c8.html#ac2f8445a093259c8d0f5eeba777be1c8',1,'EdgeMultiplay::EdgeManager']]],
+  ['gamestart_34',['GameStart',['../class_edge_multiplay_1_1_game_start.html',1,'EdgeMultiplay']]],
+  ['gamestarted_35',['gameStarted',['../class_edge_multiplay_1_1_edge_manager_a520ba0c86d1882bac6b68de98eaf7f71.html#a520ba0c86d1882bac6b68de98eaf7f71',1,'EdgeMultiplay::EdgeManager']]],
+  ['getavailablerooms_36',['GetAvailableRooms',['../group__edgemanager_gafdef9d5d719d46a871722e25addb5b93.html#gafdef9d5d719d46a871722e25addb5b93',1,'EdgeMultiplay::EdgeManager']]],
+  ['getavailableroomsrequest_37',['GetAvailableRoomsRequest',['../class_edge_multiplay_1_1_get_available_rooms_request.html',1,'EdgeMultiplay']]],
+  ['getlocalpositionandrotationdata_38',['GetLocalPositionAndRotationData',['../class_edge_multiplay_1_1_util_adc4f3dfc02613517ed04356acf98d80b.html#adc4f3dfc02613517ed04356acf98d80b',1,'EdgeMultiplay::Util']]],
+  ['getlocalpositiondata_39',['GetLocalPositionData',['../class_edge_multiplay_1_1_util_addae33c4d3d988675df6880e121a3d5c.html#addae33c4d3d988675df6880e121a3d5c',1,'EdgeMultiplay::Util']]],
+  ['getlocalrotationdata_40',['GetLocalRotationData',['../class_edge_multiplay_1_1_util_a360b6664c1b2d81a409e0f6329a941a0.html#a360b6664c1b2d81a409e0f6329a941a0',1,'EdgeMultiplay::Util']]],
+  ['getplayer_41',['GetPlayer',['../group__edgemanager_ga0eddc949c52221dd2780691d582780e6.html#ga0eddc949c52221dd2780691d582780e6',1,'EdgeMultiplay.EdgeManager.GetPlayer(string playerId)'],['../group__edgemanager_ga863f69460752af3386c65a58fddd9212.html#ga863f69460752af3386c65a58fddd9212',1,'EdgeMultiplay.EdgeManager.GetPlayer(int playerIndex)']]],
+  ['getpositionandrotationdata_42',['GetPositionAndRotationData',['../class_edge_multiplay_1_1_util_ac5dc9e12fe26895f55befef836b6c622.html#ac5dc9e12fe26895f55befef836b6c622',1,'EdgeMultiplay::Util']]],
+  ['getpositiondata_43',['GetPositionData',['../class_edge_multiplay_1_1_util_a5fff67a5816ce9a76662ae6bcc30d3aa.html#a5fff67a5816ce9a76662ae6bcc30d3aa',1,'EdgeMultiplay::Util']]],
+  ['getrooms_44',['GetRooms',['../group__edgemanager_ga33bf13d474ccdb18cf0c93ac7e66e206.html#ga33bf13d474ccdb18cf0c93ac7e66e206',1,'EdgeMultiplay::EdgeManager']]],
+  ['getroomsrequest_45',['GetRoomsRequest',['../class_edge_multiplay_1_1_get_rooms_request.html',1,'EdgeMultiplay']]],
+  ['getrotationeulerdata_46',['GetRotationEulerData',['../class_edge_multiplay_1_1_util_aefb355ae5d5f8d576b8069e7e3fb850a.html#aefb355ae5d5f8d576b8069e7e3fb850a',1,'EdgeMultiplay::Util']]],
+  ['getting_20started_47',['Getting Started',['../getting_started.html',1,'']]]
 ];

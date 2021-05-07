@@ -1,6 +1,7 @@
 var group__functiongroups =
 [
-    [ "EdgeManager", "group__edgemanager.html", "group__edgemanager" ],
-    [ "NetworkedPlayer", "group__networkedplayer.html", "group__networkedplayer" ],
-    [ "ConnectToEdge", "group__connecttoedge.html", null ]
+    [ "ConnectToEdge", "group__connecttoedge.html", "group__connecttoedge" ],
+    [ "GameManager", "group__edgemanager.html", "group__edgemanager" ],
+    [ "PlayerManager", "group__networkedplayer.html", "group__networkedplayer" ],
+    [ "Observer", "group__observerfunctions.html", "group__observerfunctions" ]
 ];

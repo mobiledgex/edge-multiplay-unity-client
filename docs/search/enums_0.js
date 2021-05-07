@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['syncoptions_253',['SyncOptions',['../class_edge_multiplay_1_1_edge_multiplay_observer.html#a5852865b041b1dfde3d636d33ecdc5e6',1,'EdgeMultiplay::EdgeMultiplayObserver']]]
+  ['syncoptions_289',['SyncOptions',['../namespace_edge_multiplay_a672661aa74377e7ca80e99b5f5117525.html#a672661aa74377e7ca80e99b5f5117525',1,'EdgeMultiplay']]]
 ];

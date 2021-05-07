@@ -1,5 +1,19 @@
 var searchData=
 [
-  ['udpport_83',['udpPort',['../class_edge_multiplay_1_1_player_adccaa2610671dec7cca2e48d0a86eade.html#adccaa2610671dec7cca2e48d0a86eade',1,'EdgeMultiplay::Player']]],
-  ['uselocalhostserver_84',['useLocalHostServer',['../class_edge_multiplay_1_1_edge_manager_af658c38d0d817a7196216ad6e75d044e.html#af658c38d0d817a7196216ad6e75d044e',1,'EdgeMultiplay::EdgeManager']]]
+  ['senderid_124',['senderId',['../class_edge_multiplay_1_1_game_play_event_aaf9e70653889fe6561e044c0b287d42e.html#aaf9e70653889fe6561e044c0b287d42e',1,'EdgeMultiplay::GamePlayEvent']]],
+  ['sendgameplayevent_125',['SendGamePlayEvent',['../group__edgemanager_gad69399364fce5fc305e2a4de81209c32.html#gad69399364fce5fc305e2a4de81209c32',1,'EdgeMultiplay.EdgeManager.SendGamePlayEvent()'],['../group__networkedplayer_ga930f0e99e12ce267804ba24165891355.html#ga930f0e99e12ce267804ba24165891355',1,'EdgeMultiplay.NetworkedPlayer.SendGamePlayEvent()']]],
+  ['sendgameplayeventudp_126',['SendGamePlayEventUDP',['../group__networkedplayer_ga051cd05aaf39aa165344ec12e80611a4.html#ga051cd05aaf39aa165344ec12e80611a4',1,'EdgeMultiplay::NetworkedPlayer']]],
+  ['sendudpmessage_127',['SendUDPMessage',['../group__edgemanager_ga43fa9b65b9c1ce0ff13835a2cb3782d7.html#ga43fa9b65b9c1ce0ff13835a2cb3782d7',1,'EdgeMultiplay::EdgeManager']]],
+  ['session_128',['Session',['../class_edge_multiplay_1_1_session.html',1,'EdgeMultiplay']]],
+  ['sessionid_129',['sessionId',['../class_edge_multiplay_1_1_register_a2ca823abfc8ce5c241e6c8a350697368.html#a2ca823abfc8ce5c241e6c8a350697368',1,'EdgeMultiplay.Register.sessionId()'],['../class_edge_multiplay_1_1_session_a439c48a83f4cc286d076d44f5115792e.html#a439c48a83f4cc286d076d44f5115792e',1,'EdgeMultiplay.Session.sessionId()']]],
+  ['setlocalpostion_130',['SetLocalPostion',['../class_edge_multiplay_1_1_util_a970856cfcc9f4780af61e10ce6672bbd.html#a970856cfcc9f4780af61e10ce6672bbd',1,'EdgeMultiplay::Util']]],
+  ['setlocalrotation_131',['SetLocalRotation',['../class_edge_multiplay_1_1_util_a3c2a663ccb518389171394580d484216.html#a3c2a663ccb518389171394580d484216',1,'EdgeMultiplay::Util']]],
+  ['setobservableindex_132',['SetObservableIndex',['../class_edge_multiplay_1_1_observable_ae5c27d2d7b71886a3b9134adbd8802cd.html#ae5c27d2d7b71886a3b9134adbd8802cd',1,'EdgeMultiplay::Observable']]],
+  ['spawninfo_133',['SpawnInfo',['../class_edge_multiplay_1_1_edge_manager_a9f22674b4689e1f8555dcc0c8bf7eeb8.html#a9f22674b4689e1f8555dcc0c8bf7eeb8',1,'EdgeMultiplay::EdgeManager']]],
+  ['spawnprefabs_134',['SpawnPrefabs',['../class_edge_multiplay_1_1_edge_manager_abf17715c3abb0800aca318ceefe48859.html#abf17715c3abb0800aca318ceefe48859',1,'EdgeMultiplay::EdgeManager']]],
+  ['squattingallowed_135',['squattingAllowed',['../class_edge_multiplay_1_1_observable_a6e0e609b62049a8070e5f835b08a2359.html#a6e0e609b62049a8070e5f835b08a2359',1,'EdgeMultiplay::Observable']]],
+  ['stoplistening_136',['StopListening',['../group__networkedplayer_gaf7afe2e54bc594c50e41cbd9d79926f5.html#gaf7afe2e54bc594c50e41cbd9d79926f5',1,'EdgeMultiplay::NetworkedPlayer']]],
+  ['stringdata_137',['stringData',['../class_edge_multiplay_1_1_game_play_event_a91bf7bc5ac6f880a38e494b940def4ab.html#a91bf7bc5ac6f880a38e494b940def4ab',1,'EdgeMultiplay::GamePlayEvent']]],
+  ['syncoption_138',['syncOption',['../class_edge_multiplay_1_1_observable_a1130f3fc2f80e798ba80447bfae8ddf2.html#a1130f3fc2f80e798ba80447bfae8ddf2',1,'EdgeMultiplay::Observable']]],
+  ['syncoptions_139',['SyncOptions',['../namespace_edge_multiplay_a672661aa74377e7ca80e99b5f5117525.html#a672661aa74377e7ca80e99b5f5117525',1,'EdgeMultiplay']]]
 ];

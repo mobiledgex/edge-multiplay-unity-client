@@ -1,5 +1,5 @@
 var searchData=
 [
-  ['gamesession_147',['gameSession',['../class_edge_multiplay_1_1_edge_manager_ac2f8445a093259c8d0f5eeba777be1c8.html#ac2f8445a093259c8d0f5eeba777be1c8',1,'EdgeMultiplay::EdgeManager']]],
-  ['gamestarted_148',['gameStarted',['../class_edge_multiplay_1_1_edge_manager_a520ba0c86d1882bac6b68de98eaf7f71.html#a520ba0c86d1882bac6b68de98eaf7f71',1,'EdgeMultiplay::EdgeManager']]]
+  ['currentplayers_239',['currentPlayers',['../class_edge_multiplay_1_1_session_a603dd8db1b9725ba22c0ffb57cf3ad38.html#a603dd8db1b9725ba22c0ffb57cf3ad38',1,'EdgeMultiplay::Session']]],
+  ['currentroomplayers_240',['currentRoomPlayers',['../class_edge_multiplay_1_1_edge_manager_ad197f3019567fb9fb9efc74cf0c978c2.html#ad197f3019567fb9fb9efc74cf0c978c2',1,'EdgeMultiplay::EdgeManager']]]
 ];

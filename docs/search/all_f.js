@@ -1,8 +1,14 @@
 var searchData=
 [
-  ['sendudpmessage_78',['SendUDPMessage',['../group__edgemanager_ga43fa9b65b9c1ce0ff13835a2cb3782d7.html#ga43fa9b65b9c1ce0ff13835a2cb3782d7',1,'EdgeMultiplay::EdgeManager']]],
-  ['session_79',['Session',['../class_edge_multiplay_1_1_session.html',1,'EdgeMultiplay']]],
-  ['spawninfo_80',['SpawnInfo',['../class_edge_multiplay_1_1_edge_manager_a9f22674b4689e1f8555dcc0c8bf7eeb8.html#a9f22674b4689e1f8555dcc0c8bf7eeb8',1,'EdgeMultiplay::EdgeManager']]],
-  ['spawnprefabs_81',['SpawnPrefabs',['../class_edge_multiplay_1_1_edge_manager_aa7c8bc71673808941eae079dd7945c72.html#aa7c8bc71673808941eae079dd7945c72',1,'EdgeMultiplay::EdgeManager']]],
-  ['stoplistening_82',['StopListening',['../group__networkedplayer_gaf7afe2e54bc594c50e41cbd9d79926f5.html#gaf7afe2e54bc594c50e41cbd9d79926f5',1,'EdgeMultiplay::NetworkedPlayer']]]
+  ['register_113',['Register',['../class_edge_multiplay_1_1_register.html',1,'EdgeMultiplay']]],
+  ['requestownership_114',['RequestOwnership',['../group__observerfunctions_ga5e33ef85574d9296dc88cddc17975f6f.html#ga5e33ef85574d9296dc88cddc17975f6f',1,'EdgeMultiplay::EdgeMultiplayObserver']]],
+  ['room_115',['Room',['../class_edge_multiplay_1_1_room.html',1,'EdgeMultiplay.Room'],['../class_edge_multiplay_1_1_room_created_a110c4dea0596ba46eb2283731975605d.html#a110c4dea0596ba46eb2283731975605d',1,'EdgeMultiplay.RoomCreated.room()'],['../class_edge_multiplay_1_1_room_join_ac917ed6df48be1d273498e64343acbeb.html#ac917ed6df48be1d273498e64343acbeb',1,'EdgeMultiplay.RoomJoin.room()'],['../class_edge_multiplay_1_1_player_joined_room_a1aba12ca6596ef1c5512a6fd39ab50df.html#a1aba12ca6596ef1c5512a6fd39ab50df',1,'EdgeMultiplay.PlayerJoinedRoom.room()'],['../class_edge_multiplay_1_1_game_start_ac5a54af187d77998078d83847a95ab37.html#ac5a54af187d77998078d83847a95ab37',1,'EdgeMultiplay.GameStart.room()']]],
+  ['roomcreated_116',['RoomCreated',['../class_edge_multiplay_1_1_room_created.html',1,'EdgeMultiplay']]],
+  ['roomid_117',['roomId',['../class_edge_multiplay_1_1_game_play_event_adc1d2f4f053cf0cb3168c74d044cb305.html#adc1d2f4f053cf0cb3168c74d044cb305',1,'EdgeMultiplay.GamePlayEvent.roomId()'],['../class_edge_multiplay_1_1_join_room_request_a34c7d645fe67c5d2cfc19b5615bcc6ee.html#a34c7d645fe67c5d2cfc19b5615bcc6ee',1,'EdgeMultiplay.JoinRoomRequest.roomId()'],['../class_edge_multiplay_1_1_exit_room_request_ab13de40ec243e4cb34e8262e1e24179b.html#ab13de40ec243e4cb34e8262e1e24179b',1,'EdgeMultiplay.ExitRoomRequest.roomId()'],['../class_edge_multiplay_1_1_session_a7fbca0e72e96f47f25f442e349cab5a0.html#a7fbca0e72e96f47f25f442e349cab5a0',1,'EdgeMultiplay.Session.roomId()'],['../class_edge_multiplay_1_1_room_a6127b806896c5b9e5f128763ea62d529.html#a6127b806896c5b9e5f128763ea62d529',1,'EdgeMultiplay.Room.roomId()'],['../class_edge_multiplay_1_1_networked_player_a2e659d993bf92b9d6a25d99d2da2c0b1.html#a2e659d993bf92b9d6a25d99d2da2c0b1',1,'EdgeMultiplay.NetworkedPlayer.roomId()']]],
+  ['roomjoin_118',['RoomJoin',['../class_edge_multiplay_1_1_room_join.html',1,'EdgeMultiplay']]],
+  ['roommemberleft_119',['RoomMemberLeft',['../class_edge_multiplay_1_1_room_member_left.html',1,'EdgeMultiplay']]],
+  ['roommembers_120',['roomMembers',['../class_edge_multiplay_1_1_room_a507d99a955b6cd478e9c733053be9c4b.html#a507d99a955b6cd478e9c733053be9c4b',1,'EdgeMultiplay::Room']]],
+  ['rooms_121',['rooms',['../class_edge_multiplay_1_1_rooms_list_a86811ee9b9af2376a9faa2ba25c8319b.html#a86811ee9b9af2376a9faa2ba25c8319b',1,'EdgeMultiplay::RoomsList']]],
+  ['roomslist_122',['RoomsList',['../class_edge_multiplay_1_1_rooms_list.html',1,'EdgeMultiplay']]],
+  ['rotation_123',['rotation',['../class_edge_multiplay_1_1_position_and_rotation_eulers_ad9ebce9afa186ff3f256eb947026a7ac.html#ad9ebce9afa186ff3f256eb947026a7ac',1,'EdgeMultiplay::PositionAndRotationEulers']]]
 ];

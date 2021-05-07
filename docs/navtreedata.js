@@ -24,7 +24,7 @@
 */
 var NAVTREE =
 [
-  [ "EdgeMultiplay", "index.html", [
+  [ "EdgeMultiplay1.2", "index.html", [
     [ "Introduction", "index.html#intro_section", null ],
     [ "Getting Started", "getting_started.html", [
       [ "Configuration", "getting_started.html#configuration", null ],
@@ -40,7 +40,8 @@ var NAVTREE =
 
 var NAVTREEINDEX =
 [
-"annotated.html"
+"annotated.html",
+"index.html#intro_section"
 ];
 
 var SYNCONMSG = 'click to disable panel synchronisation';
