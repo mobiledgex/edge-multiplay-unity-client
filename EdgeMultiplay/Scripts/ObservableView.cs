@@ -27,7 +27,7 @@ namespace EdgeMultiplay {
         public string ownerId;
         public int observableIndex; //the observable index in in the observer.observable list
 
-        public void SetupObserverView(string ownerId, int observableIndex)
+        public void SetupObservableView(string ownerId, int observableIndex)
         {
             this.ownerId = ownerId;
             this.observableIndex = observableIndex;
