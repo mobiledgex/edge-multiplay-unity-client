@@ -37,6 +37,7 @@ namespace EdgeMultiplay
         public static Action<Room> playerRoomJoined;
         public static Action joinRoomFaliure;
         public static Action newRoomCreatedInLobby;
+        public static Action roomRemovedFromLobby;
         public static Action leftRoom;
         public static Action gameStart;
         public static Action gameEnd;
@@ -56,6 +57,7 @@ namespace EdgeMultiplay
             notificationEvent += OnNotificationEvent;
             roomsList += OnRoomsListReceived;
             newRoomCreatedInLobby += OnNewRoomCreatedInLobby;
+            roomRemovedFromLobby += OnRoomRemovedFromLobby;
             roomCreated += OnRoomCreated;
             roomJoin += OnRoomJoin;
             playerRoomJoined += PlayerJoinedRoom;
@@ -133,11 +135,20 @@ namespace EdgeMultiplay
 
         /// <summary>
         /// Called automatically once a new room is created on the server
+        /// You can use this callback to call EdgeManager.GetRooms() to get the updated list of the rooms in the lobby
         /// </summary>
-        /// <param name="rooms"> Updated List of the rooms on the server </param>
         public virtual void OnNewRoomCreatedInLobby ()
         {
-            Debug.Log("New Room Created On Server Event From Server, Call EdgeManager.GetRooms() to update rooms");
+            Debug.Log("New Room Created In the Lobby, Call EdgeManager.GetRooms() to get the updated rooms list");
+        }
+
+        /// <summary>
+        /// Called automatically once a room is removed from the lobby
+        /// You can use this callback to call EdgeManager.GetRooms() to get the updated list of the rooms in the lobby
+        /// </summary>
+        public virtual void OnRoomRemovedFromLobby()
+        {
+            Debug.Log("A Room have been removed from the Lobby, Call EdgeManager.GetRooms() to get the updated rooms list");
         }
 
         /// <summary>
@@ -241,6 +252,7 @@ namespace EdgeMultiplay
             leftRoom += OnLeftRoom;
             roomsList -= OnRoomsListReceived;
             newRoomCreatedInLobby -= OnNewRoomCreatedInLobby;
+            roomRemovedFromLobby -= OnRoomRemovedFromLobby;
             roomCreated -= OnRoomCreated;
             roomJoin -= OnRoomJoin;
             playerRoomJoined -= PlayerJoinedRoom;

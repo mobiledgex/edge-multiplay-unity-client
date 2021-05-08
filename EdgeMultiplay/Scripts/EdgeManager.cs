@@ -124,6 +124,7 @@ namespace EdgeMultiplay
             {
                 Destroy(gameObject);
             }
+            integration = new MobiledgeXIntegration();
         }
 
         void Update()
@@ -165,6 +166,12 @@ namespace EdgeMultiplay
             {
                 udpClient.Dispose();
             }
+            if (Application.platform == RuntimePlatform.OSXPlayer
+               || Application.platform == RuntimePlatform.WindowsPlayer
+               || Application.platform == RuntimePlatform.LinuxPlayer)
+            {
+                Environment.Exit(0);
+            }
         }
 
         #endregion
@@ -186,7 +193,6 @@ namespace EdgeMultiplay
             {
                 try
                 {
-                    integration = new MobiledgeXIntegration();
                     gameSession = new Session(); 
                     wsClient = new MobiledgeXWebSocketClient();
                     Uri uri = new Uri("ws://" + hostIPAddress + ":" + defaultEdgeMultiplayServerTCPPort + path);
@@ -209,7 +215,6 @@ namespace EdgeMultiplay
                 try
                 {
                     gameSession = new Session();
-                    integration = new MobiledgeXIntegration();
                     integration.UseWifiOnly(useAnyCarrierNetwork);
                     integration.useFallbackLocation = useFallBackLocation;
                     wsClient = new MobiledgeXWebSocketClient();
@@ -474,6 +479,9 @@ namespace EdgeMultiplay
                         case "new-room-created-in-lobby":
                             EdgeMultiplayCallbacks.newRoomCreatedInLobby();
                             break;
+                        case "room-removed-from-lobby":
+                            EdgeMultiplayCallbacks.roomRemovedFromLobby();
+                            break;
                     }
                     EdgeMultiplayCallbacks.notificationEvent(notification);
                     break;
@@ -529,10 +537,16 @@ namespace EdgeMultiplay
                     switch (gamePlayEvent.eventName)
                     {
                         case "NewObservableCreated":
-                            CreateObserverableObject(gamePlayEvent);
+                            CreateObservableObject(gamePlayEvent);
                             break;
                         case "ObservableOwnershipChange":
                             UpdateObserverOwnership(gamePlayEvent);
+                            break;
+                        case "TakeOverObservable":
+                            TakeOverObservable(gamePlayEvent);
+                            break;
+                        case "OwnershipRequest":
+                            OwnershipRequestReceived(gamePlayEvent);
                             break;
                         default:
                             ReflectEvent(gamePlayEvent);
@@ -574,30 +588,30 @@ namespace EdgeMultiplay
             }
         }
 
-        void CreateObserverableObject(GamePlayEvent newObserverableEvent)
+        void CreateObservableObject(GamePlayEvent newObservableEvent)
         {
-            if(localPlayer.playerId == newObserverableEvent.stringData[0])
+            if(localPlayer.playerId == newObservableEvent.stringData[0])
             {
                 return;
             }
-            NetworkedPlayer playerCreatedObserver = GetPlayer(newObserverableEvent.stringData[0]);
-            Observable observerable = playerCreatedObserver.CreateObservableObject(
-                prefabName: newObserverableEvent.stringData[1],
-                startPosition: Util.ConvertFloatArrayToVector3(newObserverableEvent.floatData, 0),
-                startRotation: Quaternion.Euler(Util.ConvertFloatArrayToVector3(newObserverableEvent.floatData, 3)),
-                syncOption: (SyncOptions)Enum.ToObject(typeof(SyncOptions), newObserverableEvent.integerData[0]),
-                interpolatePosition: newObserverableEvent.booleanData[0],
-                interpolateRotation: newObserverableEvent.booleanData[1],
-                interpolationFactor: newObserverableEvent.floatData[6]);
-            EdgeMultiplayCallbacks.newObservableCreated(observerable);
+            NetworkedPlayer playerCreatedObserver = GetPlayer(newObservableEvent.stringData[0]);
+            Observable observable = playerCreatedObserver.CreateObservableObject(
+                prefabName: newObservableEvent.stringData[1],
+                startPosition: Util.ConvertFloatArrayToVector3(newObservableEvent.floatData, 0),
+                startRotation: Quaternion.Euler(Util.ConvertFloatArrayToVector3(newObservableEvent.floatData, 3)),
+                syncOption: (SyncOptions)Enum.ToObject(typeof(SyncOptions), newObservableEvent.integerData[0]),
+                interpolatePosition: newObservableEvent.booleanData[0],
+                interpolateRotation: newObservableEvent.booleanData[1],
+                interpolationFactor: newObservableEvent.floatData[6]);
+            EdgeMultiplayCallbacks.newObservableCreated(observable);
 
         }
 
         /// <summary>
-        /// When an observerable object change its owner, OwnershipChangeEvent is sent from the owner to other players
+        /// When an observable object change its owner, OwnershipChangeEvent is sent from the owner to other players
         /// Changing ownership must occur at the owner world
         /// </summary>
-        /// <param name="ownershipChangeEvent">OwnershipChangeEvent contains (oldOwnerId, the observerable Index and the newOwnerId)</param>
+        /// <param name="ownershipChangeEvent">OwnershipChangeEvent contains (oldOwnerId, the observable Index and the newOwnerId)</param>
         void UpdateObserverOwnership(GamePlayEvent ownershipChangeEvent)
         {
             if (localPlayer.playerId == ownershipChangeEvent.senderId)
@@ -624,11 +638,50 @@ namespace EdgeMultiplay
             oldOwner.observer.observables.RemoveAt(ownershipChangeEvent.integerData[0]);
         }
 
+        void TakeOverObservable(GamePlayEvent gamePlayEvent)
+        {
+            // check if the observable owner is the local player
+            if (gamePlayEvent.stringData[0] == localPlayer.playerId)
+            {
+                //get the observable
+                Observable observable = localPlayer.observer.observables
+                    .Find(obs => obs.observableIndex == gamePlayEvent.integerData[0]);
+                if(observable == null)
+                {
+                    Debug.LogWarning("EdgeMultiplay: couldn't find the observable");
+                    return;
+                }
+                // change the observable ownership from the current owner to the sender
+                observable.ChangeOwnership(gamePlayEvent.senderId);
+            }
+        }
+
+        void OwnershipRequestReceived(GamePlayEvent gamePlayEvent)
+        {
+            // check if the observable owner is the local player
+            if (gamePlayEvent.stringData[0] == localPlayer.playerId)
+            {
+                //get the observable
+                Observable observable = localPlayer.observer.observables
+                    .Find(obs => obs.observableIndex == gamePlayEvent.integerData[0]);
+                if (observable == null)
+                {
+                    Debug.LogWarning("EdgeMultiplay: couldn't find the observable");
+                    return;
+                }
+                NetworkedPlayer requestee = GetPlayer(gamePlayEvent.senderId);
+
+                // Inform the current owner about the ownership request
+                // Triggers OnOwnershipRequestReceived() callback
+                localPlayer.ownershipRequested(requestee, observable);
+            }
+        }
+
         /// <summary>
         /// If the LocalPlayer is observing any transforms, once there is any update to the observed transform
         /// the local player will send the updated transfrom to its clones in the other players' world.
         /// </summary>
-        /// <param name="receivedEvent"> the received gameplay event contains (obsverable owner id, observerable index, syncOption, updated transform data) </param>
+        /// <param name="receivedEvent"> the received gameplay event contains (observable owner id, observable index, syncOption, updated transform data) </param>
         void SyncObject(GamePlayEvent receivedEvent)
         {
             if (receivedEvent.senderId == localPlayer.playerId)
@@ -640,11 +693,10 @@ namespace EdgeMultiplay
             {
                 return;
             }
-            int observerIndex;
-            Observable observerObject;
-            observerIndex = receivedEvent.integerData[1];
-            observerObject = sourcePlayer.observer.observables.Find(observer => observer.observerIndex == observerIndex);
-            if (observerObject == null)
+            Observable observableObj;
+            int observableIndex = receivedEvent.integerData[1];
+            observableObj = sourcePlayer.observer.observables.Find(observer => observer.observableIndex == observableIndex);
+            if (observableObj == null)
             {
                 Debug.LogError("No observer found with this id " + receivedEvent.integerData[1]);
                 return;
@@ -652,24 +704,24 @@ namespace EdgeMultiplay
             switch (receivedEvent.integerData[0])
             {
                 case (int)SyncOptions.SyncPosition:
-                    observerObject.observeredTransform.transform.position = Util.ConvertFloatArrayToVector3(receivedEvent.floatData, 0);
+                    observableObj.observeredTransform.transform.position = Util.ConvertFloatArrayToVector3(receivedEvent.floatData, 0);
                     break;
                 case (int)SyncOptions.SyncRotation:
-                    observerObject.observeredTransform.transform.rotation = Quaternion.Euler(Util.ConvertFloatArrayToVector3(receivedEvent.floatData, 0));
+                    observableObj.observeredTransform.transform.rotation = Quaternion.Euler(Util.ConvertFloatArrayToVector3(receivedEvent.floatData, 0));
                     break;
                 case (int)SyncOptions.SyncPositionAndRotation:
-                    observerObject.observeredTransform.transform.position = Util.ConvertFloatArrayToVector3(receivedEvent.floatData, 0);
-                    observerObject.observeredTransform.transform.rotation = Quaternion.Euler(Util.ConvertFloatArrayToVector3(receivedEvent.floatData, 3));
+                    observableObj.observeredTransform.transform.position = Util.ConvertFloatArrayToVector3(receivedEvent.floatData, 0);
+                    observableObj.observeredTransform.transform.rotation = Quaternion.Euler(Util.ConvertFloatArrayToVector3(receivedEvent.floatData, 3));
                     break;
                 case (int)SyncOptions.SyncLocalPosition:
-                    Util.SetLocalPostion(observerObject.observeredTransform.transform, Util.ConvertFloatArrayToVector3(receivedEvent.floatData, 0));
+                    Util.SetLocalPostion(observableObj.observeredTransform.transform, Util.ConvertFloatArrayToVector3(receivedEvent.floatData, 0));
                     break;
                 case (int)SyncOptions.SyncLocalRotation:
-                    Util.SetLocalRotation(observerObject.observeredTransform.transform, Util.ConvertFloatArrayToVector3(receivedEvent.floatData, 0));
+                    Util.SetLocalRotation(observableObj.observeredTransform.transform, Util.ConvertFloatArrayToVector3(receivedEvent.floatData, 0));
                     break;
                 case (int)SyncOptions.SyncLocalPositionAndRotation:
-                    Util.SetLocalPostion(observerObject.observeredTransform.transform, Util.ConvertFloatArrayToVector3(receivedEvent.floatData, 0));
-                    Util.SetLocalRotation(observerObject.observeredTransform.transform, Util.ConvertFloatArrayToVector3(receivedEvent.floatData, 3));
+                    Util.SetLocalPostion(observableObj.observeredTransform.transform, Util.ConvertFloatArrayToVector3(receivedEvent.floatData, 0));
+                    Util.SetLocalRotation(observableObj.observeredTransform.transform, Util.ConvertFloatArrayToVector3(receivedEvent.floatData, 3));
                     break;
             }
         }

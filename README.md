@@ -1,3 +1,13 @@
+![NPM](https://img.shields.io/npm/l/edge-multiplay)
+![Docker Image Version (latest semver)](https://img.shields.io/docker/v/mobiledgexsamples/edge-multiplay?sort=semver)
+<a href="https://twitter.com/intent/follow?screen_name=mobiledgex">
+<img src="https://img.shields.io/twitter/follow/mobiledgex?style=social" alt="follow on Twitter">
+</a>
+ <a href="https://discord.gg/k22WcfMFZ3">
+<img src="https://img.shields.io/discord/779074183551385620?logo=discord" alt="chat on Discord">
+</a>
+
+
 # EdgeMultiplay-UnityClient
 
 EdgeMultiplay is a simple solution for creating multiplayer experiences on Edge.
