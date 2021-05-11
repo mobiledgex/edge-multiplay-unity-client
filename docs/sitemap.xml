@@ -1,0 +1,1262 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset
+      xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9
+            http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd">
+<!-- created with Free Online Sitemap Generator www.xml-sitemaps.com -->
+
+
+<url>
+  <loc>https://mobiledgex.github.io/edge-multiplay-unity-client/</loc>
+  <lastmod>2021-05-11T18:23:12+00:00</lastmod>
+  <priority>1.00</priority>
+</url>
+<url>
+  <loc>https://mobiledgex.github.io/edge-multiplay-unity-client/namespace_edge_multiplay.html</loc>
+  <lastmod>2021-05-11T18:23:12+00:00</lastmod>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>https://mobiledgex.github.io/edge-multiplay-unity-client/getting_started.html</loc>
+  <lastmod>2021-05-11T18:23:12+00:00</lastmod>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>https://mobiledgex.github.io/edge-multiplay-unity-client/how_it_works.html</loc>
+  <lastmod>2021-05-11T18:23:12+00:00</lastmod>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>https://mobiledgex.github.io/edge-multiplay-unity-client/group__functiongroups.html</loc>
+  <lastmod>2021-05-11T18:23:12+00:00</lastmod>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>https://mobiledgex.github.io/edge-multiplay-unity-client/group__maincallbacks.html</loc>
+  <lastmod>2021-05-11T18:23:12+00:00</lastmod>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>https://mobiledgex.github.io/edge-multiplay-unity-client/class_edge_multiplay_1_1_available_rooms_list.html</loc>
+  <lastmod>2021-05-11T18:23:12+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://mobiledgex.github.io/edge-multiplay-unity-client/group__edgemanager_gafdef9d5d719d46a871722e25addb5b93.html</loc>
+  <lastmod>2021-05-11T18:23:12+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://mobiledgex.github.io/edge-multiplay-unity-client/class_edge_multiplay_1_1_create_room_request.html</loc>
+  <lastmod>2021-05-11T18:23:12+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://mobiledgex.github.io/edge-multiplay-unity-client/class_edge_multiplay_1_1_edge_manager.html</loc>
+  <lastmod>2021-05-11T18:23:12+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://mobiledgex.github.io/edge-multiplay-unity-client/class_edge_multiplay_1_1_edge_multiplay_callbacks.html</loc>
+  <lastmod>2021-05-11T18:23:12+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://mobiledgex.github.io/edge-multiplay-unity-client/class_edge_multiplay_1_1_edge_multiplay_observer.html</loc>
+  <lastmod>2021-05-11T18:23:12+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://mobiledgex.github.io/edge-multiplay-unity-client/class_edge_multiplay_1_1_exit_room_request.html</loc>
+  <lastmod>2021-05-11T18:23:12+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://mobiledgex.github.io/edge-multiplay-unity-client/class_edge_multiplay_1_1_game_play_event.html</loc>
+  <lastmod>2021-05-11T18:23:12+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://mobiledgex.github.io/edge-multiplay-unity-client/class_edge_multiplay_1_1_game_start.html</loc>
+  <lastmod>2021-05-11T18:23:12+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://mobiledgex.github.io/edge-multiplay-unity-client/class_edge_multiplay_1_1_get_available_rooms_request.html</loc>
+  <lastmod>2021-05-11T18:23:12+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://mobiledgex.github.io/edge-multiplay-unity-client/class_edge_multiplay_1_1_get_rooms_request.html</loc>
+  <lastmod>2021-05-11T18:23:12+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://mobiledgex.github.io/edge-multiplay-unity-client/class_edge_multiplay_1_1_join_or_create_room_request.html</loc>
+  <lastmod>2021-05-11T18:23:12+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://mobiledgex.github.io/edge-multiplay-unity-client/class_edge_multiplay_1_1_join_room_request.html</loc>
+  <lastmod>2021-05-11T18:23:12+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://mobiledgex.github.io/edge-multiplay-unity-client/class_edge_multiplay_1_1_message_wrapper.html</loc>
+  <lastmod>2021-05-11T18:23:12+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://mobiledgex.github.io/edge-multiplay-unity-client/class_edge_multiplay_1_1_networked_player.html</loc>
+  <lastmod>2021-05-11T18:23:12+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://mobiledgex.github.io/edge-multiplay-unity-client/class_edge_multiplay_1_1_player.html</loc>
+  <lastmod>2021-05-11T18:23:12+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://mobiledgex.github.io/edge-multiplay-unity-client/class_edge_multiplay_1_1_notification.html</loc>
+  <lastmod>2021-05-11T18:23:12+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://mobiledgex.github.io/edge-multiplay-unity-client/class_edge_multiplay_1_1_observable.html</loc>
+  <lastmod>2021-05-11T18:23:12+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://mobiledgex.github.io/edge-multiplay-unity-client/class_edge_multiplay_1_1_observable_view.html</loc>
+  <lastmod>2021-05-11T18:23:12+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://mobiledgex.github.io/edge-multiplay-unity-client/class_edge_multiplay_1_1_orphan_observable.html</loc>
+  <lastmod>2021-05-11T18:23:12+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://mobiledgex.github.io/edge-multiplay-unity-client/class_edge_multiplay_1_1_player_joined_room.html</loc>
+  <lastmod>2021-05-11T18:23:12+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://mobiledgex.github.io/edge-multiplay-unity-client/class_edge_multiplay_1_1_position_and_rotation.html</loc>
+  <lastmod>2021-05-11T18:23:12+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://mobiledgex.github.io/edge-multiplay-unity-client/class_edge_multiplay_1_1_position_and_rotation_eulers.html</loc>
+  <lastmod>2021-05-11T18:23:12+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://mobiledgex.github.io/edge-multiplay-unity-client/class_edge_multiplay_1_1_register.html</loc>
+  <lastmod>2021-05-11T18:23:12+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://mobiledgex.github.io/edge-multiplay-unity-client/class_edge_multiplay_1_1_room.html</loc>
+  <lastmod>2021-05-11T18:23:12+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://mobiledgex.github.io/edge-multiplay-unity-client/class_edge_multiplay_1_1_room_created.html</loc>
+  <lastmod>2021-05-11T18:23:12+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://mobiledgex.github.io/edge-multiplay-unity-client/class_edge_multiplay_1_1_room_join.html</loc>
+  <lastmod>2021-05-11T18:23:12+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://mobiledgex.github.io/edge-multiplay-unity-client/class_edge_multiplay_1_1_room_member_left.html</loc>
+  <lastmod>2021-05-11T18:23:12+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://mobiledgex.github.io/edge-multiplay-unity-client/class_edge_multiplay_1_1_rooms_list.html</loc>
+  <lastmod>2021-05-11T18:23:12+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://mobiledgex.github.io/edge-multiplay-unity-client/group__edgemanager_ga33bf13d474ccdb18cf0c93ac7e66e206.html</loc>
+  <lastmod>2021-05-11T18:23:12+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://mobiledgex.github.io/edge-multiplay-unity-client/class_edge_multiplay_1_1_session.html</loc>
+  <lastmod>2021-05-11T18:23:12+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://mobiledgex.github.io/edge-multiplay-unity-client/class_edge_multiplay_1_1_util.html</loc>
+  <lastmod>2021-05-11T18:23:12+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://mobiledgex.github.io/edge-multiplay-unity-client/namespace_edge_multiplay_a672661aa74377e7ca80e99b5f5117525.html</loc>
+  <lastmod>2021-05-11T18:23:12+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://mobiledgex.github.io/edge-multiplay-unity-client/namespace_edge_multiplay_ac5b8415f710fd1708d8db5b3e8cd74a2.html</loc>
+  <lastmod>2021-05-11T18:23:12+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://mobiledgex.github.io/edge-multiplay-unity-client/group__connecttoedge.html</loc>
+  <lastmod>2021-05-11T18:23:12+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://mobiledgex.github.io/edge-multiplay-unity-client/group__edgemanager.html</loc>
+  <lastmod>2021-05-11T18:23:12+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://mobiledgex.github.io/edge-multiplay-unity-client/group__networkedplayer.html</loc>
+  <lastmod>2021-05-11T18:23:12+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://mobiledgex.github.io/edge-multiplay-unity-client/group__observerfunctions.html</loc>
+  <lastmod>2021-05-11T18:23:12+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://mobiledgex.github.io/edge-multiplay-unity-client/group__gameflowcallbacks.html</loc>
+  <lastmod>2021-05-11T18:23:12+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://mobiledgex.github.io/edge-multiplay-unity-client/group__gameplayeventcallbacks.html</loc>
+  <lastmod>2021-05-11T18:23:12+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://mobiledgex.github.io/edge-multiplay-unity-client/group__observercallbacks.html</loc>
+  <lastmod>2021-05-11T18:23:12+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://mobiledgex.github.io/edge-multiplay-unity-client/class_edge_multiplay_1_1_available_rooms_list-members.html</loc>
+  <lastmod>2021-05-11T18:23:12+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://mobiledgex.github.io/edge-multiplay-unity-client/class_edge_multiplay_1_1_available_rooms_list_a053e93a7882e3361068c0801e953f336.html</loc>
+  <lastmod>2021-05-11T18:23:12+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://mobiledgex.github.io/edge-multiplay-unity-client/class_edge_multiplay_1_1_available_rooms_list_a8342369db81847b0a3e23018a4fef9fb.html</loc>
+  <lastmod>2021-05-11T18:23:12+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://mobiledgex.github.io/edge-multiplay-unity-client/class_edge_multiplay_1_1_create_room_request-members.html</loc>
+  <lastmod>2021-05-11T18:23:12+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://mobiledgex.github.io/edge-multiplay-unity-client/class_edge_multiplay_1_1_create_room_request_a81b67b5849c04c67681873357bbeb8ab.html</loc>
+  <lastmod>2021-05-11T18:23:12+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://mobiledgex.github.io/edge-multiplay-unity-client/class_edge_multiplay_1_1_create_room_request_ab8992f736eeae51d0b8b84cd30e3916f.html</loc>
+  <lastmod>2021-05-11T18:23:12+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://mobiledgex.github.io/edge-multiplay-unity-client/class_edge_multiplay_1_1_create_room_request_ad38510bbf6e6908edcedf4002d429aa6.html</loc>
+  <lastmod>2021-05-11T18:23:12+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://mobiledgex.github.io/edge-multiplay-unity-client/class_edge_multiplay_1_1_create_room_request_a78eb0e8aef7371740f860335e2cc8b00.html</loc>
+  <lastmod>2021-05-11T18:23:12+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://mobiledgex.github.io/edge-multiplay-unity-client/class_edge_multiplay_1_1_create_room_request_aba7207b61630df8e0019c004cc44771e.html</loc>
+  <lastmod>2021-05-11T18:23:12+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://mobiledgex.github.io/edge-multiplay-unity-client/class_edge_multiplay_1_1_edge_manager_a9f22674b4689e1f8555dcc0c8bf7eeb8.html</loc>
+  <lastmod>2021-05-11T18:23:12+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://mobiledgex.github.io/edge-multiplay-unity-client/class_edge_multiplay_1_1_create_room_request_ae4c61dfd83b79d5ed5b03dbbb51d0c28.html</loc>
+  <lastmod>2021-05-11T18:23:12+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://mobiledgex.github.io/edge-multiplay-unity-client/class_edge_multiplay_1_1_edge_manager-members.html</loc>
+  <lastmod>2021-05-11T18:23:12+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://mobiledgex.github.io/edge-multiplay-unity-client/class_edge_multiplay_1_1_edge_manager_a066ffffe7308366c769810112797e552.html</loc>
+  <lastmod>2021-05-11T18:23:12+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://mobiledgex.github.io/edge-multiplay-unity-client/group__edgemanager_gad69399364fce5fc305e2a4de81209c32.html</loc>
+  <lastmod>2021-05-11T18:23:12+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://mobiledgex.github.io/edge-multiplay-unity-client/group__edgemanager_ga0eddc949c52221dd2780691d582780e6.html</loc>
+  <lastmod>2021-05-11T18:23:12+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://mobiledgex.github.io/edge-multiplay-unity-client/group__edgemanager_ga863f69460752af3386c65a58fddd9212.html</loc>
+  <lastmod>2021-05-11T18:23:12+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://mobiledgex.github.io/edge-multiplay-unity-client/group__edgemanager_ga11b149587667d236fe7dfa7fccd3c59e.html</loc>
+  <lastmod>2021-05-11T18:23:12+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://mobiledgex.github.io/edge-multiplay-unity-client/group__edgemanager_gadb9cd3378f9b7eb56a1e01576de1dd77.html</loc>
+  <lastmod>2021-05-11T18:23:12+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://mobiledgex.github.io/edge-multiplay-unity-client/group__edgemanager_ga9e05df94bb2c7a880bfb24f59ecab17f.html</loc>
+  <lastmod>2021-05-11T18:23:12+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://mobiledgex.github.io/edge-multiplay-unity-client/group__edgemanager_ga43fa9b65b9c1ce0ff13835a2cb3782d7.html</loc>
+  <lastmod>2021-05-11T18:23:12+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://mobiledgex.github.io/edge-multiplay-unity-client/group__edgemanager_ga628a32117f9aa7819a286fa1b36e0f9c.html</loc>
+  <lastmod>2021-05-11T18:23:12+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://mobiledgex.github.io/edge-multiplay-unity-client/group__edgemanager_ga07ccb4ede8d9387611582586259cd4f7.html</loc>
+  <lastmod>2021-05-11T18:23:12+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://mobiledgex.github.io/edge-multiplay-unity-client/class_edge_multiplay_1_1_edge_manager_a1e32235f0077ed0d74861864c11e07dd.html</loc>
+  <lastmod>2021-05-11T18:23:12+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://mobiledgex.github.io/edge-multiplay-unity-client/class_edge_multiplay_1_1_edge_manager_abf17715c3abb0800aca318ceefe48859.html</loc>
+  <lastmod>2021-05-11T18:23:12+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://mobiledgex.github.io/edge-multiplay-unity-client/class_edge_multiplay_1_1_edge_manager_af658c38d0d817a7196216ad6e75d044e.html</loc>
+  <lastmod>2021-05-11T18:23:12+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://mobiledgex.github.io/edge-multiplay-unity-client/class_edge_multiplay_1_1_edge_manager_a112e7c325e42f106798b6a3101ca639f.html</loc>
+  <lastmod>2021-05-11T18:23:12+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://mobiledgex.github.io/edge-multiplay-unity-client/class_edge_multiplay_1_1_edge_manager_ae4502cf2dbfe1cbae2d0ea705a5ae995.html</loc>
+  <lastmod>2021-05-11T18:23:12+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://mobiledgex.github.io/edge-multiplay-unity-client/class_edge_multiplay_1_1_edge_manager_ac2f8445a093259c8d0f5eeba777be1c8.html</loc>
+  <lastmod>2021-05-11T18:23:12+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://mobiledgex.github.io/edge-multiplay-unity-client/class_edge_multiplay_1_1_edge_manager_ad197f3019567fb9fb9efc74cf0c978c2.html</loc>
+  <lastmod>2021-05-11T18:23:12+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://mobiledgex.github.io/edge-multiplay-unity-client/class_edge_multiplay_1_1_edge_manager_a510049f8d66560108db60662bb5893cf.html</loc>
+  <lastmod>2021-05-11T18:23:12+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://mobiledgex.github.io/edge-multiplay-unity-client/class_edge_multiplay_1_1_edge_manager_ad86880cb665b43ff328ba9da1c6fd747.html</loc>
+  <lastmod>2021-05-11T18:23:12+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://mobiledgex.github.io/edge-multiplay-unity-client/class_edge_multiplay_1_1_edge_manager_a520ba0c86d1882bac6b68de98eaf7f71.html</loc>
+  <lastmod>2021-05-11T18:23:12+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://mobiledgex.github.io/edge-multiplay-unity-client/class_edge_multiplay_1_1_edge_manager_a2c949a5d748ad1525d80acd927975a1d.html</loc>
+  <lastmod>2021-05-11T18:23:12+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://mobiledgex.github.io/edge-multiplay-unity-client/class_edge_multiplay_1_1_edge_manager_a6cbe423c05b4bd4543427df1ca55783d.html</loc>
+  <lastmod>2021-05-11T18:23:12+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://mobiledgex.github.io/edge-multiplay-unity-client/class_edge_multiplay_1_1_edge_manager_acea4c1cee36a790c8ea13c155084ec7f.html</loc>
+  <lastmod>2021-05-11T18:23:12+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://mobiledgex.github.io/edge-multiplay-unity-client/class_edge_multiplay_1_1_edge_multiplay_callbacks-members.html</loc>
+  <lastmod>2021-05-11T18:23:12+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://mobiledgex.github.io/edge-multiplay-unity-client/group__connecttoedge_ga2d0f5b1ec2292a0270bbef1090169c50.html</loc>
+  <lastmod>2021-05-11T18:23:12+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://mobiledgex.github.io/edge-multiplay-unity-client/group__gameflowcallbacks_ga4b3c2288e8e10eb645b91b8a8ad433aa.html</loc>
+  <lastmod>2021-05-11T18:23:12+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://mobiledgex.github.io/edge-multiplay-unity-client/group__gameflowcallbacks_gac5ff58771f4c10c8447041021c3a7b91.html</loc>
+  <lastmod>2021-05-11T18:23:12+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://mobiledgex.github.io/edge-multiplay-unity-client/group__gameflowcallbacks_ga9534109822210300d2b62137b3f5b9b7.html</loc>
+  <lastmod>2021-05-11T18:23:12+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://mobiledgex.github.io/edge-multiplay-unity-client/group__gameflowcallbacks_gac7f081f397a814347473f38878488120.html</loc>
+  <lastmod>2021-05-11T18:23:12+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://mobiledgex.github.io/edge-multiplay-unity-client/group__gameflowcallbacks_ga087720de3b0aac80ce6c1def5a7e94bf.html</loc>
+  <lastmod>2021-05-11T18:23:12+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://mobiledgex.github.io/edge-multiplay-unity-client/group__gameflowcallbacks_ga8200c072d9009d8de8cd791d0d3e996a.html</loc>
+  <lastmod>2021-05-11T18:23:12+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://mobiledgex.github.io/edge-multiplay-unity-client/group__gameflowcallbacks_ga224c3b43a2900785d6d8e1ffdf9dafd9.html</loc>
+  <lastmod>2021-05-11T18:23:12+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://mobiledgex.github.io/edge-multiplay-unity-client/group__gameflowcallbacks_ga44ef853d2b443091529dc93ec52b510f.html</loc>
+  <lastmod>2021-05-11T18:23:12+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://mobiledgex.github.io/edge-multiplay-unity-client/group__gameflowcallbacks_gaa19b9c9da31301191ffaff15c01c715d.html</loc>
+  <lastmod>2021-05-11T18:23:12+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://mobiledgex.github.io/edge-multiplay-unity-client/group__gameflowcallbacks_ga9a2f700f6c92188b33bb105bc527ac90.html</loc>
+  <lastmod>2021-05-11T18:23:12+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://mobiledgex.github.io/edge-multiplay-unity-client/group__gameflowcallbacks_gab86fed4ea535f60ddb41b16a6a7eacac.html</loc>
+  <lastmod>2021-05-11T18:23:12+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://mobiledgex.github.io/edge-multiplay-unity-client/group__gameflowcallbacks_gaa85b3dccbd9094cdfc1d8705ff711a22.html</loc>
+  <lastmod>2021-05-11T18:23:12+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://mobiledgex.github.io/edge-multiplay-unity-client/group__gameflowcallbacks_gaa248230f3df88acdd82d8cfa21c6224c.html</loc>
+  <lastmod>2021-05-11T18:23:12+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://mobiledgex.github.io/edge-multiplay-unity-client/group__gameflowcallbacks_ga7aa7b3bc2c6064e849beb5e745e0c86f.html</loc>
+  <lastmod>2021-05-11T18:23:12+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://mobiledgex.github.io/edge-multiplay-unity-client/group__gameplayeventcallbacks_gab78dc34f332c158558245b64b612f49a.html</loc>
+  <lastmod>2021-05-11T18:23:12+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://mobiledgex.github.io/edge-multiplay-unity-client/group__observercallbacks_ga47937544bc389b4586f1be74fdfcb173.html</loc>
+  <lastmod>2021-05-11T18:23:12+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://mobiledgex.github.io/edge-multiplay-unity-client/group__gameplayeventcallbacks_ga9bb6e8580a0b18106daf6b387d13da52.html</loc>
+  <lastmod>2021-05-11T18:23:12+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://mobiledgex.github.io/edge-multiplay-unity-client/class_edge_multiplay_1_1_edge_multiplay_observer-members.html</loc>
+  <lastmod>2021-05-11T18:23:12+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://mobiledgex.github.io/edge-multiplay-unity-client/group__observerfunctions_gaab26c2d96e71ea9466cde1d67d48b37a.html</loc>
+  <lastmod>2021-05-11T18:23:12+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://mobiledgex.github.io/edge-multiplay-unity-client/group__observerfunctions_ga399580c372087f317d7333d3e9ef6803.html</loc>
+  <lastmod>2021-05-11T18:23:12+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://mobiledgex.github.io/edge-multiplay-unity-client/group__observerfunctions_ga5e33ef85574d9296dc88cddc17975f6f.html</loc>
+  <lastmod>2021-05-11T18:23:12+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://mobiledgex.github.io/edge-multiplay-unity-client/class_edge_multiplay_1_1_edge_multiplay_observer_ad9108dc29fc337c08cfa2fc2744022ad.html</loc>
+  <lastmod>2021-05-11T18:23:12+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://mobiledgex.github.io/edge-multiplay-unity-client/class_edge_multiplay_1_1_edge_multiplay_observer_a5adf99217e32a2794022c91b35f3174e.html</loc>
+  <lastmod>2021-05-11T18:23:12+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://mobiledgex.github.io/edge-multiplay-unity-client/class_edge_multiplay_1_1_edge_multiplay_observer_a00143095ab5602170983b5e919ea3d4c.html</loc>
+  <lastmod>2021-05-11T18:23:12+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://mobiledgex.github.io/edge-multiplay-unity-client/class_edge_multiplay_1_1_exit_room_request-members.html</loc>
+  <lastmod>2021-05-11T18:23:12+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://mobiledgex.github.io/edge-multiplay-unity-client/class_edge_multiplay_1_1_exit_room_request_a278f3348fb9c7a1193d80cf79ba061cc.html</loc>
+  <lastmod>2021-05-11T18:23:12+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://mobiledgex.github.io/edge-multiplay-unity-client/class_edge_multiplay_1_1_exit_room_request_aa48c83649827e7f03f3133139778e96e.html</loc>
+  <lastmod>2021-05-11T18:23:12+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://mobiledgex.github.io/edge-multiplay-unity-client/class_edge_multiplay_1_1_exit_room_request_ab13de40ec243e4cb34e8262e1e24179b.html</loc>
+  <lastmod>2021-05-11T18:23:12+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://mobiledgex.github.io/edge-multiplay-unity-client/class_edge_multiplay_1_1_game_play_event-members.html</loc>
+  <lastmod>2021-05-11T18:23:12+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://mobiledgex.github.io/edge-multiplay-unity-client/class_edge_multiplay_1_1_game_play_event_a6bec701cc2c3b03811f510338aa31458.html</loc>
+  <lastmod>2021-05-11T18:23:12+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://mobiledgex.github.io/edge-multiplay-unity-client/class_edge_multiplay_1_1_game_play_event_a4887d09ce8a20d4b17ad5eaf3bc7c166.html</loc>
+  <lastmod>2021-05-11T18:23:12+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://mobiledgex.github.io/edge-multiplay-unity-client/class_edge_multiplay_1_1_game_play_event_a68c7ef3f9d5b64f0e3d3b911710ef9a4.html</loc>
+  <lastmod>2021-05-11T18:23:12+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://mobiledgex.github.io/edge-multiplay-unity-client/class_edge_multiplay_1_1_game_play_event_aa28243b3a5c069b55e8ab5d6d4e428fa.html</loc>
+  <lastmod>2021-05-11T18:23:12+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://mobiledgex.github.io/edge-multiplay-unity-client/class_edge_multiplay_1_1_game_play_event_af80ba1e104aa5f988945843de439a39b.html</loc>
+  <lastmod>2021-05-11T18:23:12+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://mobiledgex.github.io/edge-multiplay-unity-client/class_edge_multiplay_1_1_game_play_event_ab4ae742bbb03062e7d24d049ce9988bd.html</loc>
+  <lastmod>2021-05-11T18:23:12+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://mobiledgex.github.io/edge-multiplay-unity-client/class_edge_multiplay_1_1_game_play_event_ad74eece28b3702337b03fcfb7669f83b.html</loc>
+  <lastmod>2021-05-11T18:23:12+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://mobiledgex.github.io/edge-multiplay-unity-client/class_edge_multiplay_1_1_game_play_event_adc1d2f4f053cf0cb3168c74d044cb305.html</loc>
+  <lastmod>2021-05-11T18:23:12+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://mobiledgex.github.io/edge-multiplay-unity-client/class_edge_multiplay_1_1_game_play_event_a91bf7bc5ac6f880a38e494b940def4ab.html</loc>
+  <lastmod>2021-05-11T18:23:12+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://mobiledgex.github.io/edge-multiplay-unity-client/class_edge_multiplay_1_1_game_play_event_ae009861a2bb957b784f06e670d169ed9.html</loc>
+  <lastmod>2021-05-11T18:23:12+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://mobiledgex.github.io/edge-multiplay-unity-client/class_edge_multiplay_1_1_game_play_event_a5d726205f651b4bb588570303837c535.html</loc>
+  <lastmod>2021-05-11T18:23:12+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://mobiledgex.github.io/edge-multiplay-unity-client/class_edge_multiplay_1_1_game_play_event_aa76fcf4a07e3c2b6e7464a1f9f35fba2.html</loc>
+  <lastmod>2021-05-11T18:23:12+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://mobiledgex.github.io/edge-multiplay-unity-client/class_edge_multiplay_1_1_game_play_event_abd54ddcdcc57bb77b2faa34736c34698.html</loc>
+  <lastmod>2021-05-11T18:23:12+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://mobiledgex.github.io/edge-multiplay-unity-client/class_edge_multiplay_1_1_game_play_event_a062c05c1908733c0a136f3bae5cda569.html</loc>
+  <lastmod>2021-05-11T18:23:12+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://mobiledgex.github.io/edge-multiplay-unity-client/class_edge_multiplay_1_1_game_play_event_aaf9e70653889fe6561e044c0b287d42e.html</loc>
+  <lastmod>2021-05-11T18:23:12+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://mobiledgex.github.io/edge-multiplay-unity-client/class_edge_multiplay_1_1_game_start-members.html</loc>
+  <lastmod>2021-05-11T18:23:12+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://mobiledgex.github.io/edge-multiplay-unity-client/class_edge_multiplay_1_1_game_start_a9289dcafd9b9a3ddcf6f7b39712a886c.html</loc>
+  <lastmod>2021-05-11T18:23:12+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://mobiledgex.github.io/edge-multiplay-unity-client/class_edge_multiplay_1_1_game_start_ac5a54af187d77998078d83847a95ab37.html</loc>
+  <lastmod>2021-05-11T18:23:12+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://mobiledgex.github.io/edge-multiplay-unity-client/class_edge_multiplay_1_1_get_available_rooms_request-members.html</loc>
+  <lastmod>2021-05-11T18:23:12+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://mobiledgex.github.io/edge-multiplay-unity-client/class_edge_multiplay_1_1_get_available_rooms_request_a363c8e0f30ca62cd8b1476594c92961f.html</loc>
+  <lastmod>2021-05-11T18:23:12+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://mobiledgex.github.io/edge-multiplay-unity-client/class_edge_multiplay_1_1_get_rooms_request-members.html</loc>
+  <lastmod>2021-05-11T18:23:12+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://mobiledgex.github.io/edge-multiplay-unity-client/class_edge_multiplay_1_1_get_rooms_request_a3776e4c05d9780d80ef5e7864457741a.html</loc>
+  <lastmod>2021-05-11T18:23:12+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://mobiledgex.github.io/edge-multiplay-unity-client/class_edge_multiplay_1_1_join_or_create_room_request-members.html</loc>
+  <lastmod>2021-05-11T18:23:12+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://mobiledgex.github.io/edge-multiplay-unity-client/class_edge_multiplay_1_1_join_or_create_room_request_a54f61f3361a15b4a32d01268f97f419a.html</loc>
+  <lastmod>2021-05-11T18:23:12+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://mobiledgex.github.io/edge-multiplay-unity-client/class_edge_multiplay_1_1_join_or_create_room_request_a01199412f7252026abe94152688eaf7e.html</loc>
+  <lastmod>2021-05-11T18:23:12+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://mobiledgex.github.io/edge-multiplay-unity-client/class_edge_multiplay_1_1_join_or_create_room_request_afbb746f58a5f8062077db7a33476b5e3.html</loc>
+  <lastmod>2021-05-11T18:23:12+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://mobiledgex.github.io/edge-multiplay-unity-client/class_edge_multiplay_1_1_join_or_create_room_request_aca9d3e8dd205882f1fae3f495b330c59.html</loc>
+  <lastmod>2021-05-11T18:23:12+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://mobiledgex.github.io/edge-multiplay-unity-client/class_edge_multiplay_1_1_join_or_create_room_request_a7624a10abb4b89a24e7834fa8d65c1ce.html</loc>
+  <lastmod>2021-05-11T18:23:12+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://mobiledgex.github.io/edge-multiplay-unity-client/class_edge_multiplay_1_1_join_or_create_room_request_a7647d823e1f3609017f21d7fbd60518e.html</loc>
+  <lastmod>2021-05-11T18:23:12+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://mobiledgex.github.io/edge-multiplay-unity-client/class_edge_multiplay_1_1_join_room_request-members.html</loc>
+  <lastmod>2021-05-11T18:23:12+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://mobiledgex.github.io/edge-multiplay-unity-client/class_edge_multiplay_1_1_join_room_request_aabf4968a733efef50bde00717a39fe15.html</loc>
+  <lastmod>2021-05-11T18:23:12+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://mobiledgex.github.io/edge-multiplay-unity-client/class_edge_multiplay_1_1_join_room_request_aed2978e8c99622d5bcb4e3bc1c7cd945.html</loc>
+  <lastmod>2021-05-11T18:23:12+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://mobiledgex.github.io/edge-multiplay-unity-client/class_edge_multiplay_1_1_join_room_request_a2436734f024e6eb074a4c536991d37d7.html</loc>
+  <lastmod>2021-05-11T18:23:12+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://mobiledgex.github.io/edge-multiplay-unity-client/class_edge_multiplay_1_1_join_room_request_a0ede76626582edd8fac9993a2dbaf20c.html</loc>
+  <lastmod>2021-05-11T18:23:12+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://mobiledgex.github.io/edge-multiplay-unity-client/class_edge_multiplay_1_1_join_room_request_a7d8fccb3227fbe17fd3ad32a9213fef4.html</loc>
+  <lastmod>2021-05-11T18:23:12+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://mobiledgex.github.io/edge-multiplay-unity-client/class_edge_multiplay_1_1_join_room_request_a34c7d645fe67c5d2cfc19b5615bcc6ee.html</loc>
+  <lastmod>2021-05-11T18:23:12+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://mobiledgex.github.io/edge-multiplay-unity-client/class_edge_multiplay_1_1_message_wrapper-members.html</loc>
+  <lastmod>2021-05-11T18:23:12+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://mobiledgex.github.io/edge-multiplay-unity-client/class_edge_multiplay_1_1_networked_player-members.html</loc>
+  <lastmod>2021-05-11T18:23:12+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://mobiledgex.github.io/edge-multiplay-unity-client/group__networkedplayer_gac85bb9acf86c393e598c0cc5d68b0b47.html</loc>
+  <lastmod>2021-05-11T18:23:12+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://mobiledgex.github.io/edge-multiplay-unity-client/group__networkedplayer_gaf7afe2e54bc594c50e41cbd9d79926f5.html</loc>
+  <lastmod>2021-05-11T18:23:12+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://mobiledgex.github.io/edge-multiplay-unity-client/class_edge_multiplay_1_1_networked_player_a5e59a543fb6b323bf59820def24526db.html</loc>
+  <lastmod>2021-05-11T18:23:12+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://mobiledgex.github.io/edge-multiplay-unity-client/class_edge_multiplay_1_1_networked_player_abef0a6a3b6c7df3ce6be878fc00718bb.html</loc>
+  <lastmod>2021-05-11T18:23:12+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://mobiledgex.github.io/edge-multiplay-unity-client/group__gameplayeventcallbacks_ga3f24b735dd7718ee53c7ef3016e5a9c8.html</loc>
+  <lastmod>2021-05-11T18:23:12+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://mobiledgex.github.io/edge-multiplay-unity-client/group__observercallbacks_ga307ccc404892b0acba6ce9510af5409f.html</loc>
+  <lastmod>2021-05-11T18:23:12+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://mobiledgex.github.io/edge-multiplay-unity-client/class_edge_multiplay_1_1_networked_player_a2e659d993bf92b9d6a25d99d2da2c0b1.html</loc>
+  <lastmod>2021-05-11T18:23:12+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://mobiledgex.github.io/edge-multiplay-unity-client/group__networkedplayer_ga930f0e99e12ce267804ba24165891355.html</loc>
+  <lastmod>2021-05-11T18:23:12+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://mobiledgex.github.io/edge-multiplay-unity-client/group__networkedplayer_ga051cd05aaf39aa165344ec12e80611a4.html</loc>
+  <lastmod>2021-05-11T18:23:12+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://mobiledgex.github.io/edge-multiplay-unity-client/class_edge_multiplay_1_1_networked_player_a1b5e13469732f21ba2c525261eb6cd9c.html</loc>
+  <lastmod>2021-05-11T18:23:12+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://mobiledgex.github.io/edge-multiplay-unity-client/class_edge_multiplay_1_1_networked_player_aa89728f2cec8aa96af717c4b4eca9688.html</loc>
+  <lastmod>2021-05-11T18:23:12+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://mobiledgex.github.io/edge-multiplay-unity-client/class_edge_multiplay_1_1_networked_player_a1e1401e6002dc4dc7f8ffb1f66a641d6.html</loc>
+  <lastmod>2021-05-11T18:23:12+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://mobiledgex.github.io/edge-multiplay-unity-client/class_edge_multiplay_1_1_networked_player_a5992eb1eaf1d9d70fbc060f270ff7fa9.html</loc>
+  <lastmod>2021-05-11T18:23:12+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://mobiledgex.github.io/edge-multiplay-unity-client/class_edge_multiplay_1_1_networked_player_a140b21278127d0067a5f645bcaad2667.html</loc>
+  <lastmod>2021-05-11T18:23:12+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://mobiledgex.github.io/edge-multiplay-unity-client/class_edge_multiplay_1_1_networked_player_a22ed04c377ded05831cd313785abd3e3.html</loc>
+  <lastmod>2021-05-11T18:23:12+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://mobiledgex.github.io/edge-multiplay-unity-client/class_edge_multiplay_1_1_networked_player_a1fa672bafec90ebb08c250d38e9a8a89.html</loc>
+  <lastmod>2021-05-11T18:23:12+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://mobiledgex.github.io/edge-multiplay-unity-client/group__networkedplayer_ga6421453b30fd4241982af0c1019a4581.html</loc>
+  <lastmod>2021-05-11T18:23:12+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://mobiledgex.github.io/edge-multiplay-unity-client/class_edge_multiplay_1_1_networked_player_a886968fd5ad250716a8d267d435a1c46.html</loc>
+  <lastmod>2021-05-11T18:23:12+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://mobiledgex.github.io/edge-multiplay-unity-client/class_edge_multiplay_1_1_networked_player_a3bb12f7ef3e28c03c666c93e67f618b1.html</loc>
+  <lastmod>2021-05-11T18:23:12+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://mobiledgex.github.io/edge-multiplay-unity-client/class_edge_multiplay_1_1_networked_player_a48f27b4dc749d5c676b9e9c106e0981f.html</loc>
+  <lastmod>2021-05-11T18:23:12+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://mobiledgex.github.io/edge-multiplay-unity-client/class_edge_multiplay_1_1_networked_player_aea3f3886a5a6b924cfc6a8c641934f0a.html</loc>
+  <lastmod>2021-05-11T18:23:12+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://mobiledgex.github.io/edge-multiplay-unity-client/class_edge_multiplay_1_1_networked_player_ab0cbb82b2c89338920bcf918229fd739.html</loc>
+  <lastmod>2021-05-11T18:23:12+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://mobiledgex.github.io/edge-multiplay-unity-client/class_edge_multiplay_1_1_player-members.html</loc>
+  <lastmod>2021-05-11T18:23:12+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://mobiledgex.github.io/edge-multiplay-unity-client/class_edge_multiplay_1_1_player_a4c554e9575d2ef174201e5c3bc2a02a6.html</loc>
+  <lastmod>2021-05-11T18:23:12+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://mobiledgex.github.io/edge-multiplay-unity-client/class_edge_multiplay_1_1_player_abb4308554f42ccb852f18154b50c90c2.html</loc>
+  <lastmod>2021-05-11T18:23:12+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://mobiledgex.github.io/edge-multiplay-unity-client/class_edge_multiplay_1_1_player_a4b620b09797cec5329e71825f3f72421.html</loc>
+  <lastmod>2021-05-11T18:23:12+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://mobiledgex.github.io/edge-multiplay-unity-client/class_edge_multiplay_1_1_player_ae36e710cc40d19e9d0382eea56d14f4a.html</loc>
+  <lastmod>2021-05-11T18:23:12+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://mobiledgex.github.io/edge-multiplay-unity-client/class_edge_multiplay_1_1_player_aa929686ce585d7515bdf82b25d10d5aa.html</loc>
+  <lastmod>2021-05-11T18:23:12+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://mobiledgex.github.io/edge-multiplay-unity-client/class_edge_multiplay_1_1_notification-members.html</loc>
+  <lastmod>2021-05-11T18:23:12+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://mobiledgex.github.io/edge-multiplay-unity-client/class_edge_multiplay_1_1_notification_a9454372a3d940c6c0c60900e27d6a9a5.html</loc>
+  <lastmod>2021-05-11T18:23:12+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://mobiledgex.github.io/edge-multiplay-unity-client/class_edge_multiplay_1_1_notification_a2a191fd287eb4cb55e30dcaca4111276.html</loc>
+  <lastmod>2021-05-11T18:23:12+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://mobiledgex.github.io/edge-multiplay-unity-client/class_edge_multiplay_1_1_observable-members.html</loc>
+  <lastmod>2021-05-11T18:23:12+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://mobiledgex.github.io/edge-multiplay-unity-client/class_edge_multiplay_1_1_observable_a1593f36b9363e979ed700601b76b364d.html</loc>
+  <lastmod>2021-05-11T18:23:12+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://mobiledgex.github.io/edge-multiplay-unity-client/class_edge_multiplay_1_1_observable_a1130f3fc2f80e798ba80447bfae8ddf2.html</loc>
+  <lastmod>2021-05-11T18:23:12+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://mobiledgex.github.io/edge-multiplay-unity-client/class_edge_multiplay_1_1_observable_af7e63684cef6191000fe1eb38e098528.html</loc>
+  <lastmod>2021-05-11T18:23:12+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://mobiledgex.github.io/edge-multiplay-unity-client/class_edge_multiplay_1_1_observable_a2e856d55661ee29f4fe9616c3093222d.html</loc>
+  <lastmod>2021-05-11T18:23:12+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://mobiledgex.github.io/edge-multiplay-unity-client/class_edge_multiplay_1_1_observable_ae5c27d2d7b71886a3b9134adbd8802cd.html</loc>
+  <lastmod>2021-05-11T18:23:12+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://mobiledgex.github.io/edge-multiplay-unity-client/class_edge_multiplay_1_1_observable_a21b917ff150b0d47e5a68fabe58e2b8f.html</loc>
+  <lastmod>2021-05-11T18:23:12+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://mobiledgex.github.io/edge-multiplay-unity-client/class_edge_multiplay_1_1_observable_a64181058048d43c0a0a3caa301c05b59.html</loc>
+  <lastmod>2021-05-11T18:23:12+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://mobiledgex.github.io/edge-multiplay-unity-client/class_edge_multiplay_1_1_observable_acf7c1c13840fe3bda64ac90773889b63.html</loc>
+  <lastmod>2021-05-11T18:23:12+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://mobiledgex.github.io/edge-multiplay-unity-client/class_edge_multiplay_1_1_observable_a51c4c60edba0f9c7d0cf2e0d48508408.html</loc>
+  <lastmod>2021-05-11T18:23:12+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://mobiledgex.github.io/edge-multiplay-unity-client/class_edge_multiplay_1_1_observable_a1c6ab4775f8b83c6bfdf59616e0ca61c.html</loc>
+  <lastmod>2021-05-11T18:23:12+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://mobiledgex.github.io/edge-multiplay-unity-client/class_edge_multiplay_1_1_observable_a4cb6c1497a44d63c0a65f7cb9a9d9ff5.html</loc>
+  <lastmod>2021-05-11T18:23:12+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://mobiledgex.github.io/edge-multiplay-unity-client/class_edge_multiplay_1_1_observable_a07383b7a939da5ff14375dbaf735bfe2.html</loc>
+  <lastmod>2021-05-11T18:23:12+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://mobiledgex.github.io/edge-multiplay-unity-client/class_edge_multiplay_1_1_observable_a3aaa0a4302a89e945e1eddf6ea7ca21f.html</loc>
+  <lastmod>2021-05-11T18:23:12+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://mobiledgex.github.io/edge-multiplay-unity-client/class_edge_multiplay_1_1_observable_aa026221a46b0eec890206fb025df806f.html</loc>
+  <lastmod>2021-05-11T18:23:12+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://mobiledgex.github.io/edge-multiplay-unity-client/class_edge_multiplay_1_1_observable_a6e0e609b62049a8070e5f835b08a2359.html</loc>
+  <lastmod>2021-05-11T18:23:12+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://mobiledgex.github.io/edge-multiplay-unity-client/class_edge_multiplay_1_1_observable_view-members.html</loc>
+  <lastmod>2021-05-11T18:23:12+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://mobiledgex.github.io/edge-multiplay-unity-client/class_edge_multiplay_1_1_observable_view_aa17fb1f1ca81055a3eb1eedc6440e43d.html</loc>
+  <lastmod>2021-05-11T18:23:12+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://mobiledgex.github.io/edge-multiplay-unity-client/class_edge_multiplay_1_1_observable_view_ace2858af4535203bc03e34d037c1d2cc.html</loc>
+  <lastmod>2021-05-11T18:23:12+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://mobiledgex.github.io/edge-multiplay-unity-client/class_edge_multiplay_1_1_orphan_observable-members.html</loc>
+  <lastmod>2021-05-11T18:23:12+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://mobiledgex.github.io/edge-multiplay-unity-client/class_edge_multiplay_1_1_orphan_observable_ae0d122047f55b2b800d135e6a3cc000a.html</loc>
+  <lastmod>2021-05-11T18:23:12+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://mobiledgex.github.io/edge-multiplay-unity-client/class_edge_multiplay_1_1_player_joined_room-members.html</loc>
+  <lastmod>2021-05-11T18:23:12+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://mobiledgex.github.io/edge-multiplay-unity-client/class_edge_multiplay_1_1_player_joined_room_ab52c2572663818aa02426ca8b88cdc08.html</loc>
+  <lastmod>2021-05-11T18:23:12+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://mobiledgex.github.io/edge-multiplay-unity-client/class_edge_multiplay_1_1_player_joined_room_a1aba12ca6596ef1c5512a6fd39ab50df.html</loc>
+  <lastmod>2021-05-11T18:23:12+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://mobiledgex.github.io/edge-multiplay-unity-client/class_edge_multiplay_1_1_position_and_rotation-members.html</loc>
+  <lastmod>2021-05-11T18:23:12+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://mobiledgex.github.io/edge-multiplay-unity-client/class_edge_multiplay_1_1_position_and_rotation_eulers-members.html</loc>
+  <lastmod>2021-05-11T18:23:12+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://mobiledgex.github.io/edge-multiplay-unity-client/class_edge_multiplay_1_1_position_and_rotation_eulers_ad9ebce9afa186ff3f256eb947026a7ac.html</loc>
+  <lastmod>2021-05-11T18:23:12+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://mobiledgex.github.io/edge-multiplay-unity-client/class_edge_multiplay_1_1_register-members.html</loc>
+  <lastmod>2021-05-11T18:23:12+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://mobiledgex.github.io/edge-multiplay-unity-client/class_edge_multiplay_1_1_register_a68c2648fb1d1ff6666db5ae7c1a5e407.html</loc>
+  <lastmod>2021-05-11T18:23:12+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://mobiledgex.github.io/edge-multiplay-unity-client/class_edge_multiplay_1_1_register_a2ca823abfc8ce5c241e6c8a350697368.html</loc>
+  <lastmod>2021-05-11T18:23:12+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://mobiledgex.github.io/edge-multiplay-unity-client/class_edge_multiplay_1_1_register_aacfc267323883947506142af8566c5f7.html</loc>
+  <lastmod>2021-05-11T18:23:12+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://mobiledgex.github.io/edge-multiplay-unity-client/class_edge_multiplay_1_1_room-members.html</loc>
+  <lastmod>2021-05-11T18:23:12+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://mobiledgex.github.io/edge-multiplay-unity-client/class_edge_multiplay_1_1_room_a6127b806896c5b9e5f128763ea62d529.html</loc>
+  <lastmod>2021-05-11T18:23:12+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://mobiledgex.github.io/edge-multiplay-unity-client/class_edge_multiplay_1_1_room_a507d99a955b6cd478e9c733053be9c4b.html</loc>
+  <lastmod>2021-05-11T18:23:12+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://mobiledgex.github.io/edge-multiplay-unity-client/class_edge_multiplay_1_1_room_ac8f6d952753fa9aeb09524cf880bbdf4.html</loc>
+  <lastmod>2021-05-11T18:23:12+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://mobiledgex.github.io/edge-multiplay-unity-client/class_edge_multiplay_1_1_room_created-members.html</loc>
+  <lastmod>2021-05-11T18:23:12+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://mobiledgex.github.io/edge-multiplay-unity-client/class_edge_multiplay_1_1_room_created_acef1ed397b3d57462def33f284ca9269.html</loc>
+  <lastmod>2021-05-11T18:23:12+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://mobiledgex.github.io/edge-multiplay-unity-client/class_edge_multiplay_1_1_room_created_a110c4dea0596ba46eb2283731975605d.html</loc>
+  <lastmod>2021-05-11T18:23:12+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://mobiledgex.github.io/edge-multiplay-unity-client/class_edge_multiplay_1_1_room_join-members.html</loc>
+  <lastmod>2021-05-11T18:23:12+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://mobiledgex.github.io/edge-multiplay-unity-client/class_edge_multiplay_1_1_room_join_a255e099be94971d1122de25cdd4be5a6.html</loc>
+  <lastmod>2021-05-11T18:23:12+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://mobiledgex.github.io/edge-multiplay-unity-client/class_edge_multiplay_1_1_room_join_ac917ed6df48be1d273498e64343acbeb.html</loc>
+  <lastmod>2021-05-11T18:23:12+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://mobiledgex.github.io/edge-multiplay-unity-client/class_edge_multiplay_1_1_room_member_left-members.html</loc>
+  <lastmod>2021-05-11T18:23:12+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://mobiledgex.github.io/edge-multiplay-unity-client/class_edge_multiplay_1_1_room_member_left_a641d1f6c6094bd58bd9b4fddcdfdde47.html</loc>
+  <lastmod>2021-05-11T18:23:12+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://mobiledgex.github.io/edge-multiplay-unity-client/class_edge_multiplay_1_1_room_member_left_a7852d3e695de9354708e1a8bc2a0a865.html</loc>
+  <lastmod>2021-05-11T18:23:12+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://mobiledgex.github.io/edge-multiplay-unity-client/class_edge_multiplay_1_1_rooms_list-members.html</loc>
+  <lastmod>2021-05-11T18:23:12+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://mobiledgex.github.io/edge-multiplay-unity-client/class_edge_multiplay_1_1_rooms_list_a731e57bc8de82f63c39835717f55d862.html</loc>
+  <lastmod>2021-05-11T18:23:12+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://mobiledgex.github.io/edge-multiplay-unity-client/class_edge_multiplay_1_1_rooms_list_a86811ee9b9af2376a9faa2ba25c8319b.html</loc>
+  <lastmod>2021-05-11T18:23:12+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://mobiledgex.github.io/edge-multiplay-unity-client/class_edge_multiplay_1_1_session-members.html</loc>
+  <lastmod>2021-05-11T18:23:12+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://mobiledgex.github.io/edge-multiplay-unity-client/class_edge_multiplay_1_1_session_a439c48a83f4cc286d076d44f5115792e.html</loc>
+  <lastmod>2021-05-11T18:23:12+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://mobiledgex.github.io/edge-multiplay-unity-client/class_edge_multiplay_1_1_session_a7fbca0e72e96f47f25f442e349cab5a0.html</loc>
+  <lastmod>2021-05-11T18:23:12+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://mobiledgex.github.io/edge-multiplay-unity-client/class_edge_multiplay_1_1_session_a2f423ef06f08f46f57a1bcff8368e3a6.html</loc>
+  <lastmod>2021-05-11T18:23:12+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://mobiledgex.github.io/edge-multiplay-unity-client/class_edge_multiplay_1_1_session_ae01ee5e3e93db813735061a63490ee6f.html</loc>
+  <lastmod>2021-05-11T18:23:12+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://mobiledgex.github.io/edge-multiplay-unity-client/class_edge_multiplay_1_1_session_aea9c47876b58119d5e45fe3be067e3aa.html</loc>
+  <lastmod>2021-05-11T18:23:12+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://mobiledgex.github.io/edge-multiplay-unity-client/class_edge_multiplay_1_1_session_ae716fd61c52c197c43a312129107273c.html</loc>
+  <lastmod>2021-05-11T18:23:12+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://mobiledgex.github.io/edge-multiplay-unity-client/class_edge_multiplay_1_1_session_a603dd8db1b9725ba22c0ffb57cf3ad38.html</loc>
+  <lastmod>2021-05-11T18:23:12+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://mobiledgex.github.io/edge-multiplay-unity-client/class_edge_multiplay_1_1_util-members.html</loc>
+  <lastmod>2021-05-11T18:23:12+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://mobiledgex.github.io/edge-multiplay-unity-client/class_edge_multiplay_1_1_util_a5fff67a5816ce9a76662ae6bcc30d3aa.html</loc>
+  <lastmod>2021-05-11T18:23:12+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://mobiledgex.github.io/edge-multiplay-unity-client/class_edge_multiplay_1_1_util_aefb355ae5d5f8d576b8069e7e3fb850a.html</loc>
+  <lastmod>2021-05-11T18:23:12+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://mobiledgex.github.io/edge-multiplay-unity-client/class_edge_multiplay_1_1_util_ac5dc9e12fe26895f55befef836b6c622.html</loc>
+  <lastmod>2021-05-11T18:23:12+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://mobiledgex.github.io/edge-multiplay-unity-client/class_edge_multiplay_1_1_util_addae33c4d3d988675df6880e121a3d5c.html</loc>
+  <lastmod>2021-05-11T18:23:12+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://mobiledgex.github.io/edge-multiplay-unity-client/class_edge_multiplay_1_1_util_a360b6664c1b2d81a409e0f6329a941a0.html</loc>
+  <lastmod>2021-05-11T18:23:12+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://mobiledgex.github.io/edge-multiplay-unity-client/class_edge_multiplay_1_1_util_adc4f3dfc02613517ed04356acf98d80b.html</loc>
+  <lastmod>2021-05-11T18:23:12+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://mobiledgex.github.io/edge-multiplay-unity-client/class_edge_multiplay_1_1_util_a970856cfcc9f4780af61e10ce6672bbd.html</loc>
+  <lastmod>2021-05-11T18:23:12+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://mobiledgex.github.io/edge-multiplay-unity-client/class_edge_multiplay_1_1_util_a3c2a663ccb518389171394580d484216.html</loc>
+  <lastmod>2021-05-11T18:23:12+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://mobiledgex.github.io/edge-multiplay-unity-client/class_edge_multiplay_1_1_util_a9359ddca21b0a5fa9ce76a91b3f255e9.html</loc>
+  <lastmod>2021-05-11T18:23:12+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://mobiledgex.github.io/edge-multiplay-unity-client/class_edge_multiplay_1_1_util_adc7ea1edca911c1999c75e55d2129205.html</loc>
+  <lastmod>2021-05-11T18:23:12+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://mobiledgex.github.io/edge-multiplay-unity-client/class_edge_multiplay_1_1_util_afb0921bc5b7ba9c69436e35de819fb91.html</loc>
+  <lastmod>2021-05-11T18:23:12+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+<url>
+  <loc>https://mobiledgex.github.io/edge-multiplay-unity-client/class_edge_multiplay_1_1_util_a05dac790e58fb71914d53b8184075ad6.html</loc>
+  <lastmod>2021-05-11T18:23:12+00:00</lastmod>
+  <priority>0.51</priority>
+</url>
+
+
+</urlset>
