@@ -16,6 +16,8 @@
  */
 
 using System;
+using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace EdgeMultiplay
@@ -162,5 +164,58 @@ namespace EdgeMultiplay
                 throw new Exception("floatArray starting from the start index doesn't qualify to create a Vector3");
             }
         }
+
+        /// <summary>
+        /// Converts a Hashtable to Dictionary<string, string>
+        /// </summary>
+        /// <param name="htags">Tags Hashtable</param>
+        /// <returns>Tags of type Dictionary<string, string></returns>
+        public static Dictionary<string, string> HashtableToDictionary(Hashtable htags)
+        {
+            Dictionary<string, string> tags = new Dictionary<string, string>();
+            Debug.Log("HashtableToDictionary: " + htags + ", Count: " + htags.Count);
+            if (htags == null || htags.Count == 0)
+            {
+                Debug.Log("HashtableToDictionary: Nothing: " + htags);
+                return null;
+            }
+            foreach (var key in htags.Keys)
+            {
+                if (htags[key] == null)
+                {
+                    continue;
+                }
+                tags[key.ToString()] = htags[key].ToString();
+                Debug.Log("Key: " + key + ", Value: " + tags[key.ToString()]);
+            }
+            return tags;
+        }
+
+        /// <summary>
+        /// Converts a Dictionary<string, string> to Hashtable
+        /// </summary>
+        /// <param name="tags">Tags of type Dictionary<string, string></param>
+        /// <returns>Tags Hashtable</returns>
+        public static Hashtable DictionaryToHashtable(Dictionary<string, string> tags)
+        {
+            Debug.Log("DictionaryToHashtable: " + tags);
+            if (tags == null || tags.Count == 0)
+            {
+                Debug.Log("DictionaryToHashtable: Nothing: " + tags);
+                return null;
+            }
+            Hashtable htags = new Hashtable();
+            foreach (KeyValuePair<string, string> entry in tags)
+            {
+                if (entry.Value == null)
+                {
+                    continue;
+                }
+                htags.Add(entry.Key, entry.Value);
+                Debug.Log("Key: " + entry.Key + ", Value: " + htags[entry.Key]);
+            }
+            return htags;
+        }
+
     }
 }

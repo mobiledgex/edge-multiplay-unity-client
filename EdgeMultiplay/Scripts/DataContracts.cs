@@ -691,7 +691,7 @@ namespace EdgeMultiplay
             {
                 if(playerTags != null)
                 {
-                    return Tag.HashtableToDictionary(playerTags);
+                    return Util.HashtableToDictionary(playerTags);
                 }
                 else
                 {
