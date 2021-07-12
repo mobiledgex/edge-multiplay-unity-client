@@ -246,6 +246,11 @@ namespace EdgeMultiplay
                     await wsClient.Connect(@uri);
                     EdgeMultiplayCallbacks.connectedToEdge();
                 }
+                catch (AppPortException appPortException)
+                {
+                     EdgeMultiplayCallbacks.failureToConnect(appPortException.Message);
+                     Debug.LogError("EdgeMultiplay: Failed to connect to Edge, Error finding AppPort");
+                }
                 catch (Exception e)
                 {
                     EdgeMultiplayCallbacks.failureToConnect(e.Message);
