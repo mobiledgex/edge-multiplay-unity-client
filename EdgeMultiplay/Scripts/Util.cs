@@ -173,10 +173,9 @@ namespace EdgeMultiplay
         public static Dictionary<string, string> HashtableToDictionary(Hashtable htable)
         {
             Dictionary<string, string> dict = new Dictionary<string, string>();
-            Debug.Log("HashtableToDictionary: " + htable + ", Count: " + htable.Count);
-            if (htable == null || htable.Count == 0)
+            if (htable == null)
             {
-                return dict;
+                return null;
             }
             foreach (var key in htable.Keys)
             {
@@ -197,11 +196,10 @@ namespace EdgeMultiplay
         /// <returns>Hashtable</returns>
         public static Hashtable DictionaryToHashtable(Dictionary<string, string> dict)
         {
-            Debug.Log("DictionaryToHashtable: " + dict);
             Hashtable htable = new Hashtable();
-            if (dict == null || dict.Count == 0)
+            if (dict == null)
             {
-                return htable;
+                return null;
             }
             foreach (KeyValuePair<string, string> entry in dict)
             {
