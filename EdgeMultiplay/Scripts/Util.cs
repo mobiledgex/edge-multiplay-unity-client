@@ -16,6 +16,8 @@
  */
 
 using System;
+using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace EdgeMultiplay
@@ -162,5 +164,54 @@ namespace EdgeMultiplay
                 throw new Exception("floatArray starting from the start index doesn't qualify to create a Vector3");
             }
         }
+
+        /// <summary>
+        /// Converts a Hashtable to Dictionary<string, string>
+        /// </summary>
+        /// <param name="htable">Hashtable</param>
+        /// <returns>Dictionary<string, string></returns>
+        public static Dictionary<string, string> HashtableToDictionary(Hashtable htable)
+        {
+            Dictionary<string, string> dict = new Dictionary<string, string>();
+            if (htable == null)
+            {
+                return null;
+            }
+            foreach (var key in htable.Keys)
+            {
+                if (htable[key] == null)
+                {
+                    continue;
+                }
+                dict[key.ToString()] = htable[key].ToString();
+                Debug.Log("Key: " + key + ", Value: " + dict[key.ToString()]);
+            }
+            return dict;
+        }
+
+        /// <summary>
+        /// Converts a Dictionary<string, string> to Hashtable
+        /// </summary>
+        /// <param name="dict">Dictionary<string, string></param>
+        /// <returns>Hashtable</returns>
+        public static Hashtable DictionaryToHashtable(Dictionary<string, string> dict)
+        {
+            Hashtable htable = new Hashtable();
+            if (dict == null)
+            {
+                return null;
+            }
+            foreach (KeyValuePair<string, string> entry in dict)
+            {
+                if (entry.Value == null)
+                {
+                    continue;
+                }
+                htable.Add(entry.Key, entry.Value);
+                Debug.Log("Key: " + entry.Key + ", Value: " + htable[entry.Key]);
+            }
+            return htable;
+        }
+
     }
 }
