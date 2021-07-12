@@ -168,53 +168,51 @@ namespace EdgeMultiplay
         /// <summary>
         /// Converts a Hashtable to Dictionary<string, string>
         /// </summary>
-        /// <param name="htags">Tags Hashtable</param>
-        /// <returns>Tags of type Dictionary<string, string></returns>
-        public static Dictionary<string, string> HashtableToDictionary(Hashtable htags)
+        /// <param name="htable">Hashtable</param>
+        /// <returns>Dictionary<string, string></returns>
+        public static Dictionary<string, string> HashtableToDictionary(Hashtable htable)
         {
-            Dictionary<string, string> tags = new Dictionary<string, string>();
-            Debug.Log("HashtableToDictionary: " + htags + ", Count: " + htags.Count);
-            if (htags == null || htags.Count == 0)
+            Dictionary<string, string> dict = new Dictionary<string, string>();
+            Debug.Log("HashtableToDictionary: " + htable + ", Count: " + htable.Count);
+            if (htable == null || htable.Count == 0)
             {
-                Debug.Log("HashtableToDictionary: Nothing: " + htags);
-                return null;
+                return dict;
             }
-            foreach (var key in htags.Keys)
+            foreach (var key in htable.Keys)
             {
-                if (htags[key] == null)
+                if (htable[key] == null)
                 {
                     continue;
                 }
-                tags[key.ToString()] = htags[key].ToString();
-                Debug.Log("Key: " + key + ", Value: " + tags[key.ToString()]);
+                dict[key.ToString()] = htable[key].ToString();
+                Debug.Log("Key: " + key + ", Value: " + dict[key.ToString()]);
             }
-            return tags;
+            return dict;
         }
 
         /// <summary>
         /// Converts a Dictionary<string, string> to Hashtable
         /// </summary>
-        /// <param name="tags">Tags of type Dictionary<string, string></param>
-        /// <returns>Tags Hashtable</returns>
-        public static Hashtable DictionaryToHashtable(Dictionary<string, string> tags)
+        /// <param name="dict">Dictionary<string, string></param>
+        /// <returns>Hashtable</returns>
+        public static Hashtable DictionaryToHashtable(Dictionary<string, string> dict)
         {
-            Debug.Log("DictionaryToHashtable: " + tags);
-            if (tags == null || tags.Count == 0)
+            Debug.Log("DictionaryToHashtable: " + dict);
+            Hashtable htable = new Hashtable();
+            if (dict == null || dict.Count == 0)
             {
-                Debug.Log("DictionaryToHashtable: Nothing: " + tags);
-                return null;
+                return htable;
             }
-            Hashtable htags = new Hashtable();
-            foreach (KeyValuePair<string, string> entry in tags)
+            foreach (KeyValuePair<string, string> entry in dict)
             {
                 if (entry.Value == null)
                 {
                     continue;
                 }
-                htags.Add(entry.Key, entry.Value);
-                Debug.Log("Key: " + entry.Key + ", Value: " + htags[entry.Key]);
+                htable.Add(entry.Key, entry.Value);
+                Debug.Log("Key: " + entry.Key + ", Value: " + htable[entry.Key]);
             }
-            return htags;
+            return htable;
         }
 
     }
