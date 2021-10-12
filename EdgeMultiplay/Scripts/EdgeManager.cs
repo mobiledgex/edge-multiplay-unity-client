@@ -86,26 +86,6 @@ namespace EdgeMultiplay
         /// </summary>
         [Tooltip("Positions for spawning player prefabs, the order is based on who connects first")]
         public List<PositionAndRotationEulers> SpawnInfo;
-
-        [Header("Configuration", order = 10)]
-        /// <summary>
-        /// Set to true if you have EdgeMultiplay Server running on your machine
-        /// </summary>
-        [Tooltip("Set to true if you have EdgeMultiplay Server running on your machine")]
-        public bool useLocalHostServer;
-
-        /// <summary>
-        /// Use 127.0.0.1 as your IP Address for testing on you computer only
-        /// Or use the Host IP Address for testing between your Computer and devices connected to the same WifiNetwork
-        /// For Mac : Open Terminal and type "ifconfig" and copy the "en0" address
-        /// For Windows : Open CMD and type "Ipconfig /all" and copy the "IPV4" address
-        /// </summary>
-        [Tooltip("Use 127.0.0.1 as your IP Address for testing on you computer only,\n" +
-            "Or use the Host IP Address for testing between your Computer and devices connected to the same WifiNetwork\n" +
-            "For Mac : Open Terminal and type \"ifconfig\" and copy the \"en0\" address \n" +
-            "For Windows : Open CMD and type \"Ipconfig /all \" and copy the \"IPV4\" address ")]
-        public string hostIPAddress;
-
         private static EdgeManager instance;
         #endregion
 
@@ -186,13 +166,13 @@ namespace EdgeMultiplay
         /// <returns> Connection Task, use OnConnectionToEdge() to listen to the async task result </returns>
         public async Task ConnectToServer(bool useAnyCarrierNetwork = true, bool useFallBackLocation = false, string path = "")
         {
-            if (useLocalHostServer)
+            if (Configs.clientSettings.useLocalHostServer)
             {
                 try
                 {
                     gameSession = new Session(); 
                     wsClient = new MobiledgeXWebSocketClient();
-                    Uri uri = new Uri("ws://" + hostIPAddress + ":" + Configs.clientSettings.WebSocketPort + path);
+                    Uri uri = new Uri("ws://" + Configs.clientSettings.hostIPAddress + ":" + Configs.clientSettings.WebSocketPort + path);
                     if (wsClient.isOpen())
                     {
                         wsClient.Dispose();
@@ -518,9 +498,9 @@ namespace EdgeMultiplay
                     CreatePlayers(gameSession.currentPlayers);
                     gameStarted = true;
                     EdgeMultiplayCallbacks.gameStart();
-                    if (useLocalHostServer)
+                    if (Configs.clientSettings.useLocalHostServer)
                     {
-                        udpClient = new MobiledgeXUDPClient(hostIPAddress, Configs.clientSettings.UDPPort);
+                        udpClient = new MobiledgeXUDPClient(Configs.clientSettings.hostIPAddress, Configs.clientSettings.UDPPort);
                     }
                     else
                     {
