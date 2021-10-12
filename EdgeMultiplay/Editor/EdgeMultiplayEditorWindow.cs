@@ -81,12 +81,19 @@ namespace EdgeMultiplay
             Application.OpenURL("https://github.com/mobiledgex/edge-multiplay-unity-client/issues/new/choose");
         }
 
+        [MenuItem("EdgeMultiplay/ClientSettings", false, 0)]
+        public static void ShowSettings()
+        {
+            Selection.objects = new Object[] { Configs.clientSettings };
+            EditorGUIUtility.PingObject(Configs.clientSettings);
+        }
+    
         [MenuItem("EdgeMultiplay/Server Stats", false, 80)]
         public static async void ServerStats()
         {
             if (EditorUtility.DisplayDialog("EdgeMultiplay", "Where are you are running the server?", "Locally", "MobiledgeX"))
             {
-                Application.OpenURL("http://localhost:7776");
+                Application.OpenURL("http://localhost:" + Configs.clientSettings.StatisticsPort);
             }
             else
             {
@@ -97,12 +104,12 @@ namespace EdgeMultiplay
                 }
                 else
                 {
-                    Application.OpenURL("http://" + fqdn + ":7776");
+                    Application.OpenURL("http://" + fqdn + ":" + Configs.clientSettings.StatisticsPort);
                 }
             }
         }
 
-        [MenuItem("EdgeMultiplay/Version 1.2", false, 80)]
+        [MenuItem("EdgeMultiplay/Version 1.3", false, 80)]
         public static void Version()
         {
             //placeholder for version number

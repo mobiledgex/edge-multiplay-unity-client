@@ -59,9 +59,6 @@ namespace EdgeMultiplay
         public static bool gameStarted;
         public static List<EdgeMultiplayObserver> observers = new List<EdgeMultiplayObserver>();
 
-        public const int defaultEdgeMultiplayServerUDPPort = 5000;
-        public const int defaultEdgeMultiplayServerTCPPort = 3000;
-
         /// <summary>
         /// If you want to have a different World Origin, Players will be spawned relative to the Transform specified
         /// </summary>
@@ -195,7 +192,7 @@ namespace EdgeMultiplay
                 {
                     gameSession = new Session(); 
                     wsClient = new MobiledgeXWebSocketClient();
-                    Uri uri = new Uri("ws://" + hostIPAddress + ":" + defaultEdgeMultiplayServerTCPPort + path);
+                    Uri uri = new Uri("ws://" + hostIPAddress + ":" + Configs.clientSettings.WebSocketPort + path);
                     if (wsClient.isOpen())
                     {
                         wsClient.Dispose();
@@ -219,7 +216,7 @@ namespace EdgeMultiplay
                     integration.useFallbackLocation = useFallBackLocation;
                     wsClient = new MobiledgeXWebSocketClient();
                     await integration.RegisterAndFindCloudlet();
-                    integration.GetAppPort(LProto.L_PROTO_TCP);
+                    integration.GetAppPort(LProto.L_PROTO_TCP, Configs.clientSettings.WebSocketPort);
                     string url = integration.GetUrl("ws") + path;
                     Uri uri = new Uri(url);
                     if (wsClient.isOpen())
@@ -523,11 +520,11 @@ namespace EdgeMultiplay
                     EdgeMultiplayCallbacks.gameStart();
                     if (useLocalHostServer)
                     {
-                        udpClient = new MobiledgeXUDPClient(hostIPAddress, defaultEdgeMultiplayServerUDPPort);
+                        udpClient = new MobiledgeXUDPClient(hostIPAddress, Configs.clientSettings.UDPPort);
                     }
                     else
                     {
-                        udpClient = new MobiledgeXUDPClient(integration.GetHost(), integration.GetAppPort(LProto.L_PROTO_UDP).public_port);
+                        udpClient = new MobiledgeXUDPClient(integration.GetHost(), integration.GetAppPort(LProto.L_PROTO_UDP, Configs.clientSettings.UDPPort).public_port);
                     }
                     SendUDPMessage(new GamePlayEvent(){eventName = "Start"});
                     break;
