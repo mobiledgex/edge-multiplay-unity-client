@@ -74,7 +74,7 @@ namespace EdgeMultiplay
         IEnumerator ConnectToEdgeCoroutine(bool useAnyCarrierNetwork = true, bool useFallBackLocation = false, string path = "")
         {
             EdgeManager edgeManager = FindObjectOfType<EdgeManager>();
-            if(edgeManager.useLocalHostServer == false)
+            if(Configs.clientSettings.useLocalHostServer == false)
             {
                 if (SystemInfo.supportsLocationService)
                 {
