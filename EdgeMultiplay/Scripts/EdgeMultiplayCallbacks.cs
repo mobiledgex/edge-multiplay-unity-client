@@ -38,6 +38,7 @@ namespace EdgeMultiplay
     public static Action joinRoomFaliure;
     public static Action newRoomCreatedInLobby;
     public static Action roomRemovedFromLobby;
+    public static Action roomsUpdated;
     public static Action leftRoom;
     public static Action gameStart;
     public static Action gameEnd;
@@ -63,6 +64,7 @@ namespace EdgeMultiplay
       playerRoomJoined += PlayerJoinedRoom;
       joinRoomFaliure += OnJoinRoomFailed;
       gameStart += OnGameStart;
+      roomsUpdated += OnRoomsUpdated;
       playerLeft += OnPlayerLeft;
       leftRoom += OnLeftRoom;
       eventReceived += OnWebSocketEventReceived;
@@ -209,6 +211,15 @@ namespace EdgeMultiplay
     }
 
     /// <summary>
+    /// Called once a player joins or leaves a room in the lobby
+    /// this callback can be useful to update rooms status, Call EdgeManager.GetRooms() to get the latest rooms updates
+    /// </summary>
+    public virtual void OnRoomsUpdated()
+    {
+      Debug.Log("RoomsUpdate Event From Server");
+    }
+
+    /// <summary>
     /// Called once ExitRoom request in(EdgeManager.ExitRoom()) succeed
     /// </summary>
     public virtual void OnLeftRoom()
@@ -259,6 +270,7 @@ namespace EdgeMultiplay
       joinRoomFaliure -= OnJoinRoomFailed;
       gameStart -= OnGameStart;
       playerLeft -= OnPlayerLeft;
+      roomsUpdated -= OnRoomsUpdated;
       eventReceived -= OnWebSocketEventReceived;
       udpEventReceived -= OnUDPEventReceived;
       newObservableCreated -= OnNewObservableCreated;

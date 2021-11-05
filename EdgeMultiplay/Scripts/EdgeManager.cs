@@ -222,7 +222,13 @@ namespace EdgeMultiplay
     /// <returns> The NetworkedPlayer of the supplied playerId </returns>
     public static NetworkedPlayer GetPlayer(string playerId)
     {
-      return currentRoomPlayers.Find(player => player.playerId == playerId);
+      NetworkedPlayer playerRequested;
+      playerRequested = currentRoomPlayers.Find(player => player.playerId == playerId);
+      if (playerRequested == null)
+      {
+        Debug.LogError("Error finding player with id: " + playerId);
+      }
+      return playerRequested;
     }
 
     /// <summary>
@@ -232,7 +238,13 @@ namespace EdgeMultiplay
     /// <returns> The NetworkedPlayer of the supplied playerIndex </returns>
     public static NetworkedPlayer GetPlayer(int playerIndex)
     {
-      return currentRoomPlayers.Find(player => player.playerIndex == playerIndex);
+      NetworkedPlayer playerRequested;
+      playerRequested = currentRoomPlayers.Find(player => player.playerIndex == playerIndex);
+      if (playerRequested == null)
+      {
+        Debug.LogError("Error finding player with index: " + playerIndex);
+      }
+      return playerRequested;
     }
 
     /// <summary>
@@ -245,8 +257,9 @@ namespace EdgeMultiplay
     /// <param name="playerName"> player name to be assigned to player</param>
     /// <param name="playerAvatar">(integer value) Avatar Index from EdgeManager Spawn Prefabs</param>
     /// <param name="maxPlayersPerRoom">In case of room creation, the maximum players allowed in the room</param>
+    /// <param name="minPlayersPerRoom">In case of room creation, the minimum players threshold to start a game, if less than 2, minPlayersPerRoom == maxPlayersPerRoom </param>
     /// <param name="playerTags">Dictionary<string,string> custom data associated with the player</param> 
-    public static void JoinOrCreateRoom(string playerName, int playerAvatar, int maxPlayersPerRoom, Dictionary<string, string> playerTags = null)
+    public static void JoinOrCreateRoom(string playerName, int playerAvatar, int maxPlayersPerRoom, Dictionary<string, string> playerTags = null, int minPlayersToStartGame = 0)
     {
       if (maxPlayersPerRoom < 2)
       {
@@ -262,7 +275,7 @@ namespace EdgeMultiplay
       {
         playertagsHashtable = null;
       }
-      JoinOrCreateRoomRequest createOrJoinRoomRequest = new JoinOrCreateRoomRequest(playerName, playerAvatar, maxPlayersPerRoom, playertagsHashtable);
+      JoinOrCreateRoomRequest createOrJoinRoomRequest = new JoinOrCreateRoomRequest(playerName, playerAvatar, maxPlayersPerRoom, playertagsHashtable, minPlayersToStartGame);
       wsClient.Send(Messaging<JoinOrCreateRoomRequest>.Serialize(createOrJoinRoomRequest));
     }
 
@@ -299,8 +312,9 @@ namespace EdgeMultiplay
     /// <param name="playerName">player name to be assigned to player</param>
     /// <param name="playerAvatar">(integer value) Avatar Index from EdgeManager Spawn Prefabs</param>
     /// <param name="maxPlayersPerRoom">The maximum players allowed in the room</param>
+    /// <param name="minPlayersPerRoom">In case of room creation, the minimum players threshold to start a game, if less than 2, minPlayersPerRoom == maxPlayersPerRoom </param>
     /// <param name="playerTags">Dictionary<string,string> custom data associated with the player</param>
-    public static void CreateRoom(string playerName, int playerAvatar, int maxPlayersPerRoom, Dictionary<string, string> playerTags = null)
+    public static void CreateRoom(string playerName, int playerAvatar, int maxPlayersPerRoom, Dictionary<string, string> playerTags = null, int minPlayersToStartGame = 0)
     {
       if (maxPlayersPerRoom < 2)
       {
@@ -319,7 +333,7 @@ namespace EdgeMultiplay
         {
           playertagsHashtable = null;
         }
-        CreateRoomRequest createRoomRequest = new CreateRoomRequest(playerName, playerAvatar, maxPlayersPerRoom, playertagsHashtable);
+        CreateRoomRequest createRoomRequest = new CreateRoomRequest(playerName, playerAvatar, maxPlayersPerRoom, playertagsHashtable, minPlayersToStartGame);
         wsClient.Send(Messaging<CreateRoomRequest>.Serialize(createRoomRequest));
       }
       else
@@ -459,6 +473,9 @@ namespace EdgeMultiplay
             case "room-removed-from-lobby":
               EdgeMultiplayCallbacks.roomRemovedFromLobby();
               break;
+            case "rooms-updated":
+              EdgeMultiplayCallbacks.roomsUpdated();
+              break;
           }
           EdgeMultiplayCallbacks.notificationEvent(notification);
           break;
@@ -478,35 +495,39 @@ namespace EdgeMultiplay
           RoomJoin roomJoin = Messaging<RoomJoin>.Deserialize(message);
           gameSession.roomId = roomJoin.room.roomId;
           EdgeMultiplayCallbacks.roomJoin(roomJoin.room);
+          int roomMembersCount = roomJoin.room.roomMembers.Count;
+          if (roomMembersCount >= roomJoin.room.minPlayersToStartGame) //game already started
+          {
+            StartGame(roomJoin.room);
+          }
           break;
 
         case "playerJoinedRoom":
           PlayerJoinedRoom playerJoinedRoom = Messaging<PlayerJoinedRoom>.Deserialize(message);
           EdgeMultiplayCallbacks.playerRoomJoined(playerJoinedRoom.room);
+          if (playerJoinedRoom.room.roomMembers[playerJoinedRoom.room.roomMembers.Count - 1].playerId == gameSession.playerId)
+          {
+            break;
+          }
+          else
+          {
+            if (gameStarted)
+            {
+              NetworkedPlayer networkedPlayer = SpawnPlayer(playerJoinedRoom.room.roomMembers[playerJoinedRoom.room.roomMembers.Count - 1]);
+              currentRoomPlayers.Add(networkedPlayer);
+              EdgeMultiplayCallbacks.eventReceived += networkedPlayer.OnWebSocketEventReceived;
+              EdgeMultiplayCallbacks.udpEventReceived += networkedPlayer.OnUDPEventReceived;
+            }
+            else if (playerJoinedRoom.room.roomMembers.Count == playerJoinedRoom.room.minPlayersToStartGame)
+            {
+              StartGame(playerJoinedRoom.room);
+            }
+          }
           break;
 
         case "gameStart":
           GameStart gameStart = Messaging<GameStart>.Deserialize(message);
-          gameSession.currentPlayers = gameStart.room.roomMembers.ToArray();
-          foreach (Player player in gameStart.room.roomMembers)
-          {
-            if (player.playerId == gameSession.playerId)
-            {
-              gameSession.playerIndex = player.playerIndex;
-            }
-          }
-          CreatePlayers(gameSession.currentPlayers);
-          gameStarted = true;
           EdgeMultiplayCallbacks.gameStart();
-          if (Configs.clientSettings.useLocalHostServer)
-          {
-            udpClient = new MobiledgeXUDPClient(Configs.clientSettings.hostIPAddress, Configs.clientSettings.UDPPort);
-          }
-          else
-          {
-            udpClient = new MobiledgeXUDPClient(integration.GetHost(), integration.GetAppPort(LProto.L_PROTO_UDP, Configs.clientSettings.UDPPort).public_port);
-          }
-          SendUDPMessage(new GamePlayEvent() { eventName = "Start" });
           break;
 
         case "GamePlayEvent":
@@ -540,6 +561,29 @@ namespace EdgeMultiplay
           Debug.LogError("Unknown WebSocket message arrived: " + msg.type + ", message: " + message);
           break;
       }
+    }
+
+    void StartGame(Room room)
+    {
+      gameSession.currentPlayers = room.roomMembers.ToArray();
+      foreach (Player player in room.roomMembers)
+      {
+        if (player.playerId == gameSession.playerId)
+        {
+          gameSession.playerIndex = player.playerIndex;
+        }
+      }
+      CreatePlayers(gameSession.currentPlayers);
+      gameStarted = true;
+      if (Configs.clientSettings.useLocalHostServer)
+      {
+        udpClient = new MobiledgeXUDPClient(Configs.clientSettings.hostIPAddress, Configs.clientSettings.UDPPort);
+      }
+      else
+      {
+        udpClient = new MobiledgeXUDPClient(integration.GetHost(), integration.GetAppPort(LProto.L_PROTO_UDP, Configs.clientSettings.UDPPort).public_port);
+      }
+      SendUDPMessage(new GamePlayEvent() { eventName = "Start" });
     }
 
     void HandleUDPMessage(string message)
@@ -711,59 +755,62 @@ namespace EdgeMultiplay
 
     void CreatePlayers(Player[] gamePlayers)
     {
-      if (currentRoomPlayers.Count < 1 && gamePlayers.Length > 1)
+      try
       {
-        try
+        foreach (Player player in gamePlayers)
         {
-          foreach (Player player in gamePlayers)
+          NetworkedPlayer networkedPlayer = SpawnPlayer(player);
+          currentRoomPlayers.Add(networkedPlayer);
+          EdgeMultiplayCallbacks.eventReceived += networkedPlayer.OnWebSocketEventReceived;
+          EdgeMultiplayCallbacks.udpEventReceived += networkedPlayer.OnUDPEventReceived;
+          if (player.playerId == gameSession.playerId)
           {
-            GameObject playerObj = SpawnPrefabs[player.playerAvatar].gameObject;
-            playerObj.GetComponent<NetworkedPlayer>().SetUpPlayer(player, gameSession.roomId, player.playerId == gameSession.playerId);
-
-            GameObject playerCreated;
-            if (WorldOriginTransform != null)
-            {
-              playerCreated = Instantiate(playerObj, WorldOriginTransform);
-              Util.SetLocalPostion(playerCreated.transform, SpawnInfo[player.playerIndex].position);
-              Util.SetLocalRotation(playerCreated.transform, SpawnInfo[player.playerIndex].rotation);
-            }
-            else
-            {
-              playerCreated = Instantiate(playerObj, SpawnInfo[player.playerIndex].position, Quaternion.Euler(SpawnInfo[player.playerIndex].rotation));
-            }
-            NetworkedPlayer networkedPlayer = playerCreated.GetComponent<NetworkedPlayer>();
-            if (player.playerName == "")
-            {
-              playerCreated.name = networkedPlayer.playerName = "Player " + (player.playerIndex + 1);
-            }
-            else
-            {
-              playerCreated.name = player.playerName;
-            }
-            currentRoomPlayers.Add(networkedPlayer);
-            EdgeMultiplayCallbacks.eventReceived += networkedPlayer.OnWebSocketEventReceived;
-            EdgeMultiplayCallbacks.udpEventReceived += networkedPlayer.OnUDPEventReceived;
-            if (player.playerId == gameSession.playerId)
-            {
-              localPlayer = MessageSender = networkedPlayer;
-            }
+            print("XXXX LOCATED LOCAL PLAYER");
+            localPlayer = MessageSender = networkedPlayer;
           }
         }
-        catch (NullReferenceException)
-        {
-          throw new Exception("EdgeMultiplay: Error in creating players, Make sure to attach your Prefabs to EdgeManager.SpawnInfo in the inspector");
-        }
-        catch (ArgumentOutOfRangeException)
-        {
-          throw new Exception("EdgeMultiplay: Error in creating players, Make sure Size of EdgeManager Spawn Info equal or greater than number of players in the room");
-        }
-        catch (Exception)
-        {
-          throw new Exception("EdgeMultiplay: Error in creating players");
-        }
+      }
+      catch (NullReferenceException)
+      {
+        throw new Exception("EdgeMultiplay: Error in creating players, Make sure to attach your Prefabs to EdgeManager.SpawnInfo in the inspector");
+      }
+      catch (ArgumentOutOfRangeException)
+      {
+        throw new Exception("EdgeMultiplay: Error in creating players, Make sure Size of EdgeManager Spawn Info equal or greater than number of players in the room");
+      }
+      catch (Exception)
+      {
+        throw new Exception("EdgeMultiplay: Error in creating players");
       }
     }
+    NetworkedPlayer SpawnPlayer(Player player)
+    {
+      GameObject playerObj = SpawnPrefabs[player.playerAvatar].gameObject;
+      playerObj.GetComponent<NetworkedPlayer>().SetUpPlayer(player, gameSession.roomId, player.playerId == gameSession.playerId);
 
+      GameObject playerCreated;
+      if (WorldOriginTransform != null)
+      {
+        playerCreated = Instantiate(playerObj, WorldOriginTransform);
+        Util.SetLocalPostion(playerCreated.transform, SpawnInfo[player.playerIndex].position);
+        Util.SetLocalRotation(playerCreated.transform, SpawnInfo[player.playerIndex].rotation);
+      }
+      else
+      {
+        playerCreated = Instantiate(playerObj, SpawnInfo[player.playerIndex].position, Quaternion.Euler(SpawnInfo[player.playerIndex].rotation));
+      }
+      NetworkedPlayer networkedPlayer = playerCreated.GetComponent<NetworkedPlayer>();
+      if (player.playerName == "")
+      {
+        playerCreated.name = networkedPlayer.playerName = "Player " + (player.playerIndex + 1);
+      }
+      else
+      {
+        playerCreated.name = player.playerName;
+      }
+
+      return networkedPlayer;
+    }
     #endregion
 
   }
