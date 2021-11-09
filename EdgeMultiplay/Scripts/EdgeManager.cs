@@ -499,6 +499,7 @@ namespace EdgeMultiplay
           if (roomMembersCount >= roomJoin.room.minPlayersToStartGame) //game already started
           {
             StartGame(roomJoin.room);
+            EdgeMultiplayCallbacks.gameStart();
           }
           break;
 
@@ -521,13 +522,9 @@ namespace EdgeMultiplay
             else if (playerJoinedRoom.room.roomMembers.Count == playerJoinedRoom.room.minPlayersToStartGame)
             {
               StartGame(playerJoinedRoom.room);
+              EdgeMultiplayCallbacks.gameStart();
             }
           }
-          break;
-
-        case "gameStart":
-          GameStart gameStart = Messaging<GameStart>.Deserialize(message);
-          EdgeMultiplayCallbacks.gameStart();
           break;
 
         case "GamePlayEvent":
