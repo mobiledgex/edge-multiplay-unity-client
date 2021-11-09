@@ -488,7 +488,7 @@ namespace EdgeMultiplay
     public int minPlayersToStartGame;
     [DataMember(EmitDefaultValue = false)]
     public Hashtable playerTags;
-    public CreateRoomRequest(string PlayerName, int PlayerAvatar, int MaxPlayersPerRoom, Hashtable playerTags = null, int MinPlayersToStartGame)
+    public CreateRoomRequest(string PlayerName, int PlayerAvatar, int MaxPlayersPerRoom, Hashtable playerTags = null, int MinPlayersToStartGame = 0)
     {
       type = "CreateRoom";
       playerId = EdgeManager.gameSession.playerId;
@@ -521,7 +521,7 @@ namespace EdgeMultiplay
     [DataMember(EmitDefaultValue = false)]
     public Hashtable playerTags;
 
-    public JoinOrCreateRoomRequest(string PlayerName, int PlayerAvatar, int MaxPlayersPerRoom, Hashtable playerTags = null, int MinPlayersToStartGame)
+    public JoinOrCreateRoomRequest(string PlayerName, int PlayerAvatar, int MaxPlayersPerRoom, Hashtable playerTags = null, int MinPlayersToStartGame = 0)
     {
       type = "JoinOrCreateRoom";
       playerId = EdgeManager.gameSession.playerId;
