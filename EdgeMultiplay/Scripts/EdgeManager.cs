@@ -393,6 +393,11 @@ namespace EdgeMultiplay
     /// <param name="gameplayEvent">the GamePlay Event to be forwarded to other room members</param>
     public static void SendUDPMessage(GamePlayEvent gameplayEvent)
     {
+      if (!gameStarted)
+      {
+        Debug.LogError("Cannot perform this operation, Game didn't start yet");
+        return;
+      }
       gameplayEvent.roomId = gameSession.roomId;
       gameplayEvent.senderId = gameSession.playerId;
       if (udpClient.run)
@@ -403,6 +408,26 @@ namespace EdgeMultiplay
       {
         Debug.LogError("EdgeMultiplay: Error in sending UDP Message");
       }
+    }
+
+    /// <summary>
+    /// Sends a WebSocket Message from local player to other room members, can be used only after the game starts (OnGameStart())
+    /// <para>
+    /// on the player manager that inherits from NetworkedPlayer use
+    /// <b>public override void OnMessageReceived</b>  to get the forwarded message
+    /// </para>
+    /// </summary>
+    /// <param name="gamePlayEvent"></param>
+    public void SendGamePlayEvent(GamePlayEvent gamePlayEvent)
+    {
+      if (!gameStarted)
+      {
+        Debug.LogError("Cannot perform this operation, Game didn't start yet");
+        return;
+      }
+      gamePlayEvent.roomId = gameSession.roomId;
+      gamePlayEvent.senderId = gameSession.playerId;
+      wsClient.Send(Messaging<GamePlayEvent>.Serialize(gamePlayEvent));
     }
 
     /// <summary>
@@ -436,13 +461,6 @@ namespace EdgeMultiplay
     #endregion
 
     #region EdgeManager Functions
-
-    public void SendGamePlayEvent(GamePlayEvent mobiledgexEvent)
-    {
-      mobiledgexEvent.roomId = gameSession.roomId;
-      mobiledgexEvent.senderId = gameSession.playerId;
-      wsClient.Send(Messaging<GamePlayEvent>.Serialize(mobiledgexEvent));
-    }
 
     void HandleWebSocketMessage(string message)
     {
@@ -608,6 +626,11 @@ namespace EdgeMultiplay
 
     void CreateObservableObject(GamePlayEvent newObservableEvent)
     {
+      if (!gameStarted)
+      {
+        Debug.LogError("Cannot create observables, Game didn't start yet");
+        return;
+      }
       if (localPlayer.playerId == newObservableEvent.stringData[0])
       {
         return;
@@ -762,7 +785,6 @@ namespace EdgeMultiplay
           EdgeMultiplayCallbacks.udpEventReceived += networkedPlayer.OnUDPEventReceived;
           if (player.playerId == gameSession.playerId)
           {
-            print("XXXX LOCATED LOCAL PLAYER");
             localPlayer = MessageSender = networkedPlayer;
           }
         }
