@@ -17,32 +17,33 @@
 
 using UnityEngine;
 
-namespace EdgeMultiplay {
-    /// <summary>
-    /// ObservableView is added by default to Observered objects,holding the reference to the observable owner and the observable index in in the observer.observable list
-    /// </summary>
-    [AddComponentMenu("EdgeMultiplay/ObservableView")]
-    public class ObservableView : MonoBehaviour
+namespace EdgeMultiplay
+{
+  /// <summary>
+  /// ObservableView is added by default to Observered objects,holding the reference to the observable owner and the observable index in in the observer.observable list
+  /// </summary>
+  [AddComponentMenu("EdgeMultiplay/ObservableView")]
+  public class ObservableView : MonoBehaviour
+  {
+    public string ownerId;
+    public int observableIndex; //the observable index in in the observer.observable list
+
+    public void SetupObservableView(string ownerId, int observableIndex)
     {
-        public string ownerId;
-        public int observableIndex; //the observable index in in the observer.observable list
-
-        public void SetupObservableView(string ownerId, int observableIndex)
-        {
-            this.ownerId = ownerId;
-            this.observableIndex = observableIndex;
-        }
-
-        public bool OwnerIsLocalPlayer()
-        {
-            if(EdgeManager.localPlayer.playerId == ownerId)
-            {
-                return true;
-            }
-            else
-            {
-                return false;
-            }
-        }
+      this.ownerId = ownerId;
+      this.observableIndex = observableIndex;
     }
+
+    public bool OwnerIsLocalPlayer()
+    {
+      if (EdgeManager.localPlayer.playerId == ownerId)
+      {
+        return true;
+      }
+      else
+      {
+        return false;
+      }
+    }
+  }
 }
