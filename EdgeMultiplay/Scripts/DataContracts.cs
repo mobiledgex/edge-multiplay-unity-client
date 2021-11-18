@@ -484,15 +484,18 @@ namespace EdgeMultiplay
     public int playerAvatar;
     [DataMember]
     public int maxPlayersPerRoom;
+    [DataMember]
+    public int minPlayersToStartGame;
     [DataMember(EmitDefaultValue = false)]
     public Hashtable playerTags;
-    public CreateRoomRequest(string PlayerName, int PlayerAvatar, int MaxPlayersPerRoom, Hashtable playerTags = null)
+    public CreateRoomRequest(string PlayerName, int PlayerAvatar, int MaxPlayersPerRoom, Hashtable playerTags = null, int MinPlayersToStartGame = 0)
     {
       type = "CreateRoom";
       playerId = EdgeManager.gameSession.playerId;
       playerName = PlayerName;
       playerAvatar = PlayerAvatar;
       maxPlayersPerRoom = MaxPlayersPerRoom;
+      minPlayersToStartGame = MinPlayersToStartGame;
       this.playerTags = playerTags;
     }
   }
@@ -513,16 +516,19 @@ namespace EdgeMultiplay
     public int playerAvatar;
     [DataMember]
     public int maxPlayersPerRoom;
+    [DataMember]
+    public int minPlayersToStartGame;
     [DataMember(EmitDefaultValue = false)]
     public Hashtable playerTags;
 
-    public JoinOrCreateRoomRequest(string PlayerName, int PlayerAvatar, int MaxPlayersPerRoom, Hashtable playerTags = null)
+    public JoinOrCreateRoomRequest(string PlayerName, int PlayerAvatar, int MaxPlayersPerRoom, Hashtable playerTags = null, int MinPlayersToStartGame = 0)
     {
       type = "JoinOrCreateRoom";
       playerId = EdgeManager.gameSession.playerId;
       playerName = PlayerName;
       playerAvatar = PlayerAvatar;
       maxPlayersPerRoom = MaxPlayersPerRoom;
+      minPlayersToStartGame = MinPlayersToStartGame;
       this.playerTags = playerTags;
     }
   }
@@ -645,6 +651,18 @@ namespace EdgeMultiplay
     /// </summary>
     [DataMember]
     public int maxPlayersPerRoom;
+
+    /// <summary>
+    /// The minimum players threshold to start a game, if less than 2, minPlayersPerRoom == maxPlayersPerRoom 
+    /// </summary>
+    [DataMember]
+    public int minPlayersToStartGame;
+
+    /// <summary>
+    /// Indicates that the game is running in the room
+    /// </summary>
+    [DataMember]
+    public bool gameStarted;
   }
 
   /// <summary>

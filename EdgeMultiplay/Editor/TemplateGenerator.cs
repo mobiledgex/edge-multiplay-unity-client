@@ -96,7 +96,7 @@ namespace EdgeMultiplay
                     outfile.WriteLine("public class PlayerManager : NetworkedPlayer {");
                     outfile.WriteLine(" ");
                     outfile.WriteLine("    // Use this for initialization");
-                    outfile.WriteLine("    void Start () {");
+                    outfile.WriteLine("    void OnEnable () {");
                     outfile.WriteLine("        ListenToMessages();");
                     outfile.WriteLine("    }");
                     outfile.WriteLine("    ");
