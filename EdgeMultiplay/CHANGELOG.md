@@ -1,6 +1,17 @@
 # Changelog
 All notable changes to this EdgeMultiplay Unity Client will be documented in this file.
 
+## [1.3.0] - 2021-11-13
+
+### Fixes & Improvements:
+- Proper error logs for calling EdgeManager functions before OnGameStart() callback.
+
+### New Features:
+- EdgeManager.CreateRoom() now have a new argument minPlayersToStartGame (The minimum players threshold to start a game, new players will be able to join the running game as long as the room members count is below maxPlayersPerRoom threshold.
+- New ClientSettings menu, where you can set your ports and configure your host address.(Located under EdgeMultiplay/ClientSettings)
+- New Server Event rooms-updated, use OnRoomsUpdated() callback to get the latest status of rooms in the lobby.
+
+
 ## [1.2.0] - 2021-05-05
 
 ### Fixes & Improvements:

@@ -19,24 +19,24 @@ using UnityEngine;
 
 namespace EdgeMultiplay
 {
-    /// <summary>
-    /// Add OrphanObservable to GameObjects that don't have an owner at the time of creation (Ex. created in Unity Editor)
-    /// the default owner of this observable is the first player in the room, You can change this in SetOwnerShip() below
-    /// </summary>
-    [AddComponentMenu("EdgeMultiplay/OrphanObservable")]
-    public class OrphanObservable : MonoBehaviour
-    {
-        public Observable observable;
+  /// <summary>
+  /// Add OrphanObservable to GameObjects that don't have an owner at the time of creation (Ex. created in Unity Editor)
+  /// the default owner of this observable is the first player in the room, You can change this in SetOwnerShip() below
+  /// </summary>
+  [AddComponentMenu("EdgeMultiplay/OrphanObservable")]
+  public class OrphanObservable : MonoBehaviour
+  {
+    public Observable observable;
 
-        void Update()
+    void Update()
+    {
+      if (observable != null && observable.owner == null)
+      {
+        if (EdgeManager.gameStarted)
         {
-             if(observable != null && observable.owner == null)
-             {
-                 if (EdgeManager.gameStarted)
-                 {
-                    observable.SetOwnership(EdgeManager.GetPlayer(0).playerId);//owner is first player in the room
-                 }
-             }
+          observable.SetOwnership(EdgeManager.GetPlayer(0).playerId);//owner is first player in the room
         }
+      }
     }
+  }
 }
