@@ -196,7 +196,7 @@ namespace EdgeMultiplay
           integration.useFallbackLocation = useFallBackLocation;
           wsClient = new MobiledgeXWebSocketClient();
           await integration.RegisterAndFindCloudlet();
-          integration.GetAppPort(LProto.L_PROTO_TCP, Configs.clientSettings.WebSocketPort);
+          integration.GetAppPort(LProto.Tcp, Configs.clientSettings.WebSocketPort);
           string url = integration.GetUrl("ws") + path;
           Uri uri = new Uri(url);
           if (wsClient.isOpen())
@@ -596,7 +596,7 @@ namespace EdgeMultiplay
       }
       else
       {
-        udpClient = new MobiledgeXUDPClient(integration.GetHost(), integration.GetAppPort(LProto.L_PROTO_UDP, Configs.clientSettings.UDPPort).public_port);
+        udpClient = new MobiledgeXUDPClient(integration.GetHost(), integration.GetAppPort(LProto.Udp, Configs.clientSettings.UDPPort).public_port);
       }
       SendUDPMessage(new GamePlayEvent() { eventName = "Start" });
     }
