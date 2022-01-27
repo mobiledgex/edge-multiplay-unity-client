@@ -47,7 +47,7 @@ namespace EdgeMultiplay
     /// <summary>
     /// list of the current players in the same room as the local player
     /// </summary>
-    public static List<NetworkedPlayer> currentRoomPlayers = new List<NetworkedPlayer>();
+    public static List<NetworkedPlayer> currentRoomPlayers;
     /// <summary>
     /// Represents the local player, to send messages to the server use EdgeManager.MessageSender.BroadcastMessage()
     /// </summary>
@@ -57,12 +57,8 @@ namespace EdgeMultiplay
     /// Indicates that the game have already started
     /// </summary>
     public static bool gameStarted;
-    public static List<EdgeMultiplayObserver> observers = new List<EdgeMultiplayObserver>();
+    public static List<EdgeMultiplayObserver> observers;
 
-    /// <summary>
-    /// If you want to have a different World Origin, Players will be spawned relative to the Transform specified
-    /// </summary>
-    public Transform WorldOriginTransform;
     #endregion
 
     #region private variables
@@ -73,6 +69,17 @@ namespace EdgeMultiplay
     #endregion
 
     #region EdgeManager Editor Exposed Variables
+    /// <summary>
+    /// Set to true if you want to destroy EdgeManager on Scene load (ex. Scene Transition)
+    /// </summary>
+    [Tooltip("Set to true if you want to destroy EdgeManager on Scene load (ex. Scene Transition)")]
+    public bool DestroyOnLoad;
+
+    /// <summary>
+    /// If you want to have a different World Origin, Players will be spawned relative to the Transform specified
+    /// </summary>
+    [Tooltip("If you want to have a different World Origin, Players will be spawned relative to the Transform specified")]
+    public Transform WorldOriginTransform;
 
     /// <summary>
     /// List of GameObjects to be used as player avatar
@@ -90,9 +97,12 @@ namespace EdgeMultiplay
     #endregion
 
     #region MonoBehaviour Callbacks
-    private void Awake()
+    private void OnEnable()
     {
-      DontDestroyOnLoad(this);
+      if (!DestroyOnLoad)
+      {
+        DontDestroyOnLoad(this);
+      }
       if (instance == null)
       {
         instance = this;
@@ -102,6 +112,8 @@ namespace EdgeMultiplay
         Destroy(gameObject);
       }
       integration = new MobiledgeXIntegration();
+      observers = new List<EdgeMultiplayObserver>();
+      currentRoomPlayers = new List<NetworkedPlayer>();
     }
 
     void Update()
@@ -111,10 +123,9 @@ namespace EdgeMultiplay
         return;
       }
       //websocket receive queue
-      var ws_queue = wsClient.receiveQueue;
-      while (ws_queue.TryPeek(out wsMsg))
+      while (wsClient.receiveQueue.TryPeek(out wsMsg))
       {
-        ws_queue.TryDequeue(out wsMsg);
+        wsClient.receiveQueue.TryDequeue(out wsMsg);
         HandleWebSocketMessage(wsMsg);
         wsMsg = null;
       }
@@ -137,17 +148,11 @@ namespace EdgeMultiplay
       currentRoomPlayers = null;
       if (wsClient != null)
       {
-        wsClient.tokenSource.Cancel();
+        wsClient.Dispose();
       }
       if (udpClient != null)
       {
         udpClient.Dispose();
-      }
-      if (Application.platform == RuntimePlatform.OSXPlayer
-         || Application.platform == RuntimePlatform.WindowsPlayer
-         || Application.platform == RuntimePlatform.LinuxPlayer)
-      {
-        Environment.Exit(0);
       }
     }
 
