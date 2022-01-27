@@ -97,7 +97,7 @@ namespace EdgeMultiplay
     #endregion
 
     #region MonoBehaviour Callbacks
-    private void OnEnable()
+    private void Awake()
     {
       if (!DestroyOnLoad)
       {
