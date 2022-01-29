@@ -440,18 +440,34 @@ namespace EdgeMultiplay
     /// </summary>
     public static void Disconnect()
     {
-      wsClient = null;
-      udpClient = null;
-      foreach (NetworkedPlayer player in currentRoomPlayers)
+      if (wsClient != null)
       {
-        Destroy(player.gameObject);
+        wsClient.Dispose();
+        wsClient = null;
       }
-      currentRoomPlayers = new List<NetworkedPlayer>();
-      gameSession = new Session();
+      if (udpClient != null)
+      {
+        udpClient.Dispose();
+        udpClient = null;
+      }
+      if (integration != null)
+      {
+        integration.Dispose();
+        integration = null;
+      }
+      if (currentRoomPlayers != null)
+      {
+        foreach (NetworkedPlayer player in currentRoomPlayers)
+        {
+          Destroy(player.gameObject);
+        }
+      }
+      currentRoomPlayers = null;
+      gameSession = null;
       gameStarted = false;
       MessageSender = null;
       localPlayer = null;
-      observers = new List<EdgeMultiplayObserver>();
+      observers = null;
     }
 
     /// <summary>
