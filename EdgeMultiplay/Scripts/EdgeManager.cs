@@ -32,6 +32,7 @@ namespace EdgeMultiplay
     /// EdgeManager have many static variables, your app/game should have only one EdgeManager
     /// </summary>
     [RequireComponent(typeof(MobiledgeX.LocationService))]
+    [RequireComponent(typeof(EdgeEventsManager))]
     [AddComponentMenu("EdgeMultiplay/EdgeManager")]
     public class EdgeManager : MonoBehaviour
     {
@@ -124,7 +125,22 @@ namespace EdgeMultiplay
             {
                 Destroy(gameObject);
             }
-            integration = new MobiledgeXIntegration();
+            integration = new MobiledgeXIntegration(FindObjectOfType<EdgeEventsManager>());
+            integration.matchingEngine.EnableEdgeEvents = true;
+            integration.NewFindCloudletHandler += HandleFindCloudlet;
+        }
+
+        private void HandleFindCloudlet(EdgeEventsStatus edgeEventstatus, FindCloudletEvent fcEvent)
+        {
+            print("NewFindCloudlet triggered status is " + edgeEventstatus.status + ", Trigger" + fcEvent.trigger);
+            if (fcEvent.newCloudlet != null)
+            {
+                print("New Cloudlet FQDN: " + fcEvent.newCloudlet.Fqdn);
+            }
+            if (edgeEventstatus.status == Status.error)
+            {
+                print("Error received: " + edgeEventstatus.error_msg);
+            }
         }
 
         void Update()
@@ -219,7 +235,7 @@ namespace EdgeMultiplay
                     integration.useFallbackLocation = useFallBackLocation;
                     wsClient = new MobiledgeXWebSocketClient();
                     await integration.RegisterAndFindCloudlet();
-                    integration.GetAppPort(LProto.L_PROTO_TCP);
+                    integration.GetAppPort(LProto.Tcp);
                     string url = integration.GetUrl("ws") + path;
                     Uri uri = new Uri(url);
                     if (wsClient.isOpen())
@@ -229,6 +245,11 @@ namespace EdgeMultiplay
                     }
                     await wsClient.Connect(@uri);
                     EdgeMultiplayCallbacks.connectedToEdge();
+                }
+                catch (AppPortException appPortException)
+                {
+                     EdgeMultiplayCallbacks.failureToConnect(appPortException.Message);
+                     Debug.LogError("EdgeMultiplay: Failed to connect to Edge, Error finding AppPort");
                 }
                 catch (Exception e)
                 {
@@ -279,7 +300,7 @@ namespace EdgeMultiplay
             Hashtable playertagsHashtable;
             if (playerTags != null)
             {
-                playertagsHashtable = Tag.DictionaryToHashtable(playerTags);
+                playertagsHashtable = Util.DictionaryToHashtable(playerTags);
             }
             else
             {
@@ -336,7 +357,7 @@ namespace EdgeMultiplay
                 Hashtable playertagsHashtable;
                 if (playerTags != null)
                 {
-                    playertagsHashtable = Tag.DictionaryToHashtable(playerTags);
+                    playertagsHashtable = Util.DictionaryToHashtable(playerTags);
                 }
                 else
                 {
@@ -367,7 +388,7 @@ namespace EdgeMultiplay
                 Hashtable playertagsHashtable;
                 if (playerTags != null)
                 {
-                    playertagsHashtable = Tag.DictionaryToHashtable(playerTags);
+                    playertagsHashtable = Util.DictionaryToHashtable(playerTags);
                 }
                 else
                 {
@@ -527,7 +548,7 @@ namespace EdgeMultiplay
                     }
                     else
                     {
-                        udpClient = new MobiledgeXUDPClient(integration.GetHost(), integration.GetAppPort(LProto.L_PROTO_UDP).public_port);
+                        udpClient = new MobiledgeXUDPClient(integration.GetHost(), integration.GetAppPort(LProto.Udp).PublicPort);
                     }
                     SendUDPMessage(new GamePlayEvent(){eventName = "Start"});
                     break;
